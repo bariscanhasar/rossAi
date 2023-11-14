@@ -1,0 +1,24 @@
+*{
+    font-size: 13px;
+}
+.css-yrdy0g-MuiDataGrid-columnHeaderRow {
+    display: flex;
+    justify-content: space-between;
+    width: 100%!important;
+}
+.css-t89xny-MuiDataGrid-columnHeaderTitle {
+    font-weight: bold!important;
+}
+.css-ptkaw2-MuiDataGrid-root .MuiDataGrid-row:not(.MuiDataGrid-row--dynamicHeight)>.MuiDataGrid-cell {
+    white-space: break-spaces!important;
+}
+.css-1869usk-MuiFormControl-root {
+    margin: 0px 0px 10px 0px!important;
+    width: 100px;
+}
+.css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root {
+    width: 150px;
+}
+.MuiToolbar-regular {
+    padding: 0!important;
+}

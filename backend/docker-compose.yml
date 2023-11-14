@@ -1,0 +1,29 @@
+version: "3.8"
+
+volumes:
+  pgdata:
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: rossAi_postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+  backend:
+    container_name: rossAi_node
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: bash -c "yarn install && yarn run dev"
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "5001:5001"
+    depends_on:
+      - postgres
+    volumes:
+      - .:/code:cached
