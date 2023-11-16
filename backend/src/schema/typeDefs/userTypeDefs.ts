@@ -69,7 +69,12 @@ input UserCreateInput {
     updated_at: String
     
 }
-
+input FileInput {
+    filename: String!
+    mimetype: String!
+    encoding: String!
+    content: String!
+}
 
 type Mutation {
     google_login(google_id_token:String): AuthResponse
@@ -78,6 +83,8 @@ type Mutation {
     register(first_name: String!, last_name:String!,email: String,keychain:String,is_premium:Boolean,device_type:DeviceType,role:UserRoleEnum, is_agreement_checked: Boolean,sub_id:String): AuthResponse
     delete_style(style_id:String):Style
     create_prompt(prompt:String, negative_prompt:String, steps:String, cfg:String, seeds:String, scheduler:String, gender:String, style_id:String ):Prompt
+    upload_files(file:[Upload]!): File!
+    
     # ... Other mutation definitions ...
 }
 # ... Other type definitions if needed ...

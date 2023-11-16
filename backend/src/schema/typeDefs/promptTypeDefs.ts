@@ -34,7 +34,8 @@ type Prompt {
 
 }
 type Query {
-    get_all_prompts:[Prompt]
+    get_all_prompts:[Style]
+    get_prompt(prompt_id:ID!):Prompt
 }
 
 

@@ -51,12 +51,29 @@ export const GET_STYLE = gql`
 export const GET_ALL_PROMPTS = gql`
         query get_all_prompts {
             get_all_prompts {
-                gender
                 id
-                prompt
-                style {
-                    name
+                name
+                prompt{
+                    id
+                    prompt
+                    gender
                 }
+          
             }
         }
     `
+
+export const GET_PROMPT = gql`
+        query get_prompt($prompt_id: ID!) {
+            get_prompt(prompt_id: $prompt_id) {
+                id
+                prompt
+                negative_prompt
+                cfg
+                steps
+                scheduler
+                gender
+            }
+        }
+
+`

@@ -39,7 +39,7 @@ export const CREATE_PROMPT = gql`
         $seeds: String
         $scheduler: String
         $gender: String
-        $styleId: String
+        $style_id: String
     ) {
         create_prompt(
             prompt: $prompt
@@ -49,7 +49,7 @@ export const CREATE_PROMPT = gql`
             seeds: $seeds
             scheduler: $scheduler
             gender: $gender
-            style_id: $styleId
+            style_id: $style_id
         ) {
             id
             prompt

@@ -31,6 +31,17 @@ type Query {
     get_style(style_id:ID!):Style
     get_all_styles:[Style]
 }
+
+scalar Upload
+
+type File {
+    filename:String
+    mimetype: String
+    encoding: String
+}
+
+
+
 # ... Other type definitions if needed ...
 `;
 

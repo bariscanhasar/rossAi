@@ -54,13 +54,14 @@ export default function CreatePrompt() {
           seeds: prompt.seeds,
           scheduler: prompt.scheduler,
           gender: prompt.gender,
-          styleId: prompt.styleId,
+          style_id: prompt.style_id,
         },
       })
     } catch (e) {
       console.log(e)
     }
   }
+  console.log(prompt)
   return (
     <div>
       <div className="d-flex flex-column">

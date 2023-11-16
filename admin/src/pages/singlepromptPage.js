@@ -12,11 +12,24 @@ import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useParams } from 'react-router-dom';
 import { useQuery, gql } from '@apollo/client';
+import {GET_PROMPT} from "../graphql/queries";
 export default function SinglePromptPage() {
-
-
-
     const [age, setAge] = React.useState('');
+    const { id } = useParams()
+    const { loading, error, data } = useQuery(GET_PROMPT, {
+        variables: { prompt_id: id },
+    })
+
+    if (loading) {
+        return <p>Loading...</p>
+    }
+
+    if (error) {
+        return <p>Error: {error.message}</p>
+    }
+
+    const promptData = data && data.get_prompt ? data.get_prompt : null
+    console.log(promptData)
     const handleChange = (event) => {
         setAge(event.target.value);
     };
@@ -50,8 +63,7 @@ export default function SinglePromptPage() {
                         fullWidth
                         multiline
                         rows={4}
-                        defaultValue="modelshoot style, head to shoulder portrait of cjw female,  (extremely detailed Hasselblad Award photo), tattoo model, neck tatoo, badass, perfect symmetrical face, centered, cinematic lighting, soft ambient lighting, grainy, 8k, dramatic lighting, ((intricate)), ((highly detailed)), high quality, sharp focus
-"
+                        defaultValue={promptData.prompt}
                         variant="filled"
                     />
                     </div>
@@ -64,18 +76,17 @@ export default function SinglePromptPage() {
                         fullWidth
                         multiline
                         rows={4}
-                        defaultValue="black and white, black & white, low quality, 3d, anime, sketch, cartoon, (poorly drawn), blurry, face blemish, (ugly), watermark, b&w, big breasts, text, canvas frame, cartoon, 3d, ((disfigured)), ((bad art)), ((deformed)),((extra limbs)),((close up)),((b&w)), weird colors, blurry, (((duplicate))), ((morbid)), ((mutilated)), [out of frame], extra fingers, mutated hands, ((poorly drawn hands)), ((poorly drawn face)), (((mutation))), (((deformed))), ((ugly)), blurry, ((bad anatomy)), (((bad proportions))), ((extra limbs)), cloned face, (((disfigured))), out of frame, ugly, extra limbs, (bad anatomy), gross proportions, (malformed limbs), ((missing arms)), ((missing legs)), (((extra arms))), (((extra legs))), mutated hands, (fused fingers), (too many fingers), (((long neck))), Photoshop, video game, ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, mutation, mutated, extra limbs, extra legs, extra arms, disfigured, deformed, cross-eye, body out of frame, blurry, bad art, bad anatomy, 3d render
-"
+                        defaultValue={promptData.negative_prompt}
                         variant="filled"
                     />
                 </div>
                 <div className='w-25 mb-3'>
 
-                    <TextField id="filled-basic" label="Steps" variant="filled"  />
+                    <TextField id="filled-basic" label="Steps" variant="filled" defaultValue={promptData.steps}  />
                 </div>
                 <div className='w-25 mb-3'>
 
-                    <TextField id="filled-basic" label="Cfg" variant="filled"  />
+                    <TextField id="filled-basic" label="Cfg" variant="filled" defaultValue={promptData.cfg}  />
                 </div>
 
                 <div className='w-25 mb-3'>
@@ -93,15 +104,16 @@ export default function SinglePromptPage() {
                     <Select
                         labelId="demo-simple-select-filled-label"
                         id="demo-simple-select-filled"
-                        value={age}
+                        value={promptData.scheduler}
                         onChange={handleChange}
                     >
-                        <MenuItem value="">
-                            <em>None</em>
-                        </MenuItem>
-                        <MenuItem value={10}>Ten</MenuItem>
-                        <MenuItem value={20}>Twenty</MenuItem>
-                        <MenuItem value={30}>Thirty</MenuItem>
+
+                        <MenuItem value="DDIM">DDIM</MenuItem>
+                        <MenuItem value="DPMSOLVERMULTISTEP">DPMSOLVERMULTISTEP</MenuItem>
+                        <MenuItem value="K_EULER">K_EULER</MenuItem>
+                        <MenuItem value="K_EULER_ANCESTRAL">K_EULER_ANCESTRAL</MenuItem>
+                        <MenuItem value="KLMS">KLMS</MenuItem>
+                        <MenuItem value="PNDM">PNDM</MenuItem>
                     </Select>
                 </FormControl>
                 <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
@@ -109,14 +121,12 @@ export default function SinglePromptPage() {
                     <Select
                         labelId="demo-simple-select-filled-label"
                         id="demo-simple-select-filled"
-                        value={age}
+                        value={promptData.gender}
                         onChange={handleChange}
                     >
-                        <MenuItem value="">
-                            <em>None</em>
-                        </MenuItem>
-                        <MenuItem value={10}>Ten</MenuItem>
-                        <MenuItem value={20}>Twenty</MenuItem>
+
+                        <MenuItem value="MALE">MALE</MenuItem>
+                        <MenuItem value="FEMALE">FEMALE</MenuItem>
                         <MenuItem value={30}>Thirty</MenuItem>
                     </Select>
                 </FormControl>

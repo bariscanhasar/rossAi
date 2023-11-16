@@ -13,16 +13,14 @@ import {GET_ALL_PROMPTS} from "../../graphql/queries";
 import { useQuery } from '@apollo/client';
 import * as React from "react";
 const columns = [
-
     {
-        field: 'style',
+        field: 'name',
         headerName: 'Style',
         width: 200,
         renderCell: (params) => (
-        <a style={{color:'blue'}}>
-            {params.value}
-
-        </a>
+            <a style={{ color: 'blue' }}>
+                {params.value}
+            </a>
         ),
     },
     {
@@ -30,21 +28,25 @@ const columns = [
         headerName: 'Prompt',
         width: 1050,
         renderCell: (params) => (
-            <a>
-                {params.value}
-
-            </a>
+            <>
+                <div>{params.row.prompt}</div>
+            </>
         ),
     },
-    { field: 'gender', headerName: 'Gender' },
+    { field: 'gender', headerName: 'Gender', hide: true }, // Hide the gender column
 ];
+
 
 export default function PromptTable() {
     const navigate = useNavigate();
     const [age, setAge] = React.useState('');
     const { loading, error, data } = useQuery(GET_ALL_PROMPTS);
 
+    const handleRowClick = (params) => {
+        // Assuming params.row.id corresponds to the style ID
 
+        navigate(`/prompts/${params.row.prompt_id}`);
+    };
     if (loading) {
         return <p>Loading...</p>;
     }
@@ -54,15 +56,27 @@ export default function PromptTable() {
     }
 
     const rowsData = data && data.get_all_prompts ? data.get_all_prompts : [];
+
+
+    const transformedRows = rowsData.reduce((acc, style) => {
+        const promptRows = style.prompt.map((prompt, index) => ({
+            id: `${style.id}-${index}`,
+            name: style.name,
+            prompt: prompt.prompt,
+            gender: prompt.gender,
+            prompt_id:prompt.id
+        }));
+        return [...acc, ...promptRows];
+    }, [])
+
     const handleChange = (event) => {
         setAge(event.target.value);
     };
     const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
+    console.log(transformedRows)
 
-    const handleRowClick = (params) => {
-        navigate(`/prompts/${params.id}`)
-    };
+
     return (
         <div style={{ width: '100%' }}>
             <Toolbar>
@@ -110,7 +124,7 @@ export default function PromptTable() {
                 </div>
             </Toolbar>
             <DataGrid
-                rows={rowsData}
+                rows={transformedRows}
                 columns={columns}
                 initialState={{
                     pagination: {

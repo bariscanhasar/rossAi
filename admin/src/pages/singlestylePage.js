@@ -57,7 +57,8 @@ export default function SingleStylePage() {
       setSelectedImage(URL.createObjectURL(droppedFiles[0]))
     }
   }
-
+    console.log(styleData.style_images)
+    const PF = "http://localhost:5001/upload/"
   return (
     <div className="d-flex flex-column">
       <div className="w-25 mb-3">
@@ -93,7 +94,7 @@ export default function SingleStylePage() {
       <div className="mb-3">
         {styleData && styleData.banner ? (
           <img
-            src={styleData.banner}
+            src={PF + styleData.banner}
             alt="Selected Image"
             style={{ width: '100px', height: 'auto' }}
           />
@@ -113,6 +114,7 @@ export default function SingleStylePage() {
           id="filled-basic"
           label="Image Link"
           variant="filled"
+          defaultValue={PF + styleData.banner}
         />
       </div>
       <div className="mb-3">
@@ -121,6 +123,7 @@ export default function SingleStylePage() {
           id="filled-basic"
           label="Description"
           variant="filled"
+          defaultValue={styleData.description}
         />
       </div>
       <div>
@@ -159,7 +162,7 @@ export default function SingleStylePage() {
           styleData.style_images.map((style) => (
             <div className="mb-3">
               <img
-                src={style.path}
+                src={PF + style.path}
                 alt="Selected Image"
                 style={{ width: '100px', height: 'auto' }}
               />
@@ -168,7 +171,7 @@ export default function SingleStylePage() {
                 id="filled-basic"
                 label="Image Link"
                 variant="filled"
-                defaultValue={styleData.banner}
+                defaultValue={PF + style.path}
               />
             </div>
           ))}
