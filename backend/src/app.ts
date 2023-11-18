@@ -17,6 +17,9 @@ import { User } from "./orm/model/User/User";
 import { getAccessToken, validateTokenData } from "./auth/authUtils";
 import JWT, { JwtPayload } from "./core/jwt";
 import { upload } from "./middlewares/upload";
+import {ReplicateModel} from "./orm/model/Replicate/ReplicateModel";
+
+
 process.on("uncaughtException", (e) => {
   Logger.error(e);
 });
@@ -24,22 +27,25 @@ process.on("uncaughtException", (e) => {
 dotenv.config();
 
 const app = express();
+app.use(express.json({ limit: "50mb" }));
+// Increase the payload size limit for URL-encoded data
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
+
 app.use(
-    cors({
-        origin: [
-            "http://localhost:3000",
-            "http://localhost:3001",
-            "https://bariscanhasar.com",
-            "https://admin.bariscanhasar.com",
-        ],
-        credentials: true,
-    })
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "http://localhost:3001",
+      "https://bariscanhasar.com",
+      "https://admin.bariscanhasar.com",
+    ],
+    credentials: true,
+  })
 );
 app.use(morgan("tiny"));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 
 app.use("/upload", express.static(path.join(__dirname, "../upload")));
 
@@ -47,22 +53,25 @@ app.use("/upload", express.static(path.join(__dirname, "../upload")));
   await dbCreateConnection();
 })();
 
+app.post("/replicate", async (req: Request, res: Response) => {
+  const replicate_id = req.body.id
+  const model = await ReplicateModel.findOne({where:{replicate_id:replicate_id}})
+  model!.version = req.body.version!
+  const modified_model = await model!.save()
 
 
-app.post(
-    "/upload",
-    upload.array("file", 10),
-    (req: Request, res: Response) => {
-      try {
-          console.log(req.files)
-          res.send("File upload successful");
-      } catch (err) {
-        console.log(err)
-      }
-    }
-);
+  console.log(req.body);
+  res.status(200).send(modified_model);
+});
 
-
+app.post("/upload", upload.array("file", 10), (req: Request, res: Response) => {
+  try {
+    console.log(req.files);
+    res.send("File upload successful");
+  } catch (err) {
+    console.log(err);
+  }
+});
 
 const server = new ApolloServer({
   typeDefs,
@@ -90,12 +99,16 @@ const server = new ApolloServer({
           !req.path.includes("login") &&
           !req.path.includes("register")
         ) {
-          const token = getAccessToken(req.headers.authorization);
-          const payload: JwtPayload = await JWT.validate(token);
-          validateTokenData(payload);
-          const user = await User.findOne({ where: { id: payload.user_id } });
+          try {
+            const token = getAccessToken(req.headers.authorization);
+            const payload: JwtPayload = await JWT.validate(token);
+            validateTokenData(payload);
+            const user = await User.findOne({ where: { id: payload.user_id } });
 
-          return { user };
+            return { user };
+          } catch (e) {
+            console.log(e);
+          }
         }
       },
     })

@@ -43,9 +43,9 @@ async function create_prompt(_,{
 
 
 }
-async function get_all_prompts(_,{
+async function get_all_prompts(_,__,context,{
 }){
-
+    console.log(context)
     const style = await Style.find({relations:["prompt"]})
     return style
 

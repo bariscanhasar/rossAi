@@ -84,6 +84,8 @@ type Mutation {
     delete_style(style_id:String):Style
     create_prompt(prompt:String, negative_prompt:String, steps:String, cfg:String, seeds:String, scheduler:String, gender:String, style_id:String ):Prompt
     upload_files(file:[Upload]!): File!
+    create_replicate_model(instance_data:String,gender:String):ReplicateModel
+    create_prediction(style_id:String):ReplicatePrediction
     
     # ... Other mutation definitions ...
 }

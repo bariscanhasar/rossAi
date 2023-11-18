@@ -1,4 +1,7 @@
 import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany, BaseEntity} from "typeorm";
+import {StyleDetails} from "../Style/StyleDetails";
+import {ReplicateModel} from "../Replicate/ReplicateModel";
+
 enum Role {
     ADMIN = "ADMIN",
     USER = "USER",
@@ -58,6 +61,10 @@ export class User extends BaseEntity{
 
     @CreateDateColumn({ default: () => "CURRENT_TIMESTAMP" })
     created_at!: Date;
+
+
+    @OneToMany(() => ReplicateModel, (replicateModel) => replicateModel.user)
+    replicate_model?: ReplicateModel[];
 
 }
 
