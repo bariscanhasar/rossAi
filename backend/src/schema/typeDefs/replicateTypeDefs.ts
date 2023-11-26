@@ -27,25 +27,35 @@ type ReplicateModel {
     updatedAt: String
 }
 
+type Image {
+    id: ID!
+    url: String!
+    replicate_prediction_id: String
+    style_id: String
+    replicate_prediction: ReplicatePrediction
+    style: Style
+    created_at: String!
+    updated_at: String!
+}
 type ReplicatePrediction {
     id: ID!
     replicate_id: String!
     status: ReplicateStatusEnum!
     prompt_text: String!
-    prompt_negative_prompt: String
+    negative_prompt: String
     prompt_steps: String
     prompt_cfg: String
     prompt_scheduler: SchedulerEnum
     prompt_output: String!
     model_id: String!
     prompt_id: String!
-    set_id: String
     style_id: String
     model: ReplicateModel!
     prompt: Prompt!
     style: Style
-    createdAt: String!
-    updatedAt: String!
+    images: [Image!]!
+    created_at: String!
+    updated_at: String!
 }
 
 type Query {

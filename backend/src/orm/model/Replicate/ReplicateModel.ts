@@ -8,8 +8,9 @@ import {
   ManyToOne,
 } from "typeorm";
 import { Style } from "../Style/Style";
-import {StyleDetails} from "../Style/StyleDetails";
-import {User} from "../User/User"
+import { StyleDetails } from "../Style/StyleDetails";
+import { User } from "../User/User";
+import { ReplicatePrediction } from "./ReplicatePrediction";
 enum ReplicateStatusEnum {
   startind = "starting",
   canceled = "canceled",
@@ -29,17 +30,14 @@ export class ReplicateModel extends BaseEntity {
   @PrimaryGeneratedColumn()
   id?: number;
 
-
   @Column({ nullable: true })
   name?: string;
 
   @Column({ nullable: true })
   replicate_id!: string;
 
-
   @Column({ nullable: true })
   version?: string;
-
 
   @Column({ nullable: true })
   image?: string;
@@ -64,6 +62,9 @@ export class ReplicateModel extends BaseEntity {
   @CreateDateColumn({ default: () => "CURRENT_TIMESTAMP" })
   created_at?: Date;
 
-    @ManyToOne(() => User, (user) => user.replicate_model)
-    user!: User
+  @ManyToOne(() => User, (user) => user.replicate_model)
+  user!: User;
+
+  @OneToMany(() => ReplicatePrediction, (prediction) => prediction.model)
+  prediction?: ReplicatePrediction;
 }

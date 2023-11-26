@@ -1,5 +1,6 @@
 import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany, BaseEntity, ManyToOne} from "typeorm";
 import {Style} from "../Style/Style";
+import {ReplicatePrediction} from "../Replicate/ReplicatePrediction";
 
 enum Scheduler {
     DDIM = "DDIM",
@@ -52,6 +53,8 @@ export class Prompt extends BaseEntity{
     @ManyToOne(() => Style, (style) => style.style_details)
     style!: Style
 
+    @OneToMany(() => ReplicatePrediction, (prediction) => prediction.prompt)
+    prediction?: ReplicatePrediction;
 
     @CreateDateColumn({ default: () => "CURRENT_TIMESTAMP" })
     created_at?: Date;

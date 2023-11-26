@@ -18,6 +18,8 @@ import { getAccessToken, validateTokenData } from "./auth/authUtils";
 import JWT, { JwtPayload } from "./core/jwt";
 import { upload } from "./middlewares/upload";
 import {ReplicateModel} from "./orm/model/Replicate/ReplicateModel";
+import {ReplicatePrediction} from "./orm/model/Replicate/ReplicatePrediction";
+import {ReplicatePredictionImage} from "./orm/model/Replicate/ReplicatePredictionImage";
 
 
 process.on("uncaughtException", (e) => {
@@ -53,7 +55,7 @@ app.use("/upload", express.static(path.join(__dirname, "../upload")));
   await dbCreateConnection();
 })();
 
-app.post("/replicate", async (req: Request, res: Response) => {
+app.post("/model", async (req: Request, res: Response) => {
   const replicate_id = req.body.id
   const model = await ReplicateModel.findOne({where:{replicate_id:replicate_id}})
   model!.version = req.body.version!
@@ -62,6 +64,12 @@ app.post("/replicate", async (req: Request, res: Response) => {
 
   console.log(req.body);
   res.status(200).send(modified_model);
+});
+
+app.post("/prediction", async (req: Request, res: Response) => {
+
+  console.log(req.body);
+  res.status(200).send(req.body);
 });
 
 app.post("/upload", upload.array("file", 10), (req: Request, res: Response) => {

@@ -6,6 +6,8 @@ import {StyleImages} from "../model/Style/StyleImages";
 import {StyleDetails} from "../model/Style/StyleDetails";
 import {Prompt} from "../model/Prompt/Prompt"
 import {ReplicateModel} from "../model/Replicate/ReplicateModel";
+import {ReplicatePrediction} from "../model/Replicate/ReplicatePrediction";
+import {ReplicatePredictionImage} from "../model/Replicate/ReplicatePredictionImage";
 
 const ormConfig: ConnectionOptions = {
   type: "postgres",
@@ -23,7 +25,9 @@ const ormConfig: ConnectionOptions = {
     StyleImages,
     StyleDetails,
     Prompt,
-    ReplicateModel
+    ReplicateModel,
+    ReplicatePrediction,
+    ReplicatePredictionImage
   ],
 };
 
