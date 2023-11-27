@@ -17,6 +17,44 @@ export const GET_ALL_USERS = gql`
         }
     }
 `;
+export const GET_SET = gql`
+    query get_set($set_id:String) {
+        get_set(set_id:$set_id) {
+            id
+            user {
+                first_name
+                last_name
+                email
+            }
+            images {
+                id
+                path
+            }
+            model {
+                version
+            }
+        }
+    }
+
+
+
+`
+export const GET_ALL_SETS_ADMIN = gql`
+    query get_all_set_admin {
+        get_all_set_admin {
+            id
+            user {
+                first_name
+                last_name
+                email
+            }
+            images {
+                id
+            }
+        }
+    }
+
+`
 
 export const GET_ALL_STYLES = gql`
     query get_all_styles {
@@ -75,5 +113,24 @@ export const GET_PROMPT = gql`
                 gender
             }
         }
+
+`
+
+export const GET_ALL_REPLICATE_MODELS = gql`
+    query get_all_replicate_models{
+        get_all_replicate_models {
+            id
+            name
+            created_at
+            status
+            user {
+                first_name
+                last_name
+                email
+            }
+        }
+    }
+
+
 
 `

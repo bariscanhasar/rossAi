@@ -1,7 +1,7 @@
 import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany, BaseEntity} from "typeorm";
 import {StyleDetails} from "../Style/StyleDetails";
 import {ReplicateModel} from "../Replicate/ReplicateModel";
-
+import {Set} from '../Set/Set'
 enum Role {
     ADMIN = "ADMIN",
     USER = "USER",
@@ -65,6 +65,9 @@ export class User extends BaseEntity{
 
     @OneToMany(() => ReplicateModel, (replicateModel) => replicateModel.user)
     replicate_model?: ReplicateModel[];
+
+    @OneToMany(() => Set, (set) => set.user)
+    set?: Set;
 
 }
 

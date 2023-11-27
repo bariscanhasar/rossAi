@@ -11,6 +11,8 @@ import SinglePromptPage from './pages/singlepromptPage'
 import {BrowserRouter as Router, Navigate, Route, Routes} from "react-router-dom";
 import CreateStyle from "./pages/createPages/createStyle";
 import CreatePrompt from "./pages/createPages/createPrompt";
+import SetTable from "./components/setTable/setTable";
+import SinglesetPage from "./pages/singlesetPage";
 export default function App() {
     return (
 
@@ -39,6 +41,8 @@ export default function App() {
                             <Route path="/prompts/:id" element={<SinglePromptPage/>}/>
                             <Route path="/credits" element={<CreditsTable/>}/>
                             <Route path="/replicatemodels" element={<ReplicateModelsTable/>}/>
+                            <Route path="/sets" element={<SetTable/>}/>
+                            <Route path="/sets/:id" element={<SinglesetPage/>}/>
                         </Routes>
                     </div>
                 </div>

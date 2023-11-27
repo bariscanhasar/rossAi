@@ -7,13 +7,18 @@ import {
     BaseEntity,
     ManyToOne,
 } from "typeorm";
-import {ReplicatePrediction} from "./ReplicatePrediction";
+import {Set} from './Set'
+import {Prompt} from "../Prompt/Prompt";
 
 
 @Entity()
-export class ReplicatePredictionImage extends BaseEntity {
+export class SetImage extends BaseEntity {
     @PrimaryGeneratedColumn()
     id?: number;
+
+
+    @Column({ nullable: true })
+    path!: string;
 
     @Column({ nullable: true })
     replicate_id!: string;
@@ -22,7 +27,9 @@ export class ReplicatePredictionImage extends BaseEntity {
     @CreateDateColumn({ default: () => "CURRENT_TIMESTAMP" })
     created_at?: Date;
 
-    @ManyToOne(() => ReplicatePrediction, (replicate_prediction) => replicate_prediction.images)
-    prediction!: ReplicatePrediction;
+
+    @ManyToOne(() => Set, (set) => set.images)
+    set!: Set;
+
 
 }

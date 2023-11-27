@@ -7,12 +7,12 @@ import {
   BaseEntity,
   ManyToOne,
 } from "typeorm";
-import { Style } from "../Style/Style";
+import { Set } from "../Set/Set";
 import { StyleDetails } from "../Style/StyleDetails";
 import { User } from "../User/User";
 import { ReplicatePrediction } from "./ReplicatePrediction";
 enum ReplicateStatusEnum {
-  startind = "starting",
+  starting = "starting",
   canceled = "canceled",
   failed = "failed",
   processing = "processing",
@@ -67,4 +67,8 @@ export class ReplicateModel extends BaseEntity {
 
   @OneToMany(() => ReplicatePrediction, (prediction) => prediction.model)
   prediction?: ReplicatePrediction;
+
+
+  @OneToMany(() => Set, (set) => set.model)
+  set?: Set;
 }

@@ -4,6 +4,7 @@ const replicateTypeDefs = `#graphql
 
 
 enum ReplicateStatusEnum {
+    starting
     canceled
     failed
     processing
@@ -23,17 +24,15 @@ type ReplicateModel {
     gender: GenderEnum
     userId: String
     user: User
-    createdAt: String
-    updatedAt: String
+    created_at: String
+    updated_at: String
 }
 
 type Image {
     id: ID!
-    url: String!
-    replicate_prediction_id: String
-    style_id: String
-    replicate_prediction: ReplicatePrediction
-    style: Style
+    path: String!
+    set:Set
+    replicate_id: String
     created_at: String!
     updated_at: String!
 }
@@ -57,9 +56,22 @@ type ReplicatePrediction {
     created_at: String!
     updated_at: String!
 }
-
+type Set {
+    id: ID!
+    name: String!
+    status: ReplicateStatusEnum!
+    user:User
+    images:[Image]
+    model: ReplicateModel
+    created_at: String!
+    updated_at: String!
+}
 type Query {
-    get_replicate_model:ReplicateModel
+    get_user_replicate_model:[ReplicateModel]
+    get_all_set:[Set]
+    get_set(set_id:String):Set
+    get_all_set_admin:[Set]
+    get_all_replicate_models:[ReplicateModel]
 }
 
 

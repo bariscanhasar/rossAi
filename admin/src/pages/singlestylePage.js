@@ -10,6 +10,8 @@ import ListItemText from '@mui/material/ListItemText'
 import { useParams } from 'react-router-dom'
 import { useQuery } from '@apollo/client'
 import { GET_ALL_USERS, GET_STYLE } from '../graphql/queries'
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function SingleStylePage() {
   const fileInputRef = useRef()
@@ -18,9 +20,14 @@ export default function SingleStylePage() {
   const { loading, error, data } = useQuery(GET_STYLE, {
     variables: { styleId: id },
   })
-  if (loading) {
-    return <p>Loading...</p>
-  }
+    if(loading) {
+        return (
+            <Box sx={{ display: 'flex' }}>
+                <CircularProgress />
+            </Box>
+        )
+
+    }
 
   if (error) {
     return <p>Error: {error.message}</p>

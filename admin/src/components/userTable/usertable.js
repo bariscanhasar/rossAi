@@ -6,17 +6,7 @@ import TextField from '@mui/material/TextField';
 import * as React from "react";
 import { useQuery, gql } from '@apollo/client';
 import {GET_ALL_USERS} from "../../graphql/queries"
-const rows = [
-    { id: 1, first_name: 'Baris', last_name: 'Topal',created_at: '8/31/2023', email: 'bariscanhasar@icloud.com',role: 'USER', premium_status: 'FREE',device_type:'IOS',train_credits: '0', predict_credits: '1', },
-    { id: 2, first_name: 'Baris', last_name: 'Topal',created_at: '8/31/2023', email: 'bariscanhasar@icloud.com',role: 'USER', premium_status: 'FREE',device_type:'IOS',train_credits: '0', predict_credits: '1', },
-    { id: 3, first_name: 'Baris', last_name: 'Topal',created_at: '8/31/2023', email: 'bariscanhasar@icloud.com',role: 'USER', premium_status: 'FREE',device_type:'IOS',train_credits: '0', predict_credits: '1', },
-    { id: 4, first_name: 'Baris', last_name: 'Topal',created_at: '8/31/2023', email: 'bariscanhasar@icloud.com',role: 'USER', premium_status: 'FREE',device_type:'IOS',train_credits: '0', predict_credits: '1', },
-    { id: 5, first_name: 'Baris', last_name: 'Topal',created_at: '8/31/2023', email: 'bariscanhasar@icloud.com',role: 'USER', premium_status: 'FREE',device_type:'IOS',train_credits: '0', predict_credits: '1', },
-    { id: 6, first_name: 'Baris', last_name: 'Topal',created_at: '8/31/2023', email: 'bariscanhasar@icloud.com',role: 'USER', premium_status: 'FREE',device_type:'IOS',train_credits: '0', predict_credits: '1', },
-    { id: 7, first_name: 'Baris', last_name: 'Topal',created_at: '8/31/2023', email: 'bariscanhasar@icloud.com',role: 'USER', premium_status: 'FREE',device_type:'IOS',train_credits: '0', predict_credits: '1', },
-    { id: 8, first_name: 'Baris', last_name: 'Topal',created_at: '8/31/2023', email: 'bariscanhasar@icloud.com',role: 'USER', premium_status: 'FREE',device_type:'IOS',train_credits: '0', predict_credits: '1', },
-    { id: 9, first_name: 'Baris', last_name: 'Topal',created_at: '8/31/2023', email: 'bariscanhasar@icloud.com',role: 'USER', premium_status: 'FREE',device_type:'IOS',train_credits: '0', predict_credits: '1', },
-];
+
 
 
 const onButtonClick = (e, row) => {

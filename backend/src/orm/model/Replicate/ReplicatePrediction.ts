@@ -12,7 +12,7 @@ import { StyleDetails } from "../Style/StyleDetails";
 import { User } from "../User/User";
 import { Prompt } from "../Prompt/Prompt";
 import { ReplicateModel } from "./ReplicateModel";
-import {ReplicatePredictionImage} from "./ReplicatePredictionImage";
+import {Set} from "../Set/Set";
 enum Scheduler {
   DDIM = "DDIM",
   DPMSOLVERMULTISTEP = "DPMSOLVERMULTISTEP",
@@ -25,7 +25,14 @@ enum Gender {
   FEMALE = "FEMALE",
   MALE = "MALE",
 }
-
+enum ReplicateStatusEnum {
+  starting = "starting",
+  canceled = "canceled",
+  failed = "failed",
+  processing = "processing",
+  succeeded = "succeeded",
+  waiting = "waiting",
+}
 @Entity()
 export class ReplicatePrediction extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -49,18 +56,21 @@ export class ReplicatePrediction extends BaseEntity {
   @Column({ nullable: true })
   prompt_output?: string;
 
-  @Column({ nullable: true })
-  model_id?: string;
-
-  @Column({ nullable: true })
-  style_id?: string;
-
   @Column({
     nullable: true,
     type: "enum",
     enum: Scheduler, // Use the enum you've defined
   })
   prompt_scheduler?: Scheduler;
+
+
+  @Column({
+    nullable: true,
+    type: "enum",
+    enum: ReplicateStatusEnum, // Use the enum you've defined
+  })
+  status?: string;
+
 
   @CreateDateColumn({ default: () => "CURRENT_TIMESTAMP" })
   created_at?: Date;
@@ -77,13 +87,8 @@ export class ReplicatePrediction extends BaseEntity {
   )
   model!: ReplicateModel;
 
-
-  @ManyToOne(
-      () => ReplicatePredictionImage,
-      (replicate_prediction_image) => replicate_prediction_image.prediction
-  )
-  images!: [ReplicatePredictionImage];
-
+  @ManyToOne(() => Set, (set) => set.prediction)
+  set!: Set;
 
 
 }
