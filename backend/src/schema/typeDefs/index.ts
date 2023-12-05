@@ -6,17 +6,21 @@ import {userResolvers} from "../resolvers/userResolvers";
 import {promptResolvers} from "../resolvers/promptResolvers";
 import replicateTypeDefs from "./replicateTypeDefs"
 import {replicateResolvers} from "../resolvers/replicateResolvers";
+import creditTypeDefs from "./creditTypeDefs";
+import {creditResolvers} from "../resolvers/creditResolvers";
 
 export const typeDefs = [
     userTypeDefs,
     styleTypeDefs,
     promptTypeDefs,
-    replicateTypeDefs
+    replicateTypeDefs,
+    creditTypeDefs
 ]
 
 export const resolvers = [
     styleResolvers,
     userResolvers,
     promptResolvers,
-    replicateResolvers
+    replicateResolvers,
+    creditResolvers
 ]

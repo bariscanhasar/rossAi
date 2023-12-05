@@ -134,3 +134,23 @@ export const GET_ALL_REPLICATE_MODELS = gql`
 
 
 `
+
+export const GET_ALL_CREDITS = gql`
+    query get_all_credits{
+        get_all_credits {
+            id
+            amount
+            type
+            created_at
+            date
+            user {
+                first_name
+                last_name
+                email
+            }
+        }
+    }
+
+
+
+`

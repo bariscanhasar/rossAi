@@ -33,10 +33,7 @@ type Prompt {
     updatedAt: String
 
 }
-type Query {
-    get_all_prompts:[Style]
-    get_prompt(prompt_id:ID!):Prompt
-}
+
 
 
 # ... Other type definitions if needed ...

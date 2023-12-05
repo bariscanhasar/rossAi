@@ -1,20 +1,25 @@
 import axios from "axios";
 import { ReplicateModel } from "../../orm/model/Replicate/ReplicateModel";
 import { User } from "../../orm/model/User/User";
-import { v4 as uuidv4 } from "uuid";
 import { Prompt } from "../../orm/model/Prompt/Prompt";
 import { Style } from "../../orm/model/Style/Style";
-import { ReplicatePrediction } from "../../orm/model/Replicate/ReplicatePrediction";
 import { Set } from "../../orm/model/Set/Set";
+import { createPrediction } from "../../helpers/createPrediction";
+import { Credit, CreditTypeEnum } from "../../orm/model/Credit/Credit";
+import moment from "moment";
+import { Between } from "typeorm";
+
 const auth_token = process.env.REPLICATE_TOKEN;
 
 export const replicateResolvers = {
   Query: {
     get_user_replicate_model,
-    get_all_set,
+    get_all_user_set,
     get_set,
     get_all_set_admin,
-    get_all_replicate_models
+    get_all_replicate_models,
+    get_all_user_replicate_models,
+    deneme,
   },
   Mutation: {
     create_replicate_model,
@@ -30,13 +35,29 @@ async function create_replicate_model(
 ) {
   try {
     const image_zip = instance_data;
-
     const ckpt_base = process.env.REPLICATE_CKPT_BASE;
     const trainer_version = process.env.REPLICATE_TRAINER_VERSION;
     const webhook = process.env.REPLICATE_WEBHOOK_MODEL;
     const user_id = context.user.id;
     const user = await User.findOne({ where: { id: user_id } });
     const random_number = Math.floor(Math.random() * 100000);
+
+    const currentDate = moment().utc().startOf("day");
+
+
+    const startOfDay = currentDate.toDate();
+    const endOfDay = moment(currentDate).endOf("day").toDate();
+
+    const credit = await Credit.findOne({
+      where: {
+        user: { id: user_id },
+        date: Between(startOfDay, endOfDay),
+        type: CreditTypeEnum.TRAIN,
+      },
+    });
+
+    if (!credit) return Error("no credit for train");
+
     const response = await axios({
       method: "post",
       url: "https://dreambooth-api-experimental.replicate.com/v1/trainings",
@@ -52,7 +73,7 @@ async function create_replicate_model(
         model: `bariscanhasar/${user_id}${random_number}`,
         trainer_version: trainer_version,
         webhook_completed:
-          "https://a645-2a02-e0-8b28-2800-d09-db16-efe3-7942.ngrok-free.app/model",
+          "https://55e3-2a02-e0-8b28-2800-d09-db16-efe3-7942.ngrok-free.app/modelwebhook",
       },
     });
 
@@ -64,6 +85,9 @@ async function create_replicate_model(
     new_model.status = response.data.status;
     new_model.gender = gender;
     const saved_model = await new_model.save();
+
+    credit!.amount = -1
+    await credit.save()
 
     return saved_model;
   } catch (error) {
@@ -85,84 +109,46 @@ async function get_user_replicate_model(_, __, context) {
   return model;
 }
 
-async function create_prediction(_, { style_id,model_id }, context, __) {
-  const prediction_output_count = 20;
+async function create_prediction(_, { style_id, model_id }, context, __) {
   const user_id = context.user.id;
   const user = await User.findOne({ where: { id: user_id } });
   const style = await Style.findOne({ where: { id: style_id } });
   const model = await ReplicateModel.findOne({
-    where: {id:model_id},
+    where: { user: { id: user_id } },
   });
   const prompts = await Prompt.find({
     where: { style: { id: style_id }, gender: model?.gender },
   });
 
-  const integer_number = Math.floor(20 / prompts.length);
-  const remaining_number =
-    prediction_output_count - integer_number * prompts.length;
+  const currentDate = moment().utc().startOf("day");
+
+
+  const startOfDay = currentDate.toDate();
+  const endOfDay = moment(currentDate).endOf("day").toDate();
+
+  const credit = await Credit.findOne({
+    where: {
+      user: { id: user_id },
+      date: Between(startOfDay, endOfDay),
+      type: CreditTypeEnum.PREDICT,
+    },
+  });
+
+
+
+
+  if (credit?.amount! < 0) return Error("no credit for predict");
+
   try {
     const set = new Set();
     set.user = user!;
     set.model = model!;
     set.status = "processing";
     const saved_set = await set.save();
-    if (integer_number !== 1) {
-      prompts.map(async (prompt) => {
-        const replicate_prediction = new ReplicatePrediction();
-        const response = await axios({
-          method: "post",
-          url: "https://api.replicate.com/v1/predictions",
-          headers: { Authorization: `Token ${auth_token}` },
-          data: {
-            input: {
-              prompt: prompt.prompt,
-              negative_prompt: prompt.negative_prompt,
-              save_infer_steps: prompt.steps,
-              save_guidance_scale: prompt.cfg,
-              lr_scheduler: prompt.scheduler,
-              num_outputs: integer_number,
-            },
-            version: model?.version,
-            webhook_completed:
-              "https://a645-2a02-e0-8b28-2800-d09-db16-efe3-7942.ngrok-free.app/prediction",
-          },
-        });
-        replicate_prediction.replicate_id = response.data.id;
-        replicate_prediction.status = response.data.status
-        replicate_prediction.model = model!;
-        replicate_prediction.prompt = prompt;
-        replicate_prediction.style = style!;
-        replicate_prediction.set = saved_set;
-        const saved_replicate_prediction = await replicate_prediction.save();
-      });
-      for (let i = 0; i < remaining_number; i++) {
-        const replicate_prediction = new ReplicatePrediction();
-        const response = await axios({
-          method: "post",
-          url: "https://api.replicate.com/v1/predictions",
-          headers: { Authorization: `Token ${auth_token}` },
-          data: {
-            input: {
-              prompt: prompts[i].prompt,
-              negative_prompt: prompts[i].negative_prompt,
-              save_infer_steps: prompts[i].steps,
-              save_guidance_scale: prompts[i].cfg,
-              lr_scheduler: prompts[i].scheduler,
-            },
-            version: model?.version,
-            webhook_completed:
-              "https://a645-2a02-e0-8b28-2800-d09-db16-efe3-7942.ngrok-free.app/prediction",
-          },
-        });
-        replicate_prediction.replicate_id = response.data.id;
-        replicate_prediction.status = response.data.status
-        replicate_prediction.model = model!;
-        replicate_prediction.prompt = prompts[i];
-        replicate_prediction.style = style!;
-        replicate_prediction.set = saved_set;
-        const saved_replicate_prediction = await replicate_prediction.save();
-      }
-    }
+    const rest = await createPrediction(prompts, 10, model!, style!, saved_set);
+
+    credit!.amount = -1;
+    await credit!.save();
   } catch (e) {
     console.log(e);
   }
@@ -175,27 +161,59 @@ async function create_prediction(_, { style_id,model_id }, context, __) {
   return last_style;
 }
 
-async function get_all_set_admin(_,__,context){
-  const set = await Set.find({relations:['user','images']})
+async function get_all_set_admin(_, __, context) {
+  const set = await Set.find({ relations: ["user", "images"] });
 
-  return set
+  return set;
 }
 
-async function get_all_set(_,__,context){
-  const user_id = context.user.id
-  const set = await Set.find({ where: { user: { id: user_id } }, relations: ['images','user'] });
+async function get_all_user_set(_, __, context) {
+  const user_id = context.user.id;
+  const set = await Set.find({
+    where: { user: { id: user_id } },
+    relations: ["images", "user"],
+  });
 
-  return set
+  return set;
 }
 
-async function get_set(_,{set_id},context,__) {
-  console.log(set_id)
-  const set = await Set.findOne({where:{id:set_id},relations:['images','user',"model"]})
-  console.log(set)
-  return set
+async function get_set(_, { set_id }, context, __) {
+  const set = await Set.findOne({
+    where: { id: set_id },
+    relations: ["images", "user", "model"],
+  });
+  return set;
 }
 
-async function get_all_replicate_models(_,) {
-  const models = await ReplicateModel.find({relations:['user']})
-  return models
+async function get_all_user_replicate_models(_, __, context) {
+  const user_id = context.user.id;
+  const models = await ReplicateModel.find({
+    where: { user: { id: user_id } },
+  });
+
+  return models;
+}
+
+async function get_all_replicate_models(_) {
+  const models = await ReplicateModel.find({ relations: ["user"] });
+  return models;
+}
+
+async function deneme(_, __, context) {
+  const user_id = context.user.id;
+  const currentDate = moment().utc().startOf("day");
+
+
+  const startOfDay = currentDate.toDate();
+  const endOfDay = moment(currentDate).endOf("day").toDate();
+
+  const credits = await Credit.find({
+    where: {
+      user: { id: user_id },
+      date: Between(startOfDay, endOfDay),
+      type: CreditTypeEnum.TRAIN,
+    },
+  });
+
+  return credits;
 }

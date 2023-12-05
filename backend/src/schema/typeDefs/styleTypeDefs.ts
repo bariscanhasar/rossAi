@@ -27,10 +27,7 @@ type StyleDetail {
     name: String
     created_at: String
 }
-type Query {
-    get_style(style_id:ID!):Style
-    get_all_styles:[Style]
-}
+
 
 scalar Upload
 

@@ -66,13 +66,7 @@ type Set {
     created_at: String!
     updated_at: String!
 }
-type Query {
-    get_user_replicate_model:[ReplicateModel]
-    get_all_set:[Set]
-    get_set(set_id:String):Set
-    get_all_set_admin:[Set]
-    get_all_replicate_models:[ReplicateModel]
-}
+
 
 
 `;

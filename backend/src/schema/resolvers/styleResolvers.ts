@@ -67,13 +67,11 @@ async function update_style(_, {
     style_images,
     style_details
 }) {
-    // Find the existing style
     const existingStyle = await Style.findOne({ where: { id } });
     if (!existingStyle) {
         throw new Error("Style not found");
     }
 
-    // Update style properties
     existingStyle.name = name;
     existingStyle.banner = banner;
     existingStyle.description = description;
@@ -82,11 +80,11 @@ async function update_style(_, {
     existingStyle.style_images = []
     existingStyle.style_details = []
 
-    // Save the updated style
+
     await existingStyle.save();
 
 
-    // Create and save new style_images
+
     for (const path of style_images) {
         const images = new StyleImages();
         images.path = path;
@@ -96,7 +94,7 @@ async function update_style(_, {
 
 
 
-    // Create and save new style_details
+
     for (const detailName of style_details) {
         const details = new StyleDetails();
         details.name = detailName;
@@ -104,7 +102,7 @@ async function update_style(_, {
         await details.save();
     }
 
-    // Fetch the updated style data with relationships
+
     const updatedStyleData = await Style.findOne({
         where: { id },
         relations: ["style_images", "style_details"]
@@ -124,7 +122,7 @@ async function get_style(_,{
 async function get_all_styles(
 
 ){
-    const styles = await Style.find()
+    const styles = await Style.find({order:{created_at: "DESC"}})
     return styles
 }
 

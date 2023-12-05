@@ -76,7 +76,7 @@ export class ReplicatePrediction extends BaseEntity {
   created_at?: Date;
 
   @ManyToOne(() => Style, (style) => style.prediction)
-  style!: Style;
+  style!: Style | null;
 
   @ManyToOne(() => Prompt, (prompt) => prompt.prediction)
   prompt!: Prompt;

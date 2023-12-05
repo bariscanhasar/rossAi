@@ -2,6 +2,8 @@ import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany, Bas
 import {StyleDetails} from "../Style/StyleDetails";
 import {ReplicateModel} from "../Replicate/ReplicateModel";
 import {Set} from '../Set/Set'
+import {Credit} from "../Credit/Credit";
+
 enum Role {
     ADMIN = "ADMIN",
     USER = "USER",
@@ -62,6 +64,8 @@ export class User extends BaseEntity{
     @CreateDateColumn({ default: () => "CURRENT_TIMESTAMP" })
     created_at!: Date;
 
+    @OneToMany(() => Credit, (credit) => credit.user)
+    credit?: Credit
 
     @OneToMany(() => ReplicateModel, (replicateModel) => replicateModel.user)
     replicate_model?: ReplicateModel[];

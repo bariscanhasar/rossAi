@@ -9,6 +9,7 @@ import {ReplicateModel} from "../model/Replicate/ReplicateModel";
 import {ReplicatePrediction} from "../model/Replicate/ReplicatePrediction";
 import {Set} from '../model/Set/Set'
 import {SetImage} from "../model/Set/SetImage";
+import {Credit} from "../model/Credit/Credit";
 
 const ormConfig: ConnectionOptions = {
   type: "postgres",
@@ -29,7 +30,8 @@ const ormConfig: ConnectionOptions = {
     ReplicateModel,
     ReplicatePrediction,
     Set,
-    SetImage
+    SetImage,
+    Credit
   ],
 };
 

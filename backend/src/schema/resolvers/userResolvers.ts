@@ -7,10 +7,12 @@ import axios from "axios";
 export const userResolvers = {
   Query: {
     get_all_users,
+    get_user
   },
   Mutation: {
     register,
     google_login,
+    login
   },
 };
 async function google_login(_, { google_id_token }) {
@@ -102,6 +104,18 @@ async function register(
     return null; // You can return an error message or handle the error as needed.
   }
 }
+async function login(_, {email}){
+  const exist_user = await User.findOne({where:{email:email}})
+  const token = await createTokens(exist_user)
+  return {
+    code: 1000,
+    success: true,
+    message: "logged in.",
+    is_new_user: true,
+    user: exist_user,
+    token: token.token, // Include the token in the response
+  };
+}
 
 //@ts-ignore
 async function get_all_users(_, __, context): Promise<any[]> {
@@ -111,4 +125,17 @@ async function get_all_users(_, __, context): Promise<any[]> {
     created_at: user.created_at.toLocaleDateString("en-GB"), // Adjust 'en-GB' based on your locale
   }));
   return formattedUsers;
+}
+
+async function get_user(_,{user_id},context) {
+  const user = await User.findOne({where:{id:user_id}})
+
+  if(!user) return Error("No user.")
+
+  return user
+
+
+
+
+
 }
