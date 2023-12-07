@@ -73,37 +73,50 @@ input FileInput {
     content: String!
 }
 
+enum StyleFilterEnum {
+    POPULAR,
+    NEWEST,
+    EXPLORE,
+    FEATURED
+}
+type OngoingProcessesResponse {
+    models: [ReplicateModel!]
+    sets: [Set!]
+}
 type Query {
-    get_all_users:[User]
-    get_user(user_id:Int):User
-    get_user_replicate_model:[ReplicateModel]
-    get_all_user_replicate_models:[ReplicateModel]
-    get_all_user_set:[Set]
-    get_set(set_id:String):Set
-    get_all_set_admin:[Set]
-    get_all_replicate_models:[ReplicateModel]
-    get_style(style_id:ID!):Style
-    get_all_styles:[Style]
-    get_all_prompts:[Style]
-    get_prompt(prompt_id:ID!):Prompt
-    get_user_all_credits:[Credit]
-    get_all_credits:[Credit]
-    deneme:[Credit]
+    getAllUsers:[User]
+    getUser(user_id:String):User
+    getReplicateModel:[ReplicateModel]
+    getUserAllReplicateModels:[ReplicateModel]
+    getAllSets(status:ReplicateStatusEnum,model_id:String):[Set]
+    getSet(set_id:String):Set
+    getAllSetsAdmin:[Set]
+    getAllReplicateModelsAdmin:[ReplicateModel]
+    getStyle(style_id:ID!):Style
+    getAllStyles(status:StyleFilterEnum):[Style]
+    getAllPrompts:[Style]
+    getPrompt(prompt_id:ID!):Prompt
+    getUserAllCredits:[Credit]
+    getAllCreditsAdmin:[Credit]
+    onGoingProcess:OngoingProcessesResponse
+
 }
 
 type Mutation {
-    google_login(google_id_token:String): AuthResponse
-    create_style(name:String,banner:String,description:String,style_details:[String],style_images:[String],is_collection:Boolean,is_featured:Boolean):Style
-    update_style(name:String,banner:String,description:String,style_details:[String],style_images:[String],is_collection:Boolean,is_featured:Boolean):Style
+    googleLogin(google_id_token:String): AuthResponse
+    createStyle(name:String,banner:String,description:String,style_details:[String],style_images:[String],is_collection:Boolean,is_featured:Boolean):Style
+    updateStyle(name:String,banner:String,description:String,style_details:[String],style_images:[String],is_collection:Boolean,is_featured:Boolean):Style
     register(first_name: String!, last_name:String!,email: String,keychain:String,is_premium:Boolean,device_type:DeviceType,role:UserRoleEnum, is_agreement_checked: Boolean,sub_id:String): AuthResponse
-    delete_style(style_id:String):Style
-    create_prompt(prompt:String, negative_prompt:String, steps:String, cfg:String, seeds:String, scheduler:String, gender:String, style_id:String ):Prompt
+    deleteStyle(style_id:String):Style
+    createPrompt(prompt:String, negative_prompt:String, steps:String, cfg:String, seeds:String, scheduler:String, gender:String, style_id:String ):Prompt
     upload_files(file:[Upload]!): File!
-    create_replicate_model(instance_data:String,gender:String):ReplicateModel
-    create_prediction(style_id:String):ReplicatePrediction
+    createReplicateModel(instance_data:String,gender:String,image:String):ReplicateModel
+    createReplicatePrediction(style_id:String,model_id:String):Set
     login(email:String):AuthResponse
-    create_one_credit(user_id:Int,amount:Int,type:CreditTypeEnum):Credit
-    
+    createOneCredit(user_id:Int,amount:Int,type:CreditTypeEnum):Credit
+    deleteUser(user_id:String):User
+    anonRegister(device_token:String,device_type:DeviceType,keychain:String,fcm_id:String):AuthResponse
+    retryCreateReplicateModel(model_id:String):ReplicateModel
 
     # ... Other mutation definitions ...
 }

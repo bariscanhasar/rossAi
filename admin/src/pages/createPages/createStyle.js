@@ -52,14 +52,14 @@ export default function SingleStylePage() {
   const handleBannerFileSelected = (e) => {
     const selectedFile = e.target.files[0]
 
-    // Check if a file is selected
+
     if (selectedFile) {
-      // Update the selected banner image
+
       setSelectedBanner(URL.createObjectURL(selectedFile))
 
-      // Update the style.banner
 
-      // Process file data similar to handleImageChange
+
+
       const currentTimestamp = new Date().getTime()
       const fileNameWithTimestamp = `${currentTimestamp}_${selectedFile.name}`
 
@@ -67,7 +67,7 @@ export default function SingleStylePage() {
         ...prevStyle,
         banner: fileNameWithTimestamp,
       }))
-      // Update state for selectedImages, file, and fileName
+
       setSelectedBanner(URL.createObjectURL(selectedFile))
 
       setFile([...file, selectedFile])
@@ -78,7 +78,7 @@ export default function SingleStylePage() {
   const handleDetailInputChange = (e, inputId) => {
     const inputValue = e.target.value
 
-    // Update the detailInputs array with the entered value for the specific inputId
+
     setDetailInputs((prevInputs) => {
       return prevInputs.map((input) =>
         input.id === inputId ? { ...input, value: inputValue } : input,
@@ -145,9 +145,7 @@ export default function SingleStylePage() {
 
       await axios.post('http://localhost:5001/upload', formData)
 
-      // Handle the response data
     } catch (e) {
-      // Handle errors
       console.error(e.message)
     }
   }
@@ -280,8 +278,10 @@ export default function SingleStylePage() {
           />
         </div>
       ))}
+      <div className="d-flex justify-content-start">
 
-      <Button variant="contained" color="primary" onClick={handleCreateStyle} />
+      <Button variant="contained" color="primary" onClick={handleCreateStyle}>SAVE</Button>
+      </div>
     </div>
   )
 }

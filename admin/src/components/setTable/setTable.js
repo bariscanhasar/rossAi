@@ -14,7 +14,11 @@ const onButtonClick = (e, row) => {
 
 
 const columns = [
-    { field: 'name', headerName: 'Name', width: 300 },
+    {
+        field: 'name',
+        headerName: "name",
+        width: 300,
+    },
     {
         field: 'user',
         headerName: 'User',
@@ -24,7 +28,8 @@ const columns = [
     {
         field: 'model',
         headerName: "Model",
-        width: 300
+        width: 300,
+        valueGetter: (params) => params.row.model.name
     },
     {
         field: 'images',
@@ -43,8 +48,7 @@ export default function SetTable() {
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>;
 
-    const sets = data.get_all_set_admin; // Replace with the actual data field
-    console.log(sets)
+    const setsData = data.get_all_set_admin;
 
     const handleRowClick = (params) => {
         navigate(`/sets/${params.id}`)
@@ -53,7 +57,7 @@ export default function SetTable() {
     return (
         <div style={{ width: '100%', height: 400 }}>
             <DataGrid
-                rows={sets}
+                rows={setsData}
                 columns={columns}
                 pageSize={5}
                 checkboxSelection

@@ -15,6 +15,7 @@ import { GET_ALL_STYLES } from '../../graphql/queries'
 import {CREATE_PROMPT} from "../../graphql/mutation";
 import { useState } from 'react'
 import { useMutation } from '@apollo/client'
+import Button from "@mui/material/Button";
 export default function CreatePrompt() {
   const { loading, error, data } = useQuery(GET_ALL_STYLES)
   const [prompt, setPrompt] = useState({
@@ -169,10 +170,9 @@ export default function CreatePrompt() {
         </FormControl>
 
         <div className="d-flex justify-content-between p-3 bg-light">
-          <SaveIcon onClick={handleCreatePrompt} />
+          <Button variant="contained" color="primary" onClick={handleCreatePrompt}>SAVE</Button>
           <div className="">
-            <DeleteIcon />
-            <span>Delete</span>
+            <Button variant="contained" color="warning" onClick={handleCreatePrompt}>CLEAR</Button>
           </div>
         </div>
       </div>

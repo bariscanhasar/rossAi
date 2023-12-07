@@ -72,7 +72,7 @@ async function createPrediction(
           },
           version: model?.version,
           webhook_completed:
-            "https://e830-2a02-e0-8bdf-8a00-c0ba-b114-231e-1650.ngrok-free.app/predictionwebhook",
+            process.env.REPLICATE_PREDICTION_WEBHOOK,
         },
       });
       replicate_prediction.set = set;

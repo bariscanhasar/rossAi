@@ -3,12 +3,11 @@ import {
     PrimaryGeneratedColumn,
     Column,
     CreateDateColumn,
-    OneToMany,
     BaseEntity,
     ManyToOne,
 } from "typeorm";
 import {Set} from './Set'
-import {Prompt} from "../Prompt/Prompt";
+
 
 
 @Entity()

@@ -5,9 +5,7 @@ import morgan from "morgan";
 import path from "path";
 import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServer } from "@apollo/server";
-import {
-  ApolloServerPluginLandingPageLocalDefault,
-} from "@apollo/server/plugin/landingPage/default";
+import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
 import { resolvers } from "./schema/typeDefs/index";
 import { typeDefs } from "./schema/typeDefs/index";
 import { dbCreateConnection } from "./orm/dbCreateConnection";
@@ -16,7 +14,8 @@ import { User } from "./orm/model/User/User";
 import { getAccessToken, validateTokenData } from "./auth/authUtils";
 import JWT, { JwtPayload } from "./core/jwt";
 import { upload } from "./middlewares/upload";
-import routes from "./webhooks/index"
+import routes from "./webhooks/index";
+
 process.on("uncaughtException", (e) => {
   Logger.error(e);
 });
@@ -25,7 +24,7 @@ dotenv.config();
 
 const app = express();
 app.use(express.json({ limit: "50mb" }));
-// Increase the payload size limit for URL-encoded data
+
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 app.use(
@@ -41,23 +40,19 @@ app.use(
 );
 app.use(morgan("tiny"));
 
-
-
-
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/upload", express.static(path.join(__dirname, "../upload")));
-app.use("/static", express.static(path.join(__dirname, "../prediction_images")));
+app.use(
+  "/static",
+  express.static(path.join(__dirname, "../prediction_images"))
+);
 (async () => {
   await dbCreateConnection();
 })();
 
-
-
-// ROUTES ACTUALLY WEBHOOKS
-app.use("/",routes)
+app.use("/", routes);
 
 app.post("/upload", upload.array("file", 10), (req: Request, res: Response) => {
   try {
@@ -88,7 +83,7 @@ const server = new ApolloServer({
     expressMiddleware(server, {
       //@ts-ignore
       context: async ({ req }) => {
-        // Skip authentication for login and register routes
+
         if (
           req.headers.authorization &&
           !req.path.includes("login") &&
@@ -99,6 +94,8 @@ const server = new ApolloServer({
             const payload: JwtPayload = await JWT.validate(token);
             validateTokenData(payload);
             const user = await User.findOne({ where: { id: payload.user_id } });
+            if (!user) throw new Error('you must be logged in to query this schema');
+
 
             return { user };
           } catch (e) {

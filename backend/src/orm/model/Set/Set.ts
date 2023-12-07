@@ -25,7 +25,7 @@ export class Set extends BaseEntity{
     @Column({
         nullable: true,
         type: "enum",
-        enum: ReplicateStatusEnum, // Use the enum you've defined
+        enum: ReplicateStatusEnum,
     })
     status?: string;
 

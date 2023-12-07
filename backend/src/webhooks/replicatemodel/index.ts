@@ -25,7 +25,7 @@ router.post("/", async (req, res) => {
   set.model = model!;
   set.status = "processing";
   const saved_set = await set.save();
-  const results = await createPrediction(prompts, 50, model!, style!, set);
+  await createPrediction(prompts, 50, model!, style!, saved_set);
 
   console.log(req.body);
   res.status(200).send(modified_model);

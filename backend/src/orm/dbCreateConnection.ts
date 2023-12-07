@@ -4,7 +4,7 @@ import ormConfig from './config/ormconfig';
 export const dbCreateConnection = async (): Promise<Connection> => {
     try {
         const connectionManager = getConnectionManager();
-        const connectionName = ormConfig.name ?? 'default'; // Use 'default' as a default value if ormConfig.name is undefined
+        const connectionName = ormConfig.name ?? 'default';
 
         if (connectionManager.has(connectionName)) {
             const activeConnection = connectionManager.get(connectionName);
@@ -16,7 +16,7 @@ export const dbCreateConnection = async (): Promise<Connection> => {
 
         const connection = await createConnection({ ...ormConfig, name: connectionName });
         console.log(`Database connection success. Connection name: '${connection.name}' Database: '${connection.options.database}'`);
-        await connection.runMigrations(); // Automatically create database tables based on entities
+        await connection.runMigrations();
         return connection;
     } catch (err) {
         console.error('Database connection error:', err);

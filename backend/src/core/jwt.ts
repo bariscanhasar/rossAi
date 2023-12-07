@@ -35,21 +35,6 @@ async function validate(token: string): Promise<JwtPayload> {
 }
 
 
-/**
- * Returns the decoded payload if the signature is valid even if it is expired
- */
-// async function decode(token: string): Promise<JwtPayload> {
-//
-//   try {
-//     // @ts-ignore
-//     return (await promisify(Verify)(token,  {
-//       ignoreExpiration: true,
-//     })) as JwtPayload;
-//   } catch (e) {
-//     Logger.debug(e);
-//     throw new BadTokenError();
-//   }
-// }
 
 export default {
     encode,

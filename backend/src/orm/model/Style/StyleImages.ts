@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany, BaseEntity,ManyToOne} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, BaseEntity,ManyToOne} from "typeorm";
 import {Style} from "./Style"
 @Entity()
 export class StyleImages extends BaseEntity{

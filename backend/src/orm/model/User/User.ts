@@ -31,7 +31,7 @@ export class User extends BaseEntity{
 
     @Column({
         type: "enum",
-        enum: Role, // Use the enum you've defined
+        enum: Role,
         default: Role.USER
     })
     role?: Role;
@@ -39,7 +39,7 @@ export class User extends BaseEntity{
 
     @Column({
         type: "enum",
-        enum: DeviceType, // Use the enum you've defined
+        enum: DeviceType,
         default: DeviceType.IOS
 
     })

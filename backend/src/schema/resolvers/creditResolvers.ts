@@ -1,21 +1,21 @@
 import {Credit} from "../../orm/model/Credit/Credit";
 import {User} from "../../orm/model/User/User";
 import moment from "moment/moment";
+import {checkPermission} from "../../helpers/checkPermission";
 
 export const creditResolvers = {
     Query: {
-        get_user_all_credits,
-        get_all_credits
+        getUserAllCredits,
+        getAllCreditsAdmin
     },
     Mutation: {
-        create_one_credit
+        createOneCredit
     },
 };
 
 
-async function get_user_all_credits(_,__,context) {
+async function getUserAllCredits(_,__,context) {
     const user_id = context.user.id
-
 
     const credits = await Credit.find({where:{user:{id:user_id}},relations:["user"]})
 
@@ -23,13 +23,14 @@ async function get_user_all_credits(_,__,context) {
 
 }
 
-async function get_all_credits(_,__,) {
+async function getAllCreditsAdmin(_,__,context) {
+    checkPermission(context.user.role)
     const credits = await Credit.find({relations:["user"]})
-    console.log("bra")
     return credits
 }
 
-async function create_one_credit(_,{user_id,amount,type}) {
+async function createOneCredit(_,{user_id,amount,type},context) {
+    checkPermission(context.user.role)
     const user = await User.findOne({where:{id:user_id}});
     const currentDate = moment().utc().startOf("day");
     if(!user) return Error("no user")

@@ -17,6 +17,24 @@ export const GET_ALL_USERS = gql`
         }
     }
 `;
+
+export const GET_USER = gql`
+    query get_user($user_id:String) {
+        get_user(user_id:$user_id) {
+            id
+            first_name
+            last_name
+            email
+            device_type
+            is_agreement_checked
+            is_premium
+            keychain
+            role
+            sub_id
+            created_at
+        }
+    }
+`;
 export const GET_SET = gql`
     query get_set($set_id:String) {
         get_set(set_id:$set_id) {
@@ -50,6 +68,9 @@ export const GET_ALL_SETS_ADMIN = gql`
             }
             images {
                 id
+            }
+            model {
+                name
             }
         }
     }

@@ -13,6 +13,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useParams } from 'react-router-dom';
 import { useQuery, gql } from '@apollo/client';
 import {GET_PROMPT} from "../graphql/queries";
+import Button from "@mui/material/Button";
 export default function SinglePromptPage() {
     const [age, setAge] = React.useState('');
     const { id } = useParams()
@@ -133,12 +134,10 @@ export default function SinglePromptPage() {
 
 
 
-                <div className='d-flex justify-content-between p-3 bg-light'>
-                    <SaveIcon/>
-                    <div className=''>
-
-                        <DeleteIcon/>
-                        <span>Delete</span>
+                <div className="d-flex justify-content-between p-3 bg-light">
+                    <Button variant="contained" color="primary" >SAVE</Button>
+                    <div className="">
+                        <Button variant="contained" color="warning">DELETE</Button>
                     </div>
                 </div>
             </div>

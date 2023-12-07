@@ -59,7 +59,7 @@ export class ReplicatePrediction extends BaseEntity {
   @Column({
     nullable: true,
     type: "enum",
-    enum: Scheduler, // Use the enum you've defined
+    enum: Scheduler,
   })
   prompt_scheduler?: Scheduler;
 
@@ -67,7 +67,7 @@ export class ReplicatePrediction extends BaseEntity {
   @Column({
     nullable: true,
     type: "enum",
-    enum: ReplicateStatusEnum, // Use the enum you've defined
+    enum: ReplicateStatusEnum,
   })
   status?: string;
 

@@ -45,17 +45,20 @@ export class ReplicateModel extends BaseEntity {
   @Column({ nullable: true })
   instance_data?: string;
 
+
+
+
   @Column({
     nullable: true,
     type: "enum",
-    enum: ReplicateStatusEnum, // Use the enum you've defined
+    enum: ReplicateStatusEnum,
   })
   status?: ReplicateStatusEnum;
 
   @Column({
     nullable: true,
     type: "enum",
-    enum: Gender, // Use the enum you've defined
+    enum: Gender,
   })
   gender?: Gender;
 

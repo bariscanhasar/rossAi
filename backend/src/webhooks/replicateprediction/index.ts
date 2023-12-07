@@ -19,13 +19,14 @@ router.post("/", async (req, res) => {
   });
   const set_id = exist_prediction?.set.id;
   const exist_set = await Set.findOne({ where: { id: set_id } });
-  console.log(exist_prediction);
+
+  if (!exist_set) res.status(500).json("Error on prediction webhook.")
 
   // @ts-ignore
   const imageNames: [string] = [];
   output.map(async (url) => {
     const imageUrl = url;
-    const imageName = uuidv4() + ".jpg"; // You can generate a more meaningful name
+    const imageName = uuidv4() + ".jpg";
 
     try {
       const response = await axios.get(imageUrl, {
@@ -43,7 +44,8 @@ router.post("/", async (req, res) => {
       console.error(error);
     }
   });
-
+  exist_set!.status = "succeded"
+  await exist_set?.save()
   res.status(200).send(req.body);
 });
 

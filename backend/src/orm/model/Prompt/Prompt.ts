@@ -39,14 +39,14 @@ export class Prompt extends BaseEntity{
 
     @Column({
         type: "enum",
-        enum: Scheduler, // Use the enum you've defined
+        enum: Scheduler,
     })
     scheduler?: Scheduler;
 
 
     @Column({
         type: "enum",
-        enum: Gender, // Use the enum you've defined
+        enum: Gender,
     })
     gender?: Gender;
 
