@@ -5,10 +5,12 @@ import { where } from "sequelize";
 import { ReplicatePrediction } from "../../orm/model/Replicate/ReplicatePrediction";
 import { In } from "typeorm";
 import {checkPermission} from "../../helpers/checkPermission";
+import {Prompt} from "../../orm/model/Prompt/Prompt";
 export const styleResolvers = {
   Query: {
     getStyle,
     getAllStyles,
+    getAllStylesAdmin
   },
   Mutation: {
     createStyle,
@@ -190,6 +192,12 @@ async function getAllStyles(_, { status }) {
   }
 
   return styles;
+}
+
+async function getAllStylesAdmin(_,__,context) {
+  checkPermission(context.user.role)
+  const styles = await Style.find({relations:["prompt"]})
+  return styles
 }
 async function deleteStyle(_, { style_id }) {
   const style = await Style.findOne({

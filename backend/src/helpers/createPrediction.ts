@@ -72,7 +72,7 @@ async function createPrediction(
           },
           version: model?.version,
           webhook_completed:
-            process.env.REPLICATE_PREDICTION_WEBHOOK,
+            process.env.REPLICATE_WEBHOOK_PREDICTION,
         },
       });
       replicate_prediction.set = set;

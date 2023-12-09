@@ -89,11 +89,12 @@ const server = new ApolloServer({
           !req.path.includes("login") &&
           !req.path.includes("register")
         ) {
+
           try {
             const token = getAccessToken(req.headers.authorization);
             const payload: JwtPayload = await JWT.validate(token);
             validateTokenData(payload);
-            const user = await User.findOne({ where: { id: payload.user_id } });
+            const user = await User.findOne({ where: { id: payload.userId } });
             if (!user) throw new Error('you must be logged in to query this schema');
 
 

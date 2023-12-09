@@ -3,8 +3,9 @@ import Logger from "../../core/logger";
 import { createTokens } from "../../auth/authUtils";
 import { AuthFailureError } from "../../core/apiError";
 import axios from "axios";
-import {ReplicateModel} from "../../orm/model/Replicate/ReplicateModel";
-import {Set} from "../../orm/model/Set/Set";
+import { ReplicateModel } from "../../orm/model/Replicate/ReplicateModel";
+import { Set } from "../../orm/model/Set/Set";
+import crypto from "crypto-js";
 
 export const userResolvers = {
   Query: {
@@ -16,7 +17,7 @@ export const userResolvers = {
     googleLogin,
     login,
     deleteUser,
-    anonRegister
+    anonRegister,
   },
 };
 async function googleLogin(_, { google_id_token }) {
@@ -72,6 +73,7 @@ async function register(
     is_agreement_checked,
     is_premium,
     sub_id,
+    password,
   }
 ) {
   const userExist = await User.findOne({
@@ -81,17 +83,30 @@ async function register(
   if (userExist) {
     return new AuthFailureError("User already exists.");
   }
-
+  const hashedPass = crypto.AES.encrypt(password, "secret_key").toString();
   const user = new User();
-  user.email = email;
-  user.first_name = first_name;
-  user.last_name = last_name;
-  user.role = role;
-  user.device_type = device_type;
-  user.keychain = keychain;
-  user.is_agreement_checked = is_agreement_checked;
-  user.is_premium = is_premium;
-  user.sub_id = sub_id;
+  if (password) {
+    user.email = email;
+    user.first_name = first_name;
+    user.last_name = last_name;
+    user.role = role;
+    user.device_type = device_type;
+    user.keychain = keychain;
+    user.is_agreement_checked = is_agreement_checked;
+    user.is_premium = is_premium;
+    user.sub_id = sub_id;
+    user.password = hashedPass;
+  } else {
+    user.email = email;
+    user.first_name = first_name;
+    user.last_name = last_name;
+    user.role = role;
+    user.device_type = device_type;
+    user.keychain = keychain;
+    user.is_agreement_checked = is_agreement_checked;
+    user.is_premium = is_premium;
+    user.sub_id = sub_id;
+  }
 
   try {
     const newUser = await user.save();
@@ -133,8 +148,16 @@ async function anonRegister(
   };
 }
 
-async function login(_, { email }) {
+async function login(_, { email, password }) {
+  console.log(`email:${email}`);
   const exist_user = await User.findOne({ where: { email: email } });
+  if (password) {
+    const hashedPass = crypto.AES.decrypt(exist_user!.password!, "secret_key");
+    const orgPass = hashedPass.toString(crypto.enc.Utf8);
+    console.log(password);
+    if (orgPass !== password) throw new Error("Wrong pass.");
+  }
+
   const token = await createTokens(exist_user);
   return {
     code: 1000,
@@ -171,7 +194,6 @@ async function deleteUser(_, { user_id }, context) {
 
   return user;
 }
-
 
 async function mergeUser({ _, user_id, new_user_id }) {
   try {

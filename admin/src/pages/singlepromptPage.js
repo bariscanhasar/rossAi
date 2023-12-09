@@ -12,12 +12,12 @@ import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useParams } from 'react-router-dom';
 import { useQuery, gql } from '@apollo/client';
-import {GET_PROMPT} from "../graphql/queries";
+import {getPrompt} from "../graphql/queries";
 import Button from "@mui/material/Button";
 export default function SinglePromptPage() {
     const [age, setAge] = React.useState('');
     const { id } = useParams()
-    const { loading, error, data } = useQuery(GET_PROMPT, {
+    const { loading, error, data } = useQuery(getPrompt, {
         variables: { prompt_id: id },
     })
 
@@ -29,7 +29,7 @@ export default function SinglePromptPage() {
         return <p>Error: {error.message}</p>
     }
 
-    const promptData = data && data.get_prompt ? data.get_prompt : null
+    const promptData = data && data.getPrompt ? data.getPrompt : null
     console.log(promptData)
     const handleChange = (event) => {
         setAge(event.target.value);

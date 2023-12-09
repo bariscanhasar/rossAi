@@ -1,7 +1,7 @@
 import { DataGrid } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-import { GET_ALL_REPLICATE_MODELS } from '../../graphql/queries';
+import { getAllReplicateModelsAdmin } from '../../graphql/queries';
 
 const columns = [
     { field: 'name', headerName: 'Name', width: 500, valueGetter: (params) => params.row.name },
@@ -10,8 +10,8 @@ const columns = [
 ];
 
 export default function ReplicateModelsTable() {
-    const { loading, error, data } = useQuery(GET_ALL_REPLICATE_MODELS);
-    const modelsData = data?.get_all_replicate_models ?? [];
+    const { loading, error, data } = useQuery(getAllReplicateModelsAdmin);
+    const modelsData = data?.getAllReplicateModelsAdmin ?? [];
     console.log(modelsData);
     const navigate = useNavigate();
 

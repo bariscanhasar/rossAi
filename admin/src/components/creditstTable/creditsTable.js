@@ -1,6 +1,6 @@
 import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
 import {useQuery} from "@apollo/client";
-import {GET_ALL_CREDITS} from "../../graphql/queries";
+import {getAllCreditsAdmin} from "../../graphql/queries";
 const rows = [
     { id: 1,  date: '10/24/2023', amount:1, user: 'Barış Topal <baristpl@gmail.com>', },
     { id: 1,  date: '10/24/2023', amount:1, user: 'Barış Topal <baristpl@gmail.com>', },
@@ -24,10 +24,10 @@ const columns = [
 
 
 export default function CreditsTable() {
-    const { loading, error, data } = useQuery(GET_ALL_CREDITS);
+    const { loading, error, data } = useQuery(getAllCreditsAdmin);
 
 
-    const rowsData = data && data.get_all_credits ? data.get_all_credits : []
+    const rowsData = data && data.getAllCreditsAdmin ? data.getAllCreditsAdmin : []
 
     console.log(data)
     return (

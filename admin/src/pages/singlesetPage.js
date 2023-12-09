@@ -9,7 +9,7 @@ import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
 import { useParams } from 'react-router-dom'
 import { useQuery } from '@apollo/client'
-import {GET_ALL_USERS, GET_SET, GET_STYLE} from '../graphql/queries'
+import {getAllUsers, getSet, getStyle} from '../graphql/queries'
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 
@@ -17,7 +17,7 @@ const PF = "http://localhost:5001/static/"
 
 export default function SingleSetPage() {
     const { id } = useParams()
-    const { loading, error, data } = useQuery(GET_SET, {
+    const { loading, error, data } = useQuery(getSet, {
         variables: { set_id: id },
     })
     if(loading) {
@@ -29,7 +29,7 @@ export default function SingleSetPage() {
 
     }
 
-    const setData = data && data.get_set ? data.get_set : null
+    const setData = data && data.getSet ? data.getSet : null
     return (
        <div className="card">
            <div className="info p-3 border-bottom">

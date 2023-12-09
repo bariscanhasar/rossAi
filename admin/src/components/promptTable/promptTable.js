@@ -6,9 +6,9 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { Toolbar } from '@mui/material';
-import { GET_ALL_PROMPTS, GET_ALL_STYLES } from '../../graphql/queries';
+import { getAllPrompts, getAllStylesAdmin } from '../../graphql/queries';
 import { useQuery } from '@apollo/client';
-
+import {makeQuery} from "../../makeQuery"
 const columns = [
     {
         field: 'name',
@@ -33,25 +33,20 @@ export default function PromptTable() {
     const navigate = useNavigate();
     const [age, setAge] = React.useState('');
     const [genderFilter, setGenderFilter] = React.useState('');
-    const { loading, error, data } = useQuery(GET_ALL_PROMPTS);
-    const style_data = useQuery(GET_ALL_STYLES);
 
+    const { loading, error, data } =  useQuery(getAllPrompts);
+    console.log(error)
+    const style_data = useQuery(getAllStylesAdmin);
     const handleRowClick = (params) => {
         navigate(`/prompts/${params.row.prompt_id}`);
     };
 
-    if (loading) {
-        return <p>Loading...</p>;
-    }
 
-    if (error) {
-        return <p>Error: {error.message}</p>;
-    }
 
-    const rowsData = data && data.get_all_prompts ? data.get_all_prompts : [];
+    const rowsData = data && data.getAllPrompts ? data.getAllPrompts : [];
     const styleData =
-        style_data.data && style_data.data.get_all_styles
-            ? style_data.data.get_all_styles
+        style_data.data && style_data.data.getAllStylesAdmin
+            ? style_data.data.getAllStylesAdmin
             : [];
 
     const transformedRows = rowsData.reduce((acc, style) => {

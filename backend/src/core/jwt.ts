@@ -5,13 +5,13 @@ import Logger from './logger';
 
 
 export class JwtPayload {
-    user_id: number;
+    userId: number;
     exp: number;
 
     constructor(
         userId: number,
     ) {
-        this.user_id = userId;
+        this.userId = userId;
         this.exp = Math.floor(Date.now() / 1000) + 1000000
     }
 }

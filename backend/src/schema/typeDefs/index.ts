@@ -9,6 +9,7 @@ import {replicateResolvers} from "../resolvers/replicateResolvers";
 import creditTypeDefs from "./creditTypeDefs";
 import {creditResolvers} from "../resolvers/creditResolvers";
 import {setResolvers} from "../resolvers/setResolvers";
+import {statsResolvers} from "../resolvers/statsResolvers";
 
 export const typeDefs = [
     userTypeDefs,
@@ -24,5 +25,6 @@ export const resolvers = [
     promptResolvers,
     replicateResolvers,
     creditResolvers,
-    setResolvers
+    setResolvers,
+    statsResolvers
 ]

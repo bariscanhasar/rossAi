@@ -12,13 +12,13 @@ import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {useParams} from "react-router-dom";
 import {useQuery} from "@apollo/client";
-import {GET_USER} from "../graphql/queries";
+import {getUser} from "../graphql/queries";
 import NativeSelect from '@mui/material/NativeSelect';
 export default function SingleUserPage() {
     const [age, setAge] = React.useState('');
     const { id } = useParams()
 
-    const { loading, error, data } = useQuery(GET_USER, {
+    const { loading, error, data } = useQuery(getUser, {
         variables: { user_id: id },
     });
     if (loading) {
@@ -29,7 +29,7 @@ export default function SingleUserPage() {
         return <p>Error: {error.message}</p>
     }
 
-    const userData = data && data.get_user ? data.get_user : null
+    const userData = data && data.getUser ? data.getUser : null
     console.log(userData)
     const handleChange = (event) => {
         setAge(event.target.value);

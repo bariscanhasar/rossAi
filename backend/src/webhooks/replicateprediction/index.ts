@@ -44,7 +44,7 @@ router.post("/", async (req, res) => {
       console.error(error);
     }
   });
-  exist_set!.status = "succeded"
+  exist_set!.status = "succeeded"
   await exist_set?.save()
   res.status(200).send(req.body);
 });

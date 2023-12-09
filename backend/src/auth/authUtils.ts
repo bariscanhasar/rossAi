@@ -15,7 +15,7 @@ export const getAccessToken = (authorization?: string) => {
 }
 // Function to validate token data
 export const validateTokenData = (payload: JwtPayload): boolean => {
-    if (!payload.user_id) throw new AuthFailureError('Invalid Access Token');
+    if (!payload.userId) throw new AuthFailureError('Invalid Access Token');
 
     return true;
 };
@@ -24,6 +24,7 @@ export const validateTokenData = (payload: JwtPayload): boolean => {
 export const createTokens = async (
     user: User | null,
 ) => {
+    console.log(user)
     const token = await JWT.encode(
         new JwtPayload(
             user?.id!, // We use the User's ID in the JWT payload

@@ -80,8 +80,21 @@ enum StyleFilterEnum {
     FEATURED
 }
 type OngoingProcessesResponse {
-    models: [ReplicateModel!]
-    sets: [Set!]
+    models: [ReplicateModel]
+    sets: [Set]
+}
+type lastSevenDayPredictionCount {
+    date:String
+    count:Int
+}
+type StatResponse {
+    userCount:Int
+    modelCount:Int
+    predictionCount:Int
+    setCount:Int
+    lastSevenDayPredictionCount:[lastSevenDayPredictionCount]
+
+
 }
 type Query {
     getAllUsers:[User]
@@ -99,6 +112,8 @@ type Query {
     getUserAllCredits:[Credit]
     getAllCreditsAdmin:[Credit]
     onGoingProcess:OngoingProcessesResponse
+    getAllStylesAdmin:[Style]
+    homePageStats:StatResponse
 
 }
 
@@ -106,13 +121,13 @@ type Mutation {
     googleLogin(google_id_token:String): AuthResponse
     createStyle(name:String,banner:String,description:String,style_details:[String],style_images:[String],is_collection:Boolean,is_featured:Boolean):Style
     updateStyle(name:String,banner:String,description:String,style_details:[String],style_images:[String],is_collection:Boolean,is_featured:Boolean):Style
-    register(first_name: String!, last_name:String!,email: String,keychain:String,is_premium:Boolean,device_type:DeviceType,role:UserRoleEnum, is_agreement_checked: Boolean,sub_id:String): AuthResponse
+    register(first_name: String!, last_name:String!,email: String,password:String,keychain:String,is_premium:Boolean,device_type:DeviceType,role:UserRoleEnum, is_agreement_checked: Boolean,sub_id:String): AuthResponse
     deleteStyle(style_id:String):Style
     createPrompt(prompt:String, negative_prompt:String, steps:String, cfg:String, seeds:String, scheduler:String, gender:String, style_id:String ):Prompt
     upload_files(file:[Upload]!): File!
     createReplicateModel(instance_data:String,gender:String,image:String):ReplicateModel
     createReplicatePrediction(style_id:String,model_id:String):Set
-    login(email:String):AuthResponse
+    login(email:String,password:String):AuthResponse
     createOneCredit(user_id:Int,amount:Int,type:CreditTypeEnum):Credit
     deleteUser(user_id:String):User
     anonRegister(device_token:String,device_type:DeviceType,keychain:String,fcm_id:String):AuthResponse

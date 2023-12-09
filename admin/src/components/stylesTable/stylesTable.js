@@ -1,10 +1,10 @@
 import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid'
 import { Link, useNavigate } from 'react-router-dom'
 import { useQuery } from '@apollo/client'
-import { GET_ALL_STYLES, GET_ALL_USERS } from '../../graphql/queries'
+import { getAllStylesAdmin, getAllUsers } from '../../graphql/queries'
 import * as React from 'react'
 import { Toolbar } from '@mui/material'
-
+import { makeQuery } from '../../makeQuery'
 
 const PF = 'http://localhost:5001/upload/'
 const columns = [
@@ -24,24 +24,19 @@ const columns = [
 ]
 
 export default function StylesTable() {
+  const { loading, error, data } =  useQuery(getAllStylesAdmin);
   const [age, setAge] = React.useState('')
   const handleChange = (event) => {
     setAge(event.target.value)
   }
   const label = { inputProps: { 'aria-label': 'Switch demo' } }
-  const { loading, error, data } = useQuery(GET_ALL_STYLES)
+  const styleData = data && data.getAllStylesAdmin ? data.getAllStylesAdmin : []
   const navigate = useNavigate()
 
-  if (loading) {
-    return <p>Loading...</p>
-  }
+  console.log(data)
 
-  if (error) {
-    return <p>Error: {error.message}</p>
-  }
 
-  const rowsData = data && data.get_all_styles ? data.get_all_styles : []
-  console.log(rowsData)
+  console.log(styleData)
   const handleRowClick = (params) => {
     navigate(`/styles/${params.id}`)
   }
@@ -55,7 +50,7 @@ export default function StylesTable() {
         </div>
       </Toolbar>
       <DataGrid
-        rows={rowsData}
+        rows={styleData}
         columns={columns}
         initialState={{
           pagination: {

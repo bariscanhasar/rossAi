@@ -11,13 +11,13 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import SaveIcon from '@mui/icons-material/Save'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { useQuery } from '@apollo/client'
-import { GET_ALL_STYLES } from '../../graphql/queries'
-import {CREATE_PROMPT} from "../../graphql/mutation";
+import { getAllStylesAdmin } from '../../graphql/queries'
+import {createPrompt} from "../../graphql/mutation";
 import { useState } from 'react'
 import { useMutation } from '@apollo/client'
 import Button from "@mui/material/Button";
 export default function CreatePrompt() {
-  const { loading, error, data } = useQuery(GET_ALL_STYLES)
+  const { loading, error, data } = useQuery(getAllStylesAdmin)
   const [prompt, setPrompt] = useState({
     style_id: '',
     prompt: '',
@@ -42,7 +42,7 @@ export default function CreatePrompt() {
   }
   data && console.log(data.get_all_styles)
 
-  const [createPromptMutation] = useMutation(CREATE_PROMPT)
+  const [createPromptMutation] = useMutation(createPrompt)
 
   const handleCreatePrompt = async () => {
     try {

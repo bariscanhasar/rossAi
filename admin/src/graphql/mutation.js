@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
-export const CREATE_STYLE_MUTATION = gql`
-    mutation CreateStyle(
+export const createStyle = gql`
+    mutation createStyle(
     $name: String!,
     $banner: String!,
     $description: String!,
@@ -10,7 +10,7 @@ export const CREATE_STYLE_MUTATION = gql`
     $style_images: [String!]!,
     $style_details: [String!]!
     ) {
-    create_style(
+    createStyle(
     name: $name,
     banner: $banner,
     description: $description,
@@ -30,8 +30,8 @@ export const CREATE_STYLE_MUTATION = gql`
     }
 `;
 
-export const CREATE_PROMPT = gql`
-    mutation CreatePrompt(
+export const createPrompt = gql`
+    mutation createPrompt(
         $prompt: String
         $negative_prompt: String
         $steps: String
@@ -41,7 +41,7 @@ export const CREATE_PROMPT = gql`
         $gender: String
         $style_id: String
     ) {
-        create_prompt(
+        createPrompt(
             prompt: $prompt
             negative_prompt: $negative_prompt
             steps: $steps
@@ -63,6 +63,25 @@ export const CREATE_PROMPT = gql`
             createdAt
             updatedAt
             # Add other fields you want to retrieve after creating a prompt
+        }
+    }
+`;
+
+
+
+export const Login = gql`
+    mutation login(
+        $email: String
+        $password:String
+   
+
+    ) {
+        login(
+            email: $email\
+            password: $password
+
+        ) {
+            token
         }
     }
 `;

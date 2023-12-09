@@ -129,16 +129,22 @@ async function getAllReplicateModelsAdmin(_,__,context) {
   const models = await ReplicateModel.find({ relations: ["user"] });
   return models;
 }
-
 async function onGoingProcess(_, __) {
-  const set = await Set.find({
-    where: { status: In(["processing", "waiting", "started"]) },
-  });
-  const model = await ReplicateModel.find({
-    where: { status: In(["processing", "waiting", "started"]) },
-  });
+  try{
+    const sets = await Set.find({
+      where: { status: In(["processing", "waiting", "starting"]) },
+      relations:["model"]
+    });
+    console.log(sets)
+    const models = await ReplicateModel.find({
+      where: { status: In(["processing", "waiting", "starting"]) },
+    });
 
-  return [set, model];
+
+    return { models, sets};
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 async function retryCreateReplicateModel(_, { model_id }) {

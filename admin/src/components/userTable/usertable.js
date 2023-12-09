@@ -5,7 +5,7 @@ import { Toolbar } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import * as React from "react";
 import { useQuery, gql } from '@apollo/client';
-import {GET_ALL_USERS} from "../../graphql/queries"
+import {getAllUsers} from "../../graphql/queries"
 import { useState } from 'react';
 
 
@@ -19,30 +19,21 @@ const columns = [
     { field: 'first_name', headerName: 'First Name',},
     { field: 'last_name', headerName: 'Last Name',width:150  },
     { field: 'created_at', headerName: 'Created at', },
-    { field: 'email', headerName: 'Email', width:300  },
-    { field: 'role', headerName: 'Role',  },
+    { field: 'email', headerName: 'Email', width:250  },
+    { field: 'role', headerName: 'Role', width:150 },
     { field: 'is_premium', headerName: 'Premium Status',width:150 },
-    { field: 'device_type', headerName: 'Device Type', },
-    { field: 'train_credits', headerName: 'Train Credits', },
+    { field: 'device_type', headerName: 'Device Type', width:150},
+    { field: 'train_credits', headerName: 'Train Credits',width:150 },
     { field: 'predict_credits', headerName: 'Predict Credits',width:150  },
-    { field: 'actions', headerName: 'Actions', width: 75, renderCell: (params) => {
-            return (
-                <button style={{width:50, fontSize:"x-small"}}
-                    onClick={(e) => onButtonClick(e, params.row)}
-                    variant="contained"
-                >
-                    Delete
-                </button>
-            );
-        } }
+
 ];
 
 
 
 export default function UserTable() {
-    const { loading, error, data } = useQuery(GET_ALL_USERS);
+    const { loading, error, data } = useQuery(getAllUsers);
     const [filterEmail, setFilterEmail] = useState('');
-
+    console.log(data)
     const navigate = useNavigate();
 
     const handleRowClick = (params) => {
@@ -61,7 +52,7 @@ export default function UserTable() {
         return <p>Error: {error.message}</p>;
     }
 
-    const rowsData = data && data.get_all_users ? data.get_all_users : [];
+    const rowsData = data && data.getAllUsers ? data.getAllUsers : [];
 
     const filteredRows = rowsData.filter((row) =>
         row.email.toLowerCase().includes(filterEmail.toLowerCase())

@@ -12,7 +12,7 @@ import { useQuery } from '@apollo/client'
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
 import { useMutation } from '@apollo/client'
-import { CREATE_STYLE_MUTATION } from '../../graphql/mutation'
+import { createStyle } from '../../graphql/mutation'
 import Button from '@mui/material/Button'
 import axios from 'axios'
 export default function SingleStylePage() {
@@ -32,7 +32,7 @@ export default function SingleStylePage() {
     is_featured: false,
     is_collection: false,
   })
-  const [create_style, { loading, error }] = useMutation(CREATE_STYLE_MUTATION)
+  const [create_style, { loading, error }] = useMutation(createStyle)
 
   const { id } = useParams()
 

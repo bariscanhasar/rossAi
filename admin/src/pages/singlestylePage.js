@@ -9,7 +9,7 @@ import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
 import { useParams } from 'react-router-dom'
 import { useQuery } from '@apollo/client'
-import { GET_ALL_USERS, GET_STYLE } from '../graphql/queries'
+import { getStyle, GET_STYLE } from '../graphql/queries'
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -17,7 +17,7 @@ export default function SingleStylePage() {
   const fileInputRef = useRef()
   const [selectedImage, setSelectedImage] = useState(null)
   const { id } = useParams()
-  const { loading, error, data } = useQuery(GET_STYLE, {
+  const { loading, error, data } = useQuery(getStyle, {
     variables: { styleId: id },
   })
     if(loading) {
@@ -33,7 +33,7 @@ export default function SingleStylePage() {
     return <p>Error: {error.message}</p>
   }
 
-  const styleData = data && data.get_style ? data.get_style : null
+  const styleData = data && data.getStyle ? data.getStyle : null
 
   console.log(styleData)
 
