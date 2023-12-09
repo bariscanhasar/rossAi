@@ -18,7 +18,7 @@ const getToken = () => {
 }
 
 const client = new ApolloClient({
-    uri: 'http://bariscanhasar/graphql',
+    uri: 'http://api.bariscanhasar/graphql',
     cache: new InMemoryCache(),
     headers: {Authorization: getToken()}
 });
