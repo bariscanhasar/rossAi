@@ -72,7 +72,7 @@ async function createPrediction(
           },
           version: model?.version,
           webhook_completed:
-            process.env.REPLICATE_WEBHOOK_PREDICTION,
+            "https://api.bariscanhasar.com/predictionwebhook",
         },
       });
       replicate_prediction.set = set;

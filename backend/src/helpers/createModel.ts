@@ -69,10 +69,10 @@ async function createModel(
             model: `bariscanhasar/${user_id}${random_number}`,
             trainer_version: trainer_version,
             webhook_completed:
-            process.env.REPLICATE_WEBHOOK_MODEL,
+            "https://api.bariscanhasar.com/modelwebhook",
         },
     });
-
+    console.log(response.data)
     const new_model = new ReplicateModel();
     new_model.replicate_id = response.data.id;
     new_model.user = user!;
