@@ -25,7 +25,7 @@ const columns = [
         field: 'model',
         headerName: "Model",
         width: 300,
-        valueGetter: (params) => params.row.model.name
+        valueGetter: (params) => params.row.model ? params.row.model.name : ''
     },
     {
         field: 'images',
