@@ -16,11 +16,6 @@ const onButtonClick = (e, row) => {
 
 const columns = [
     {
-        field: 'name',
-        headerName: "name",
-        width: 300,
-    },
-    {
         field: 'user',
         headerName: 'User',
         width: 400,
