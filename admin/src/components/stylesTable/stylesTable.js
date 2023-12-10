@@ -6,7 +6,7 @@ import * as React from 'react'
 import { Toolbar } from '@mui/material'
 import { makeQuery } from '../../makeQuery'
 
-const PF = 'http://localhost:5001/upload/'
+const PF = 'https://bariscanhasar.com/upload/'
 const columns = [
   { field: 'name', headerName: 'Name', width: 400 },
   {

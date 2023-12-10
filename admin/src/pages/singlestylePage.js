@@ -65,7 +65,7 @@ export default function SingleStylePage() {
     }
   }
     console.log(styleData.style_images)
-    const PF = "http://localhost:5001/upload/"
+    const PF = "https://bariscanhasar.com/upload/"
   return (
     <div className="d-flex flex-column">
       <div className="w-25 mb-3">
