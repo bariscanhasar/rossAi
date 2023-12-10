@@ -7,7 +7,7 @@ import { Toolbar } from '@mui/material'
 import { makeQuery } from '../../makeQuery'
 import ProgressBar from "../circularProgress/circularProgress";
 
-const PF = 'http://localhost:5001/upload/'
+const PF = 'https://api.bariscanhasar.com/upload/'
 const columns = [
   { field: 'name', headerName: 'Name', width: 400 },
   {
