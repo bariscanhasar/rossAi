@@ -132,6 +132,7 @@ type Mutation {
     deleteUser(user_id:String):User
     anonRegister(device_token:String,device_type:DeviceType,keychain:String,fcm_id:String):AuthResponse
     retryCreateReplicateModel(model_id:String):ReplicateModel
+    deletePrompt(promptId:String):Prompt
 
     # ... Other mutation definitions ...
 }

@@ -20,7 +20,7 @@ export const createStyle = gql`
     style_details: $style_details
     ) {
             banner
-            createdAt
+            created_at
             description
             id
             is_collection
@@ -68,7 +68,17 @@ export const createPrompt = gql`
 `;
 
 
+export const deletePrompt =gql`
+    mutation deletePrompt($promptId: String) {
+        deletePrompt(promptId: $promptId){
+            id
+        }
+    }
 
+
+
+
+`
 export const Login = gql`
     mutation login(
         $email: String

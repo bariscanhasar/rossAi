@@ -3,6 +3,7 @@ import { useQuery } from "@apollo/client";
 import { getAllSetsAdmin } from "../../graphql/queries";
 import * as React from "react";
 import {Link, NavLink, useNavigate} from "react-router-dom";
+import ProgressBar from "../circularProgress/circularProgress";
 
 const onButtonClick = (e, row) => {
     console.log(row)
@@ -45,7 +46,9 @@ export default function SetTable() {
     const navigate = useNavigate();
     const { loading, error, data } = useQuery(getAllSetsAdmin);
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) {
+        return  <ProgressBar/>
+    }
     if (error) return <p>Error: {error.message}</p>;
 
     const setsData = data.getAllSetsAdmin;

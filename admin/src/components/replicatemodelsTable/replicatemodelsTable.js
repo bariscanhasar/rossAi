@@ -2,6 +2,8 @@ import { DataGrid } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { getAllReplicateModelsAdmin } from '../../graphql/queries';
+import ProgressBar from "../circularProgress/circularProgress";
+import * as React from "react";
 
 const columns = [
     { field: 'name', headerName: 'Name', width: 500, valueGetter: (params) => params.row.name },
@@ -10,10 +12,13 @@ const columns = [
 ];
 
 export default function ReplicateModelsTable() {
+    const navigate = useNavigate();
     const { loading, error, data } = useQuery(getAllReplicateModelsAdmin);
+    if (loading) {
+        return  <ProgressBar/>
+    }
     const modelsData = data?.getAllReplicateModelsAdmin ?? [];
     console.log(modelsData);
-    const navigate = useNavigate();
 
     const handleRowClick = (params) => {
         navigate(`/replicate-models/${params.id}`);

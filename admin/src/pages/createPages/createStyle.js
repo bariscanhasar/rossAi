@@ -1,26 +1,22 @@
 import React, { useRef, useState } from 'react'
-
 import TextField from '@mui/material/TextField'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Switch from '@mui/material/Switch'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import ListItemText from '@mui/material/ListItemText'
 import { useParams } from 'react-router-dom'
-import { useQuery } from '@apollo/client'
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
 import { useMutation } from '@apollo/client'
 import { createStyle } from '../../graphql/mutation'
 import Button from '@mui/material/Button'
 import axios from 'axios'
+import Alert from '@mui/material/Alert'
 export default function SingleStylePage() {
   const [file, setFile] = useState([])
   const [fileName, setFileName] = useState([])
   const [selectedImages, setSelectedImages] = useState([])
   const fileInputRef = useRef()
-
+  const [show, setShow] = useState('none')
   const [selectedImage, setSelectedImage] = useState(null)
   const [selectedBanner, setSelectedBanner] = useState(null)
   const [imageInputs, setImageInputs] = useState([])
@@ -52,13 +48,8 @@ export default function SingleStylePage() {
   const handleBannerFileSelected = (e) => {
     const selectedFile = e.target.files[0]
 
-
     if (selectedFile) {
-
       setSelectedBanner(URL.createObjectURL(selectedFile))
-
-
-
 
       const currentTimestamp = new Date().getTime()
       const fileNameWithTimestamp = `${currentTimestamp}_${selectedFile.name}`
@@ -77,7 +68,6 @@ export default function SingleStylePage() {
 
   const handleDetailInputChange = (e, inputId) => {
     const inputValue = e.target.value
-
 
     setDetailInputs((prevInputs) => {
       return prevInputs.map((input) =>
@@ -142,145 +132,176 @@ export default function SingleStylePage() {
           is_featured: style.is_featured,
         },
       })
+      if (graphqlResponse.data && graphqlResponse.data.createStyle) {
+        setShow('block')
 
-      await axios.post('http://localhost:5001/upload', formData)
-
+        // Set "none" after 3 seconds
+        setTimeout(() => {
+          setShow('none')
+        }, 3000)
+        setFile([])
+        setFileName([])
+        setSelectedImages([])
+        setSelectedImage(null)
+        setSelectedBanner(null)
+        setImageInputs([])
+        setDetailInputs([{ id: 1, value: null }])
+        setStyle({
+          name: '',
+          description: '',
+          banner: '',
+          is_featured: false,
+          is_collection: false,
+        })
+      }
+      await axios.post('https://api.bariscanhasar.com/upload', formData)
     } catch (e) {
       console.error(e.message)
     }
   }
-  console.log(fileName)
-  console.log(file)
-  console.log(selectedBanner)
+
   return (
-    <div className="d-flex flex-column">
-      <div className="w-25 mb-3">
-        <TextField
-          name="name"
-          id="filled-basic"
-          label="Name"
-          variant="filled"
-          onChange={handleChange}
-        />
-      </div>
-      <span>Banner</span>
-      <div className="mb-3 d-flex  pb-2 pt-2">
-        <input
-          name="banner"
-          type="file"
-          onChange={(e) => handleBannerFileSelected(e)}
-        />
-      </div>
-      <div className="mb-3">
-        <img
-          src={selectedBanner}
-          alt="Selected Banner"
-          style={{ width: '100px', height: 'auto' }}
-        />
-      </div>
-      <div className="mb-3">
-        <TextField
-          fullWidth
-          id="filled-basic"
-          label="Image Link"
-          variant="filled"
-          defaultValue={selectedBanner}
-        />
-      </div>
-      <div className="mb-3">
-        <TextField
-          name="description"
-          fullWidth
-          id="filled-basic"
-          label="Description"
-          variant="filled"
-          onChange={handleChange}
-        />
-      </div>
-      <div>
-        <FormGroup>
-          <FormControlLabel
-            name="is_featured"
-            control={<Switch />}
-            label="Is featured"
-            onChange={handleChange}
-          />
-          <FormControlLabel
-            control={<Switch />}
-            label="Is collection"
-            onChange={handleChange}
-            name="is_collection"
-          />
-        </FormGroup>
-      </div>
-      <span>Examples</span>
-      <div className="d-flex">
-        <AddIcon onClick={handleAddInput} />
-        <RemoveIcon onClick={handleResetInputImages} />
+    <div>
+      <div style={{ display: show }}>
+        <Alert severity="success" color="info">
+          Style successfully created.
+        </Alert>
       </div>
 
-      <div className="mb-3">
-        <div
-          onDragOver={handleDropAreaDragOver}
-          onDrop={(e) => handleDropAreaDrop(e)}
-          style={{
-            cursor: 'pointer',
-            width: 'fit-content',
-            textAlign: 'center',
-            margin: '0 auto',
-          }}
-        >
-          {' '}
-          Drop a file here, or click to select it.{' '}
-        </div>
-        <input type="file" id="file" multiple onChange={handleImageChange} />
-
-        <div className="d-flex flex-column">
-          {selectedImages &&
-            selectedImages.map((image) => (
-              <>
-                <div>
-                  <img
-                    className="mt-3"
-                    src={image}
-                    alt={`Selected Image}`}
-                    style={{ width: '100px', height: 'auto' }}
-                  />
-                  <TextField
-                    fullWidth
-                    id={`filled-basic-`}
-                    label="Image Link"
-                    variant="filled"
-                    defaultValue={image}
-                  />
-                </div>
-              </>
-            ))}
-        </div>
-
-        <div className="mb-3"></div>
-      </div>
-
-      <span>Details</span>
-      <div className="d-flex">
-        <AddIcon onClick={handleAddDetailInput} />
-        <RemoveIcon />
-      </div>
-
-      {detailInputs.map((input) => (
-        <div key={input.id} className="w-25 mb-3">
+      <div className="d-flex flex-column">
+        <div className="w-25 mb-3">
           <TextField
-            id={`filled-basic-detail-${input.id}`}
-            label="Detail Name"
+            name="name"
+            id="filled-basic"
+            label="Name"
             variant="filled"
-            value={input.value}
-            onChange={(e) => handleDetailInputChange(e, input.id)}
+            onChange={handleChange}
           />
         </div>
-      ))}
-      <div className="d-flex justify-content-start">
+        <span>Banner</span>
+        <div className="mb-3 d-flex  pb-2 pt-2">
+          <input
+            name="banner"
+            type="file"
+            onChange={(e) => handleBannerFileSelected(e)}
+          />
+        </div>
+        <div className="mb-3">
+          <img
+            src={selectedBanner}
+            alt="Selected Banner"
+            style={{ width: '100px', height: 'auto' }}
+          />
+        </div>
+        <div className="mb-3">
+          <TextField
+            fullWidth
+            id="filled-basic"
+            label="Image Link"
+            variant="filled"
+            defaultValue={selectedBanner}
+          />
+        </div>
+        <div className="mb-3">
+          <TextField
+            name="description"
+            fullWidth
+            id="filled-basic"
+            label="Description"
+            variant="filled"
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <FormGroup>
+            <FormControlLabel
+              name="is_featured"
+              control={<Switch />}
+              label="Is featured"
+              onChange={handleChange}
+            />
+            <FormControlLabel
+              control={<Switch />}
+              label="Is collection"
+              onChange={handleChange}
+              name="is_collection"
+            />
+          </FormGroup>
+        </div>
+        <span>Examples</span>
+        <div className="d-flex">
+          <AddIcon onClick={handleAddInput} />
+          <RemoveIcon onClick={handleResetInputImages} />
+        </div>
 
-      <Button variant="contained" color="primary" onClick={handleCreateStyle}>SAVE</Button>
+        <div className="mb-3">
+          <div
+            onDragOver={handleDropAreaDragOver}
+            onDrop={(e) => handleDropAreaDrop(e)}
+            style={{
+              cursor: 'pointer',
+              width: 'fit-content',
+              textAlign: 'center',
+              margin: '0 auto',
+            }}
+          >
+            {' '}
+            Drop a file here, or click to select it.{' '}
+          </div>
+          <input type="file" id="file" multiple onChange={handleImageChange} />
+
+          <div className="d-flex flex-column">
+            {selectedImages &&
+              selectedImages.map((image) => (
+                <>
+                  <div>
+                    <img
+                      className="mt-3"
+                      src={image}
+                      alt={`Selected Image}`}
+                      style={{ width: '100px', height: 'auto' }}
+                    />
+                    <TextField
+                      fullWidth
+                      id={`filled-basic-`}
+                      label="Image Link"
+                      variant="filled"
+                      defaultValue={image}
+                    />
+                  </div>
+                </>
+              ))}
+          </div>
+
+          <div className="mb-3"></div>
+        </div>
+
+        <span>Details</span>
+        <div className="d-flex">
+          <AddIcon onClick={handleAddDetailInput} />
+          <RemoveIcon />
+        </div>
+
+        {detailInputs.map((input) => (
+          <div key={input.id} className="w-25 mb-3">
+            <TextField
+              id={`filled-basic-detail-${input.id}`}
+              label="Detail Name"
+              variant="filled"
+              value={input.value}
+              onChange={(e) => handleDetailInputChange(e, input.id)}
+            />
+          </div>
+        ))}
+        <div className="d-flex justify-content-start">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleCreateStyle}
+          >
+            SAVE
+          </Button>
+        </div>
       </div>
     </div>
   )

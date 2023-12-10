@@ -11,8 +11,9 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useParams } from 'react-router-dom';
-import { useQuery, gql } from '@apollo/client';
+import {useQuery, gql, useMutation} from '@apollo/client';
 import {getPrompt} from "../graphql/queries";
+import {deletePrompt} from "../graphql/mutation";
 import Button from "@mui/material/Button";
 export default function SinglePromptPage() {
     const [age, setAge] = React.useState('');
@@ -20,6 +21,7 @@ export default function SinglePromptPage() {
     const { loading, error, data } = useQuery(getPrompt, {
         variables: { prompt_id: id },
     })
+    const [deletePromptMutation] = useMutation(deletePrompt)
 
     if (loading) {
         return <p>Loading...</p>
@@ -34,7 +36,13 @@ export default function SinglePromptPage() {
     const handleChange = (event) => {
         setAge(event.target.value);
     };
-    const label = { inputProps: { 'aria-label': 'Switch demo' } };
+    const handleDelete = async () => {
+        const gpqResponse = await deletePromptMutation({
+            variables:{
+                promptId: promptData.id
+            }
+        })
+    }
     return (
         <div>
             <div className="d-flex flex-column">
@@ -137,7 +145,7 @@ export default function SinglePromptPage() {
                 <div className="d-flex justify-content-between p-3 bg-light">
                     <Button variant="contained" color="primary" >SAVE</Button>
                     <div className="">
-                        <Button variant="contained" color="warning">DELETE</Button>
+                        <Button onClick={handleDelete} variant="contained" color="warning">DELETE</Button>
                     </div>
                 </div>
             </div>

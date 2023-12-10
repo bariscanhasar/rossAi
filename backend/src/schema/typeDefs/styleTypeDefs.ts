@@ -11,8 +11,8 @@ type Style {
     style_images: [StyleImage!]
     style_details: [StyleDetail!]
     prompt:[Prompt]
-    createdAt: String
-    updatedAt: String
+    created_at: String
+    updated_at: String
   
 }
 

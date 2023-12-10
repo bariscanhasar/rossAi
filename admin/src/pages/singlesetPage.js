@@ -13,7 +13,7 @@ import {getAllUsers, getSet, getStyle} from '../graphql/queries'
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 
-const PF = "http://localhost:5001/static/"
+const PF = "https://api.bariscanhasar.com/static/"
 
 export default function SingleSetPage() {
     const { id } = useParams()

@@ -5,8 +5,9 @@ import { getAllStylesAdmin, getAllUsers } from '../../graphql/queries'
 import * as React from 'react'
 import { Toolbar } from '@mui/material'
 import { makeQuery } from '../../makeQuery'
+import ProgressBar from "../circularProgress/circularProgress";
 
-const PF = 'https://bariscanhasar.com/upload/'
+const PF = 'http://localhost:5001/upload/'
 const columns = [
   { field: 'name', headerName: 'Name', width: 400 },
   {
@@ -24,14 +25,14 @@ const columns = [
 ]
 
 export default function StylesTable() {
+  const navigate = useNavigate()
   const { loading, error, data } =  useQuery(getAllStylesAdmin);
-  const [age, setAge] = React.useState('')
-  const handleChange = (event) => {
-    setAge(event.target.value)
+  if (loading) {
+    return  <ProgressBar/>
   }
+
   const label = { inputProps: { 'aria-label': 'Switch demo' } }
   const styleData = data && data.getAllStylesAdmin ? data.getAllStylesAdmin : []
-  const navigate = useNavigate()
 
   console.log(data)
 

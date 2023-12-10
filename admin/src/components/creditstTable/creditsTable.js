@@ -1,6 +1,7 @@
 import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
 import {useQuery} from "@apollo/client";
 import {getAllCreditsAdmin} from "../../graphql/queries";
+import ProgressBar from "../circularProgress/circularProgress";
 const rows = [
     { id: 1,  date: '10/24/2023', amount:1, user: 'Barış Topal <baristpl@gmail.com>', },
     { id: 1,  date: '10/24/2023', amount:1, user: 'Barış Topal <baristpl@gmail.com>', },
@@ -25,6 +26,10 @@ const columns = [
 
 export default function CreditsTable() {
     const { loading, error, data } = useQuery(getAllCreditsAdmin);
+
+    if (loading) {
+        return  <ProgressBar/>
+    }
 
 
     const rowsData = data && data.getAllCreditsAdmin ? data.getAllCreditsAdmin : []

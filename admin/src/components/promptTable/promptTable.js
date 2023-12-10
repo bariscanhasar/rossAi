@@ -9,6 +9,7 @@ import { Toolbar } from '@mui/material';
 import { getAllPrompts, getAllStylesAdmin } from '../../graphql/queries';
 import { useQuery } from '@apollo/client';
 import {makeQuery} from "../../makeQuery"
+import ProgressBar from "../circularProgress/circularProgress";
 const columns = [
     {
         field: 'name',
@@ -35,8 +36,13 @@ export default function PromptTable() {
     const [genderFilter, setGenderFilter] = React.useState('');
 
     const { loading, error, data } =  useQuery(getAllPrompts);
-    console.log(error)
     const style_data = useQuery(getAllStylesAdmin);
+
+    if (loading) {
+        return  <ProgressBar/>
+    }
+
+
     const handleRowClick = (params) => {
         navigate(`/prompts/${params.row.prompt_id}`);
     };

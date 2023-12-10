@@ -9,6 +9,7 @@ export const promptResolvers = {
   },
   Mutation: {
     createPrompt,
+    deletePrompt
   },
 };
 
@@ -25,7 +26,6 @@ async function createPrompt(
   newPrompt.negative_prompt = negative_prompt;
   newPrompt.steps = steps;
   newPrompt.cfg = cfg;
-  newPrompt.seeds = seeds;
   newPrompt.scheduler = scheduler;
   newPrompt.gender = gender;
   newPrompt.style = style!;
@@ -44,4 +44,17 @@ async function getPrompt(_, { prompt_id },context) {
   checkPermission(context.user.role)
   const prompt = await Prompt.findOne({ where: { id: prompt_id } });
   return prompt;
+}
+
+async function deletePrompt(_,{promptId},context) {
+  const prompt = await Prompt.findOne({where:{id:promptId}})
+  await prompt?.remove()
+
+  return prompt
+
+
+
+
+
+
 }
