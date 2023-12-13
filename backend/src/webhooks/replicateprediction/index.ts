@@ -7,6 +7,8 @@ import fs from "fs";
 import { SetImage } from "../../orm/model/Set/SetImage";
 import { v4 as uuidv4 } from "uuid";
 import S3Repo from "../../core/aws"
+import {sendPushNotification} from "../../core/firebase";
+import {User} from "../../orm/model/User/User";
 const router = express.Router();
 
 const output_directory = path.join(__dirname, "../../../prediction_images");
@@ -19,8 +21,8 @@ router.post("/", async (req, res) => {
     relations: ["set"],
   });
   const set_id = exist_prediction?.set.id;
-  const exist_set = await Set.findOne({ where: { id: set_id } });
-
+  const exist_set = await Set.findOne({ where: { id: set_id },relations:["images"] });
+  const user = await User.findOne({where:{id:exist_set?.user.id}})
   if (!exist_set) res.status(500).json("Error on prediction webhook.")
 
   // @ts-ignore
@@ -47,6 +49,10 @@ router.post("/", async (req, res) => {
   });
   exist_set!.status = "succeeded"
   await exist_set?.save()
+
+  if (exist_set &&  (exist_set.images!.length >= 20 || exist_set.images.length >= 50)) {
+   await sendPushNotification(user?.fcmId,"Your outputs waiting you.","Now u can enjoy our app.")
+  }
   res.status(200).send(req.body);
 });
 

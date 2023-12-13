@@ -2,6 +2,7 @@ import express from "express";
 import { Credit, CreditTypeEnum } from "../../orm/model/Credit/Credit";
 import { User } from "../../orm/model/User/User";
 import moment from "moment";
+import {sendPushNotification} from "../../core/firebase";
 
 const router = express.Router();
 
@@ -43,6 +44,7 @@ router.post("/", async (req, res) => {
   const event_type: revenue_cat_event_enum = req.body.type;
   const product_id = req.body.product_id;
   const event_id = req.body.id;
+  const user = await User.findOne({where:{id:user_id}})
   try {
     const user = await User.findOne({ where: { id: user_id } });
     const creditAmount = creditConfig[event_type]?.[product_id];
@@ -61,7 +63,7 @@ router.post("/", async (req, res) => {
       user!.isPremium = true;
       await user?.save();
     }
-
+    await sendPushNotification(user?.fcmId,"Subscription processed successfully","Now u can enjoy our app.")
     res.status(200).json({ message: "Subscription processed successfully" });
   } catch (error) {
     console.error("Error processing subscription:", error);

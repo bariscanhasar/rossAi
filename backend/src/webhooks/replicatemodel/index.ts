@@ -5,6 +5,7 @@ import { Prompt } from "../../orm/model/Prompt/Prompt";
 import { User } from "../../orm/model/User/User";
 import { Set } from "../../orm/model/Set/Set";
 import { createPrediction } from "../../helpers/createPrediction";
+import {sendPushNotification} from "../../core/firebase";
 
 const router = express.Router();
 
@@ -27,6 +28,9 @@ router.post("/", async (req, res) => {
   const saved_set = await set.save();
   await createPrediction(prompts, 50, model!, style!, saved_set);
 
+  if (user?.fcmId) {
+    await sendPushNotification(user.fcmId,"Your model successfully created.","Now u can enjoy our app.")
+  }
   console.log(req.body);
   res.status(200).send(modified_model);
 });

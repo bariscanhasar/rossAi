@@ -1,6 +1,7 @@
-var admin = require("firebase-admin");
+import admin from "firebase-admin"
 
-const serviceAccount = require("../../rossai-404716-firebase-adminsdk-9dmpv-f85b3b6c1d.json")
+var serviceAccount = require("../../rossai-404716-firebase-adminsdk-9dmpv-c06a7e022a.json")
+
 
 
 const firebaseAdmin = admin.initializeApp({
