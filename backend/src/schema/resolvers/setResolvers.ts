@@ -21,27 +21,27 @@ async function getAllSetsAdmin(_, __, context) {
   return set;
 }
 
-async function getAllSets(_, { status, model_id }, context) {
+async function getAllSets(_, { status, modelId }, context) {
   const user_id = context.user.id;
   if (status) {
     const set = await Set.find({
-      where: { user: { id: user_id }, status: status, model: { id: model_id } },
+      where: { user: { id: user_id }, status: status, model: { id: modelId } },
       relations: ["images", "user"],
     });
     return set;
   }
 
   const set = await Set.find({
-    where: { user: { id: user_id }, model: { id: model_id } },
+    where: { user: { id: user_id }, model: { id: modelId } },
     relations: ["images", "user"],
   });
 
   return set;
 }
 
-async function getSet(_, { set_id }, context, __) {
+async function getSet(_, { setId }, context, __) {
   const set = await Set.findOne({
-    where: { id: set_id },
+    where: { id: setId },
     relations: ["images", "user", "model"],
   });
   return set;

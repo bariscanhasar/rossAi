@@ -20,9 +20,9 @@ import Alert from '@mui/material/Alert'
 export default function CreatePrompt() {
   const { loading, error, data } = useQuery(getAllStylesAdmin)
   const [prompt, setPrompt] = useState({
-    style_id: '',
-    prompt: '',
-    negative_prompt: '',
+    styleId: '',
+    promptText: '',
+    negativePrompt: '',
     steps: '',
     cfg: '',
     seeds: '',
@@ -34,10 +34,10 @@ export default function CreatePrompt() {
     const { name, type, checked, value } = e.target
 
     if (type === 'select-one') {
-      // Handle Select components
+
       setPrompt((prev) => ({ ...prev, [name]: value }))
     } else {
-      // Handle other input components (e.g., TextField)
+
       setPrompt((prev) => ({ ...prev, [name]: value }))
     }
   }
@@ -49,14 +49,14 @@ export default function CreatePrompt() {
     try {
       const { data } = await createPromptMutation({
         variables: {
-          prompt: prompt.prompt,
-          negative_prompt: prompt.negative_prompt,
+          promptText: prompt.promptText,
+          negativePrompt: prompt.negativePrompt,
           steps: prompt.steps,
           cfg: prompt.cfg,
           seeds: prompt.seeds,
           scheduler: prompt.scheduler,
           gender: prompt.gender,
-          style_id: prompt.style_id,
+          styleId: prompt.styleId,
         },
       })
       console.log(data)
@@ -99,7 +99,7 @@ export default function CreatePrompt() {
             <Select
                 labelId="demo-simple-select-filled-label"
                 id="demo-simple-select-filled"
-                name="style_id"
+                name="styleId"
                 onChange={handleChange}
             >
               {data &&
@@ -114,7 +114,7 @@ export default function CreatePrompt() {
           <div className="mb-3">
             <TextField
                 id="filled-multiline-static"
-                name="prompt"
+                name="promptText"
                 label="Prompt"
                 fullWidth
                 multiline
@@ -126,7 +126,7 @@ export default function CreatePrompt() {
 
           <div className="mb-3">
             <TextField
-                name="negative_prompt"
+                name="negativePrompt"
                 id="filled-multiline-static"
                 label="Negative Prompt"
                 fullWidth

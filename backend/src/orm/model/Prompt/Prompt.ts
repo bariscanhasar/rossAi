@@ -23,10 +23,10 @@ export class Prompt extends BaseEntity{
     id?: number;
 
     @Column({nullable:true,})
-    prompt?: string;
+    promptText?: string;
 
     @Column({nullable:true,})
-    negative_prompt?: string;
+    negativePrompt?: string;
 
     @Column({nullable:true,})
     steps?: number;
@@ -50,14 +50,14 @@ export class Prompt extends BaseEntity{
     })
     gender?: Gender;
 
-    @ManyToOne(() => Style, (style) => style.style_details)
+    @ManyToOne(() => Style, (style) => style.prompt)
     style!: Style
 
     @OneToMany(() => ReplicatePrediction, (prediction) => prediction.prompt)
     prediction?: ReplicatePrediction;
 
     @CreateDateColumn({ default: () => "CURRENT_TIMESTAMP" })
-    created_at?: Date;
+    createdAt?: Date;
 
 
 

@@ -8,6 +8,7 @@ import ReplicateModelsTable from './components/replicatemodelsTable/replicatemod
 import SingleUserPage from './pages/singleuserPage'
 import SingleStylePage from './pages/singlestylePage'
 import SinglePromptPage from './pages/singlepromptPage'
+import CreateCredit from "./pages/createPages/createCredit";
 import {
   BrowserRouter as Router,
   Navigate,
@@ -21,9 +22,11 @@ import SinglesetPage from './pages/singlesetPage'
 import LoginPage from './pages/loginPage'
 import NavBar from './components/navbar/navBar'
 import HomePage from "./pages/homePage";
+
 export default function App() {
   const isLoggedIn = window.localStorage.getItem('token')
-
+  const api = process.env.REACT_APP_API
+  console.log(api)
   return (
     <Router>
       {isLoggedIn ? (
@@ -46,6 +49,7 @@ export default function App() {
                 <Route path="/prompts/create" element={<CreatePrompt />} />
                 <Route path="/prompts/:id" element={<SinglePromptPage />} />
                 <Route path="/credits" element={<CreditsTable />} />
+                <Route path="/credits/create" element={<CreateCredit />} />
                 <Route path="/" element={<HomePage />} />
 
                 <Route

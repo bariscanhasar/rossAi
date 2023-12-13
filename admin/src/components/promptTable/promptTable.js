@@ -65,7 +65,7 @@ export default function PromptTable() {
             .map((prompt, index) => ({
                 id: `${style.id}-${index}`,
                 name: style.name,
-                prompt: prompt.prompt,
+                prompt: prompt.promptText,
                 gender: prompt.gender,
                 prompt_id: prompt.id,
             }));
@@ -79,7 +79,7 @@ export default function PromptTable() {
     const handleGenderChange = (event) => {
         setGenderFilter(event.target.value);
     };
-
+    console.log(transformedRows)
     return (
         <div style={{ width: '100%' }}>
             <Toolbar>

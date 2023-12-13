@@ -11,14 +11,13 @@ const getToken = () => {
     if (token) {
         // Remove double quotes if present
         const cleanToken = token.replace(/^"|"$/g, '');
-        console.log(cleanToken)
         return `Bearer ${cleanToken}`;
     }
     return 'Bearer null';
 }
 
 const client = new ApolloClient({
-    uri: 'https://api.bariscanhasar.com/graphql',
+    uri: `${process.env.REACT_APP_API}graphql`,
     cache: new InMemoryCache(),
     headers: {Authorization: getToken()}
 });

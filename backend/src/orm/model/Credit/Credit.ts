@@ -26,7 +26,7 @@ export class Credit extends BaseEntity {
   date?: Date;
 
   @Column({ nullable: true })
-  revenue_cat_event_id?: string;
+  rcEventId?: string;
 
   @Column({
     type: "enum",
@@ -35,7 +35,7 @@ export class Credit extends BaseEntity {
   })
   type?: CreditTypeEnum;
   @CreateDateColumn({ default: () => "CURRENT_TIMESTAMP" })
-  created_at?: Date;
+  createdAt?: Date;
 
   @ManyToOne(() => User, (user) => user.credit)
   user!: User;

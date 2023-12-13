@@ -6,26 +6,26 @@ type Style {
     name: String
     banner: String
     description: String
-    is_featured: Boolean
-    is_collection: Boolean
-    style_images: [StyleImage!]
-    style_details: [StyleDetail!]
+    isFeatured: Boolean
+    isCollection: Boolean
+    styleImages: [StyleImage!]
+    styleDetails: [StyleDetail!]
     prompt:[Prompt]
-    created_at: String
-    updated_at: String
+    createdAt: String
+    updatedAt: String
   
 }
 
 type StyleImage {
     id: ID
     path: String
-    created_at: String
+    createdAt: String
 }
 
 type StyleDetail {
     id: ID
     name: String
-    created_at: String
+    createdAt: String
 }
 
 

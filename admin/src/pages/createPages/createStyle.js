@@ -25,8 +25,8 @@ export default function SingleStylePage() {
     name: '',
     description: '',
     banner: '',
-    is_featured: false,
-    is_collection: false,
+    isFeatured: false,
+    isCollection: false,
   })
   const [create_style, { loading, error }] = useMutation(createStyle)
 
@@ -126,10 +126,10 @@ export default function SingleStylePage() {
           name: style.name,
           banner: style.banner,
           description: style.description,
-          style_details: dataDetails,
-          style_images: fileName,
-          is_collection: style.is_collection,
-          is_featured: style.is_featured,
+          styleDetails: dataDetails,
+          styleImages: fileName,
+          isCollection: style.isCollection,
+          isFeatured: style.isFeatured,
         },
       })
       if (graphqlResponse.data && graphqlResponse.data.createStyle) {
@@ -146,15 +146,15 @@ export default function SingleStylePage() {
         setSelectedBanner(null)
         setImageInputs([])
         setDetailInputs([{ id: 1, value: null }])
-        setStyle({
-          name: '',
-          description: '',
-          banner: '',
-          is_featured: false,
-          is_collection: false,
-        })
+        // setStyle({
+        //   name: '',
+        //   description: '',
+        //   banner: '',
+        //   isFeatured: false,
+        //   isCollection: false,
+        // })
       }
-      await axios.post('https://api.bariscanhasar.com/upload', formData)
+      await axios.post('http://localhost:5001/upload', formData)
     } catch (e) {
       console.error(e.message)
     }
@@ -215,7 +215,7 @@ export default function SingleStylePage() {
         <div>
           <FormGroup>
             <FormControlLabel
-              name="is_featured"
+              name="isFeatured"
               control={<Switch />}
               label="Is featured"
               onChange={handleChange}
@@ -224,7 +224,7 @@ export default function SingleStylePage() {
               control={<Switch />}
               label="Is collection"
               onChange={handleChange}
-              name="is_collection"
+              name="isCollection"
             />
           </FormGroup>
         </div>

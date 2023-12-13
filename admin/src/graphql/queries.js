@@ -4,44 +4,44 @@ export const getAllUsers = gql`
   query getAllUsers {
     getAllUsers {
       id
-      first_name
-      last_name
+      firstName
+      lastName
       email
-      device_type
-      is_agreement_checked
-      is_premium
+      deviceType
+      isAgreementCheck
+      isPremium
       keychain
       role
-      sub_id
-      created_at
+      subId
+      createdAt
     }
   }
 `
 
 export const getUser = gql`
-  query getUser($user_id: String) {
-    getUser(user_id: $user_id) {
+  query getUser($userId: String) {
+    getUser(userId: $userId) {
       id
-      first_name
-      last_name
+      firstName
+      lastName
       email
-      device_type
-      is_agreement_checked
-      is_premium
+      deviceType
+      isAgreementCheck
+      isPremium
       keychain
       role
-      sub_id
-      created_at
+      subId
+      createdAt
     }
   }
 `
 export const getSet = gql`
-  query getSet($set_id: String) {
-    getSet(set_id: $set_id) {
+  query getSet($setId: String) {
+    getSet(setId: $setId) {
       id
       user {
-        first_name
-        last_name
+        firstName
+        lastName
         email
       }
       images {
@@ -59,8 +59,8 @@ export const getAllSetsAdmin = gql`
     getAllSetsAdmin {
       id
       user {
-        first_name
-        last_name
+        firstName
+        lastName
         email
       }
       images {
@@ -85,17 +85,19 @@ export const getAllStylesAdmin = gql`
 
 export const getStyle = gql`
   query getStyle($styleId: ID!) {
-    getStyle(style_id: $styleId) {
+    getStyle(styleId: $styleId) {
       id
       name
       banner
       description
-      is_featured
-      is_collection
-      style_images {
+      isFeatured
+      isCollection
+      styleImages {
+        id
         path
       }
-      style_details {
+      styleDetails {
+        id
         name
       }
     }
@@ -109,7 +111,7 @@ export const getAllPrompts = gql`
       name
       prompt {
         id
-        prompt
+        promptText
         gender
       }
     }
@@ -117,11 +119,11 @@ export const getAllPrompts = gql`
 `
 
 export const getPrompt = gql`
-  query getPrompt($prompt_id: ID!) {
-    getPrompt(prompt_id: $prompt_id) {
+  query getPrompt($promptId: ID!) {
+    getPrompt(promptId: $promptId) {
       id
-      prompt
-      negative_prompt
+      promptText
+      negativePrompt
       cfg
       steps
       scheduler
@@ -135,11 +137,11 @@ export const getAllReplicateModelsAdmin = gql`
     getAllReplicateModelsAdmin {
       id
       name
-      created_at
+      createdAt
       status
       user {
-        first_name
-        last_name
+        firstName
+        lastName
         email
       }
     }
@@ -152,11 +154,11 @@ export const getAllCreditsAdmin = gql`
       id
       amount
       type
-      created_at
+      createdAt
       date
       user {
-        first_name
-        last_name
+        firstName
+        lastName
         email
       }
     }

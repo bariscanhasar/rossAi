@@ -39,29 +39,29 @@ export class ReplicatePrediction extends BaseEntity {
   id?: number;
 
   @Column({ nullable: true })
-  replicate_id!: string;
+  replicateId!: string;
 
   @Column({ nullable: true })
-  prompt_text?: string;
+  promptText?: string;
 
   @Column({ nullable: true })
-  negative_prompt?: string;
+  negativePrompt?: string;
 
   @Column({ nullable: true })
-  prompt_steps?: string;
+  promptSteps?: string;
 
   @Column({ nullable: true })
-  prompt_cfg?: string;
+  promptCfg?: string;
 
   @Column({ nullable: true })
-  prompt_output?: string;
+  promptOutput?: string;
 
   @Column({
     nullable: true,
     type: "enum",
     enum: Scheduler,
   })
-  prompt_scheduler?: Scheduler;
+  promptScheduler?: Scheduler;
 
 
   @Column({
@@ -73,7 +73,7 @@ export class ReplicatePrediction extends BaseEntity {
 
 
   @CreateDateColumn({ default: () => "CURRENT_TIMESTAMP" })
-  created_at?: Date;
+  createdAt?: Date;
 
   @ManyToOne(() => Style, (style) => style.prediction)
   style!: Style | null;

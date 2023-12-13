@@ -1,4 +1,3 @@
-import axios from "axios";
 import { ReplicateModel } from "../../orm/model/Replicate/ReplicateModel";
 import { User } from "../../orm/model/User/User";
 import { Prompt } from "../../orm/model/Prompt/Prompt";
@@ -12,8 +11,8 @@ import * as process from "process";
 import Logger from "../../core/logger";
 import { createModel } from "../../helpers/createModel";
 import { In } from "typeorm";
-import {checkPermission} from "../../helpers/checkPermission";
-const auth_token = process.env.REPLICATE_TOKEN;
+import { checkPermission } from "../../helpers/checkPermission";
+
 
 export const replicateResolvers = {
   Query: {
@@ -31,24 +30,13 @@ export const replicateResolvers = {
 
 async function createReplicateModel(
   _,
-  { instance_data, gender, image },
+  { instanceData, gender, image },
   context,
   __
 ) {
   try {
-    const image_zip = instance_data;
-    const ckpt_base = process.env.REPLICATE_CKPT_BASE;
-    const trainer_version = process.env.REPLICATE_TRAINER_VERSION;
-    const webhook = process.env.REPLICATE_WEBHOOK_MODEL;
-    const user_id = context.user.id;
-    const user = await User.findOne({ where: { id: user_id } });
-
-    const saved_model = await createModel(
-      instance_data,
-      gender,
-      image,
-      user_id
-    );
+    const userId = context.user.id;
+    const saved_model = await createModel(instanceData, gender, image, userId);
 
     return saved_model;
   } catch (e) {
@@ -59,7 +47,7 @@ async function createReplicateModel(
 
 async function getReplicateModel(_, __, context) {
   const user_id = context.user.id;
-  const model = await ReplicateModel.findOne({
+  const model = await ReplicateModel.find({
     where: {
       user: {
         id: user_id,
@@ -67,18 +55,19 @@ async function getReplicateModel(_, __, context) {
     },
     relations: ["user"],
   });
+  console.log(model)
   return model;
 }
 
-async function createReplicatePrediction(_, { style_id, model_id }, context, __) {
+async function createReplicatePrediction(_, { styleId, modelId }, context, __) {
   const user_id = context.user.id;
   const user = await User.findOne({ where: { id: user_id } });
-  const style = await Style.findOne({ where: { id: style_id } });
+  const style = await Style.findOne({ where: { id: styleId } });
   const model = await ReplicateModel.findOne({
-    where: { user: { id: user_id }, id: model_id },
+    where: { user: { id: user_id }, id: modelId },
   });
   const prompts = await Prompt.find({
-    where: { style: { id: style_id }, gender: model?.gender },
+    where: { style: { id: styleId }, gender: model?.gender },
   });
 
   const currentDate = moment().utc().startOf("day");
@@ -92,13 +81,17 @@ async function createReplicatePrediction(_, { style_id, model_id }, context, __)
       date: Between(startOfDay, endOfDay),
       type: CreditTypeEnum.PREDICT,
     },
-  });
+    order: { createdAt: "DESC" },
 
-  if (credit?.amount! < 0) return Error("no credit for predict");
+  });
+  if(!credit) return Error('no credit for prediction.')
+  console.log(credit)
+  if (credit?.amount! < 0) return Error("u already used ur credit.t");
+
 
   try {
     const set = new Set();
-    set.name = `${user?.first_name}/SET `;
+    set.name = `${user?.firstName}/SET `;
     set.user = user!;
     set.model = model!;
     set.status = "processing";
@@ -108,6 +101,7 @@ async function createReplicatePrediction(_, { style_id, model_id }, context, __)
     credit!.amount = -1;
     await credit!.save();
     Logger.info(`Created predictions for user: ${user_id}`);
+    console.log(`savedSet:${saved_set}`);
     return saved_set;
   } catch (e) {
     Logger.error(e);
@@ -124,24 +118,31 @@ async function getUserAllReplicateModels(_, __, context) {
   return models;
 }
 
-async function getAllReplicateModelsAdmin(_,__,context) {
-  checkPermission(context.user.role)
+async function getAllReplicateModelsAdmin(_, __, context) {
+  checkPermission(context.user.role);
   const models = await ReplicateModel.find({ relations: ["user"] });
   return models;
 }
-async function onGoingProcess(_, __) {
-  try{
+async function onGoingProcess(_, __,context) {
+  const userId = context.user.id
+  try {
     const sets = await Set.find({
-      where: { status: In(["processing", "waiting", "starting"]) },
-      relations:["model"]
+      where: {
+        status: In(["processing", "waiting", "starting"]),
+        user:{id:userId}
+
+      },
+      relations: ["model"],
     });
-    console.log(sets)
+    console.log(sets);
     const models = await ReplicateModel.find({
-      where: { status: In(["processing", "waiting", "starting"]) },
+      where: {
+        status: In(["processing", "waiting", "starting"]),
+        user:{id:userId}
+      },
     });
 
-
-    return { models, sets};
+    return { models, sets };
   } catch (e) {
     console.log(e);
   }
@@ -155,7 +156,7 @@ async function retryCreateReplicateModel(_, { model_id }) {
 
   if (model?.status === "failed") {
     const retry_model = await createModel(
-      model.instance_data!,
+      model.instanceData!,
       model.gender!,
       model.image!,
       model.user.id!
@@ -164,5 +165,3 @@ async function retryCreateReplicateModel(_, { model_id }) {
   }
   return Error("Model status is not failed.");
 }
-
-

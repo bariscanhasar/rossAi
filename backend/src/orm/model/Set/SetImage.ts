@@ -20,11 +20,11 @@ export class SetImage extends BaseEntity {
     path!: string;
 
     @Column({ nullable: true })
-    replicate_id!: string;
+    replicateId!: string;
 
 
     @CreateDateColumn({ default: () => "CURRENT_TIMESTAMP" })
-    created_at?: Date;
+    createdAt?: Date;
 
 
     @ManyToOne(() => Set, (set) => set.images)

@@ -31,13 +31,13 @@ async function homePageStats() {
 
         const results = await replicatePredictionRepository
             .createQueryBuilder("prediction")
-            .select("DATE(prediction.created_at) as date")
+            .select("DATE(prediction.createdAt) as date")
             .addSelect("COUNT(prediction.id) as count")
-            .where("prediction.created_at BETWEEN :startDate AND :endDate", {
+            .where("prediction.createdAt BETWEEN :startDate AND :endDate", {
                 startDate,
                 endDate,
             })
-            .groupBy("DATE(prediction.created_at)")
+            .groupBy("DATE(prediction.createdAt)")
             .getRawMany();
 
         return {

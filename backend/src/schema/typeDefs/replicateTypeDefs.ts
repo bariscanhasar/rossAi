@@ -16,55 +16,54 @@ enum ReplicateStatusEnum {
 type ReplicateModel {
     id: ID!
     name: String
-    replicate_id: String
+    replicateId: String
     version: String
     image: String
-    instance_data: String
+    instanceData: String
     status: ReplicateStatusEnum
     gender: GenderEnum
-    userId: String
     user: User
-    created_at: String
-    updated_at: String
+    createdAt: String
+    updatedAt: String
 }
 
 type Image {
     id: ID!
     path: String!
     set:Set
-    replicate_id: String
-    created_at: String!
-    updated_at: String!
+    replicateId: String
+    createdAt: String!
+    updatedAt: String!
 }
 type ReplicatePrediction {
     id: ID!
-    replicate_id: String!
+    replicateId: String!
     status: ReplicateStatusEnum!
-    prompt_text: String!
-    negative_prompt: String
-    prompt_steps: String
-    prompt_cfg: String
-    prompt_scheduler: SchedulerEnum
-    prompt_output: String!
-    model_id: String!
-    prompt_id: String!
-    style_id: String
+    PromptText: String!
+    negativePrompt: String
+    promptSteps: String
+    promptCfg: String
+    PromptScheduler: SchedulerEnum
+    promptOutput: String!
+    modelId: String!
+    promptId: String!
+    styleId: String
     model: ReplicateModel!
     prompt: Prompt!
     style: Style
     images: [Image!]!
-    created_at: String!
-    updated_at: String!
+    createdAt: String!
+    updatedAt: String!
 }
 type Set {
     id: ID!
-    name: String!
-    status: ReplicateStatusEnum!
+    name: String
+    status: ReplicateStatusEnum
     user:User
     images:[Image]
     model: ReplicateModel
-    created_at: String!
-    updated_at: String!
+    createdAt: String
+    updatedAt: String
 }
 
 

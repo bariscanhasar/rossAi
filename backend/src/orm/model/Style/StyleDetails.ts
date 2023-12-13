@@ -9,9 +9,9 @@ export class StyleDetails extends BaseEntity{
     name?: string;
 
     @CreateDateColumn({ default: () => "CURRENT_TIMESTAMP" })
-    created_at?: Date;
+    createdAt?: Date;
 
-    @ManyToOne(() => Style, (style) => style.style_details)
+    @ManyToOne(() => Style, (style) => style.styleDetails)
     style!: Style
 
 

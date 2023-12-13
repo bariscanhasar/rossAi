@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import FormGroup from '@mui/material/FormGroup'
@@ -10,62 +10,60 @@ import ListItemText from '@mui/material/ListItemText'
 import { useParams } from 'react-router-dom'
 import { useQuery } from '@apollo/client'
 import { getStyle, GET_STYLE } from '../graphql/queries'
-import Box from "@mui/material/Box";
-import CircularProgress from "@mui/material/CircularProgress";
+import Box from '@mui/material/Box'
+import CircularProgress from '@mui/material/CircularProgress'
 
 export default function SingleStylePage() {
-  const fileInputRef = useRef()
   const [selectedImage, setSelectedImage] = useState(null)
+  const [style, setStyle] = useState({
+    name: '',
+    description: '',
+    banner: '',
+    isFeatured: false,
+    isCollection: false,
+  })
   const { id } = useParams()
   const { loading, error, data } = useQuery(getStyle, {
     variables: { styleId: id },
   })
-    if(loading) {
-        return (
-            <Box sx={{ display: 'flex' }}>
-                <CircularProgress />
-            </Box>
-        )
-
+  const styleData = data && data.getStyle ? data.getStyle : null
+  useEffect(() => {
+    if (!loading && data && data.getStyle) {
+      const styleData = data.getStyle
+      setStyle({
+        name: styleData.name,
+        description: styleData.description,
+        banner: styleData.banner,
+        isFeatured: styleData.isFeatured,
+        isCollection: styleData.isCollection,
+        styleImages: styleData.styleImages,
+        styleDetails: styleData.styleDetails,
+      })
+      setSelectedImage(styleData.banner ? PF + styleData.banner : null)
     }
+  }, [loading, data])
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex' }}>
+        <CircularProgress />
+      </Box>
+    )
+  }
 
   if (error) {
     return <p>Error: {error.message}</p>
   }
 
-  const styleData = data && data.getStyle ? data.getStyle : null
-
-  console.log(styleData)
-
-  const handleFileInputClick = () => {
-    fileInputRef.current.click()
-  }
+  console.log(style)
 
   const handleFileSelected = (e) => {
-    // Handle the selected file here
     const selectedFile = e.target.files[0]
     if (selectedFile) {
       setSelectedImage(URL.createObjectURL(selectedFile))
     }
   }
 
-  const handleDropAreaClick = () => {
-    fileInputRef.current.click()
-  }
-
-  const handleDropAreaDragOver = (e) => {
-    e.preventDefault()
-  }
-
-  const handleDropAreaDrop = (e) => {
-    e.preventDefault()
-    const droppedFiles = e.dataTransfer.files
-    if (droppedFiles.length > 0) {
-      setSelectedImage(URL.createObjectURL(droppedFiles[0]))
-    }
-  }
-    console.log(styleData.style_images)
-    const PF = "https://api.bariscanhasar.com/upload/"
+  const PF = `${process.env.REACT_APP_API}upload/`
   return (
     <div className="d-flex flex-column">
       <div className="w-25 mb-3">
@@ -79,9 +77,6 @@ export default function SingleStylePage() {
       <span>Banner</span>
       <div className="mb-3 d-flex justify-content-center bg-light pb-2 pt-2">
         <div
-          onClick={handleDropAreaClick}
-          onDragOver={handleDropAreaDragOver}
-          onDrop={handleDropAreaDrop}
           style={{
             cursor: 'pointer',
             width: 'fit-content',
@@ -93,7 +88,6 @@ export default function SingleStylePage() {
         </div>
         <input
           type="file"
-          ref={fileInputRef}
           style={{ display: 'none' }}
           onChange={handleFileSelected}
         />
@@ -101,6 +95,7 @@ export default function SingleStylePage() {
       <div className="mb-3">
         {styleData && styleData.banner ? (
           <img
+            key={style.id}
             src={PF + styleData.banner}
             alt="Selected Image"
             style={{ width: '100px', height: 'auto' }}
@@ -145,9 +140,6 @@ export default function SingleStylePage() {
       <span>Examples</span>
       <div className="mb-3 d-flex justify-content-center bg-light pb-2 pt-2">
         <div
-          onClick={handleDropAreaClick}
-          onDragOver={handleDropAreaDragOver}
-          onDrop={handleDropAreaDrop}
           style={{
             cursor: 'pointer',
             width: 'fit-content',
@@ -159,16 +151,16 @@ export default function SingleStylePage() {
         </div>
         <input
           type="file"
-          ref={fileInputRef}
           style={{ display: 'none' }}
           onChange={handleFileSelected}
         />
       </div>
       <div className="mb-3">
         {styleData &&
-          styleData.style_images.map((style) => (
+          styleData.styleImages.map((style) => (
             <div className="mb-3">
               <img
+                key={style.id}
                 src={PF + style.path}
                 alt="Selected Image"
                 style={{ width: '100px', height: 'auto' }}
@@ -183,11 +175,10 @@ export default function SingleStylePage() {
             </div>
           ))}
       </div>
-
       <span>Details</span>
       <List dense={false}>
         {styleData &&
-          styleData.style_details.map((detail) => (
+          styleData.styleDetails.map((detail) => (
             <ListItem>
               <div className="w-25 mb-3">
                 <TextField
@@ -199,6 +190,12 @@ export default function SingleStylePage() {
             </ListItem>
           ))}
       </List>
+      <div className="d-flex justify-content-between p-3">
+        <Button disabled variant="contained">
+          Save
+        </Button>
+        <Button variant="contained">Delete</Button>
+      </div>
     </div>
   )
 }

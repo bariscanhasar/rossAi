@@ -27,7 +27,7 @@ async function googleLogin(_, { google_id_token }) {
   try {
     const response = await axios.get(process.env.GOOGLE_AUTH + google_token);
     const data = response.data;
-    const user_exist = await User.findOne({ where: { sub_id: data.sub } });
+    const user_exist = await User.findOne({ where: { subId: data.sub } });
 
     if (user_exist) {
       const token = await createTokens(user_exist);
@@ -42,10 +42,10 @@ async function googleLogin(_, { google_id_token }) {
     }
 
     const user = new User();
-    user.sub_id = data.sub;
+    user.subId = data.sub;
     user.email = data.email;
-    user.first_name = data.given_name;
-    user.last_name = data.family_name;
+    user.firstName = data.given_name;
+    user.lastName = data.family_name;
     const newUser = await user.save();
     const token = await createTokens(newUser);
     return {
@@ -64,15 +64,16 @@ async function googleLogin(_, { google_id_token }) {
 async function register(
   _,
   {
-    first_name,
-    last_name,
+    firstName,
+    lastName,
     email,
     role,
-    device_type,
+    deviceType,
     keychain,
-    is_agreement_checked,
-    is_premium,
-    sub_id,
+    isAgreementCheck,
+    isPremium,
+    subId,
+      fcmId,
     password,
   }
 ) {
@@ -87,25 +88,27 @@ async function register(
   const user = new User();
   if (password) {
     user.email = email;
-    user.first_name = first_name;
-    user.last_name = last_name;
+    user.firstName = firstName;
+    user.lastName = lastName;
     user.role = role;
-    user.device_type = device_type;
+    user.deviceType = deviceType;
     user.keychain = keychain;
-    user.is_agreement_checked = is_agreement_checked;
-    user.is_premium = is_premium;
-    user.sub_id = sub_id;
+    user.isAgreementCheck = isAgreementCheck;
+    user.isPremium = isPremium;
+    user.subId = subId;
+    user.fcmId = fcmId;
     user.password = hashedPass;
   } else {
     user.email = email;
-    user.first_name = first_name;
-    user.last_name = last_name;
+    user.firstName = firstName;
+    user.lastName = lastName;
     user.role = role;
-    user.device_type = device_type;
+    user.deviceType = deviceType;
     user.keychain = keychain;
-    user.is_agreement_checked = is_agreement_checked;
-    user.is_premium = is_premium;
-    user.sub_id = sub_id;
+    user.isAgreementCheck = isAgreementCheck;
+    user.isPremium = isPremium;
+    user.subId = subId;
+    user.fcmId = fcmId;
   }
 
   try {
@@ -126,10 +129,10 @@ async function register(
 
 async function anonRegister(
   _,
-  { device_token, device_type, keychain, fcm_id }
+  { deviceToken, deviceType, keychain, fcmId }
 ) {
   const user = new User();
-  user.device_type = device_type;
+  user.deviceType = deviceType;
   user.keychain = keychain;
   const saved_user = await user.save();
 
@@ -174,30 +177,31 @@ async function getAllUsers(_, __, context): Promise<any[]> {
   const users = await User.find();
   const formattedUsers = users.map((user) => ({
     ...user,
-    created_at: user.created_at.toLocaleDateString("en-GB"),
+    created_at: user.createdAt.toLocaleDateString("en-GB"),
   }));
+  console.log(formattedUsers)
   return formattedUsers;
 }
 
-async function getUser(_, { user_id }, context) {
-  const user = await User.findOne({ where: { id: user_id } });
+async function getUser(_, { userId }, context) {
+  const user = await User.findOne({ where: { id: userId } });
 
   if (!user) return Error("No user.");
 
   return user;
 }
 
-async function deleteUser(_, { user_id }, context) {
-  const user = await User.findOne({ where: { id: user_id } });
+async function deleteUser(_, { userId }, context) {
+  const user = await User.findOne({ where: { id: userId } });
 
   await user?.remove();
 
   return user;
 }
 
-async function mergeUser({ _, user_id, new_user_id }) {
+async function mergeUser({ _, userId, newUserId }) {
   try {
-    const exit_user = await User.findOne({ where: { id: user_id } });
+    const exit_user = await User.findOne({ where: { id: userId } });
     const user_models = await ReplicateModel.find({
       where: { user: { id: exit_user!.id } },
     });
@@ -205,11 +209,11 @@ async function mergeUser({ _, user_id, new_user_id }) {
       where: { user: { id: exit_user!.id } },
     });
     user_models.map(async (model) => {
-      model.user.id = new_user_id;
+      model.user.id = newUserId;
       await model.save();
     });
     user_sets.map(async (set) => {
-      set.user.id = new_user_id;
+      set.user.id = newUserId;
       await set.save();
     });
 

@@ -29,15 +29,15 @@ async function getAllCreditsAdmin(_,__,context) {
     return credits
 }
 
-async function createOneCredit(_,{user_id,amount,type},context) {
+async function createOneCredit(_,{userId,amount,creditType},context) {
     checkPermission(context.user.role)
-    const user = await User.findOne({where:{id:user_id}});
+    const user = await User.findOne({where:{id:userId}});
     const currentDate = moment().utc().startOf("day");
     if(!user) return Error("no user")
 
     const credit  = new Credit()
     credit.amount = amount
-    credit.type = type
+    credit.type = creditType
     credit.user = user
     credit.date = currentDate.toDate()
     await credit.save()

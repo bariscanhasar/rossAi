@@ -11,7 +11,7 @@ export class StyleImages extends BaseEntity{
     @CreateDateColumn({ default: () => "CURRENT_TIMESTAMP" })
     created_at?: Date;
 
-    @ManyToOne(() => Style, (style) => style.style_images)
+    @ManyToOne(() => Style, (style) => style.styleImages)
     style!: Style
 
 }

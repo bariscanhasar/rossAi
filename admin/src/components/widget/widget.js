@@ -7,11 +7,10 @@ import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlin
 import ViewInArIcon from '@mui/icons-material/ViewInAr';
 import ImageIcon from '@mui/icons-material/Image';
 import CollectionsIcon from '@mui/icons-material/Collections';
-const Widget = ({type, amount}) => {
+const Widget = ({type, amount,diff}) => {
     let data;
 
     //temporary
-    const diff = 20;
 
     switch (type) {
         case "users":

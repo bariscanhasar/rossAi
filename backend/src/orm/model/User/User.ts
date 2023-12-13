@@ -21,10 +21,10 @@ export class User extends BaseEntity{
     id?: number;
 
     @Column({nullable:true,})
-    first_name?: string;
+    firstName?: string;
 
     @Column({nullable:true,})
-    last_name?: string;
+    lastName?: string;
 
     @Column({nullable:true,})
     email?: string;
@@ -46,7 +46,7 @@ export class User extends BaseEntity{
         default: DeviceType.IOS
 
     })
-    device_type?: DeviceType;
+    deviceType?: DeviceType;
 
     @Column({
         nullable:true,
@@ -56,22 +56,25 @@ export class User extends BaseEntity{
 
 
     @Column({nullable:true,})
-    is_agreement_checked?: boolean;
+    isAgreementCheck?: boolean;
 
     @Column({nullable:true,})
-    is_premium?: boolean;
+    isPremium?: boolean;
 
     @Column({nullable:true,})
-    sub_id?: string;
+    subId?: string;
+
+    @Column({nullable:true,})
+    fcmId?: string;
 
     @CreateDateColumn({ default: () => "CURRENT_TIMESTAMP" })
-    created_at!: Date;
+    createdAt!: Date;
 
     @OneToMany(() => Credit, (credit) => credit.user)
     credit?: Credit
 
     @OneToMany(() => ReplicateModel, (replicateModel) => replicateModel.user)
-    replicate_model?: ReplicateModel[];
+    replicateModel?: ReplicateModel[];
 
     @OneToMany(() => Set, (set) => set.user)
     set?: Set;

@@ -9,9 +9,9 @@ import { createPrediction } from "../../helpers/createPrediction";
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-  const replicate_id = req.body.id;
+  const replicateId = req.body.id;
   const model = await ReplicateModel.findOne({
-    where: { replicate_id: replicate_id },
+    where: { replicateId: replicateId },
     relations: ["user"],
   });
   const style = await Style.findOne({ where: { id: 34 } });

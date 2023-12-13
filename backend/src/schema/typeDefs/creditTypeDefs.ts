@@ -16,7 +16,7 @@ type Credit {
     amount: Int!
     type: CreditTypeEnum!
     user: User
-    created_at: String!
+    createdAt: String!
 
 }
 

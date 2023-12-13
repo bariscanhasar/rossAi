@@ -20,14 +20,14 @@ enum SchedulerEnum {
 
 type Prompt {
     id: ID
-    prompt: String
-    negative_prompt: String
+    promptText: String
+    negativePrompt: String
     seeds: [String]
     steps: String
     cfg: String
     scheduler: SchedulerEnum
     gender: GenderEnum
-    style_id: String
+    styleId: String
     style:Style
     createdAt: String
     updatedAt: String

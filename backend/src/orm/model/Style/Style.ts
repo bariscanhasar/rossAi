@@ -26,19 +26,19 @@ export class Style extends BaseEntity {
   description?: string;
 
   @Column({ nullable: true })
-  is_featured?: boolean;
+  isFeatured?: boolean;
 
   @Column({ nullable: true })
-  is_collection?: boolean;
+  isCollection?: boolean;
 
   @CreateDateColumn({ default: () => "CURRENT_TIMESTAMP" })
-  created_at?: Date;
+  createdAt?: Date;
 
   @OneToMany(() => StyleImages, (styleImages) => styleImages.style)
-  style_images?: StyleImages[];
+  styleImages?: StyleImages[];
 
   @OneToMany(() => StyleDetails, (styleDetails) => styleDetails.style)
-  style_details?: StyleDetails[];
+  styleDetails?: StyleDetails[];
 
   @OneToMany(() => Prompt, (prompt) => prompt.style)
   prompt?: Prompt;

@@ -6,15 +6,16 @@ import path from "path";
 import fs from "fs";
 import { SetImage } from "../../orm/model/Set/SetImage";
 import { v4 as uuidv4 } from "uuid";
+import S3Repo from "../../core/aws"
 const router = express.Router();
 
 const output_directory = path.join(__dirname, "../../../prediction_images");
 
 router.post("/", async (req, res) => {
   const output = req.body.output;
-  const replicate_id = req.body.id;
+  const replicateId = req.body.id;
   const exist_prediction = await ReplicatePrediction.findOne({
-    where: { replicate_id: replicate_id },
+    where: { replicateId: replicateId },
     relations: ["set"],
   });
   const set_id = exist_prediction?.set.id;
@@ -26,18 +27,18 @@ router.post("/", async (req, res) => {
   const imageNames: [string] = [];
   output.map(async (url) => {
     const imageUrl = url;
-    const imageName = uuidv4() + ".jpg";
+    const imageName = uuidv4();
 
     try {
       const response = await axios.get(imageUrl, {
         responseType: "arraybuffer",
       });
-      const imagePath = path.join(output_directory, imageName);
-      fs.writeFileSync(imagePath, Buffer.from(response.data));
-      imageNames.push(imageName);
+      await S3Repo.uploadImage(imageName,response.data)
+
       const set_image = new SetImage();
       set_image.set = exist_set!;
-      set_image.replicate_id = replicate_id;
+      set_image.replicateId = replicateId;
+      //@ts-ignore
       set_image.path = imageName;
       await set_image.save();
     } catch (error) {

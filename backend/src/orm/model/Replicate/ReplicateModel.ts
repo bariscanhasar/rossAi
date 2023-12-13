@@ -34,7 +34,7 @@ export class ReplicateModel extends BaseEntity {
   name?: string;
 
   @Column({ nullable: true })
-  replicate_id!: string;
+  replicateId!: string;
 
   @Column({ nullable: true })
   version?: string;
@@ -43,7 +43,7 @@ export class ReplicateModel extends BaseEntity {
   image?: string;
 
   @Column({ nullable: true })
-  instance_data?: string;
+  instanceData?: string;
 
 
 
@@ -63,9 +63,9 @@ export class ReplicateModel extends BaseEntity {
   gender?: Gender;
 
   @CreateDateColumn({ default: () => "CURRENT_TIMESTAMP" })
-  created_at?: Date;
+  createdAt?: Date;
 
-  @ManyToOne(() => User, (user) => user.replicate_model)
+  @ManyToOne(() => User, (user) => user.replicateModel)
   user!: User;
 
   @OneToMany(() => ReplicatePrediction, (prediction) => prediction.model)

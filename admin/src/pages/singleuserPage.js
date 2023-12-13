@@ -19,7 +19,7 @@ export default function SingleUserPage() {
     const { id } = useParams()
 
     const { loading, error, data } = useQuery(getUser, {
-        variables: { user_id: id },
+        variables: { userId: id },
     });
     if (loading) {
         return <p>Loading...</p>
@@ -40,15 +40,15 @@ export default function SingleUserPage() {
             <div className="d-flex flex-column">
              <div className='w-25 mb-3'>
 
-            <TextField id="filled-basic" label="First Name" variant="filled" defaultValue={userData.first_name} />
+            <TextField id="filled-basic" label="First Name" variant="filled" defaultValue={userData.firstName} />
              </div>
                 <div className='w-25 mb-3'>
 
-                    <TextField id="filled-basic" label="Last Name" variant="filled" defaultValue={userData.last_name}  />
+                    <TextField id="filled-basic" label="Last Name" variant="filled" defaultValue={userData.lastName}  />
                 </div>
                 <div className='w-25 mb-3'>
 
-                    <TextField disabled id="filled-disabled" label="Created at" variant="filled" defaultValue={userData.created_at} />
+                    <TextField disabled id="filled-disabled" label="Created at" variant="filled" defaultValue={userData.createdAt} />
                 </div>
                 <div className='w-25 mb-3'>
 
@@ -56,7 +56,7 @@ export default function SingleUserPage() {
                 </div>
                 <div className='w-25 mb-3'>
 
-                    <Switch {...label} defaultChecked={userData.is_premium} />
+                    <Switch {...label} defaultChecked={userData.isPremium} />
                     <span>is Premium</span>
                 </div>
                 <div className='w-25 mb-3'>

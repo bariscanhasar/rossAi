@@ -15,6 +15,7 @@ import { getAccessToken, validateTokenData } from "./auth/authUtils";
 import JWT, { JwtPayload } from "./core/jwt";
 import { upload } from "./middlewares/upload";
 import routes from "./webhooks/index";
+import S3Repo from "./core/aws";
 
 process.on("uncaughtException", (e) => {
   Logger.error(e);
@@ -48,15 +49,20 @@ app.use(
   "/static",
   express.static(path.join(__dirname, "../prediction_images"))
 );
+
 (async () => {
   await dbCreateConnection();
 })();
+
+
+app.get("/s3",async(req,res) => {
+  await S3Repo.listObjects()
+})
 
 app.use("/", routes);
 
 app.post("/upload", upload.array("file", 10), (req: Request, res: Response) => {
   try {
-    console.log(req.files);
     res.send("File upload successful");
   } catch (err) {
     console.log(err);
@@ -71,6 +77,8 @@ const server = new ApolloServer({
     ApolloServerPluginLandingPageLocalDefault({ includeCookies: true }),
   ],
 });
+// @ts-ignore
+// s3Repo.createBucket("rossai-predictions")
 
 (async () => {
   await server.start();
@@ -83,24 +91,23 @@ const server = new ApolloServer({
     expressMiddleware(server, {
       //@ts-ignore
       context: async ({ req }) => {
-
         if (
           req.headers.authorization &&
           !req.path.includes("login") &&
           !req.path.includes("register")
         ) {
-
           try {
             const token = getAccessToken(req.headers.authorization);
             const payload: JwtPayload = await JWT.validate(token);
             validateTokenData(payload);
             const user = await User.findOne({ where: { id: payload.userId } });
-            if (!user) throw new Error('you must be logged in to query this schema');
-
+            if (!user)
+              throw new Error("you must be logged in to query this schema");
 
             return { user };
           } catch (e) {
             console.log(e);
+            return {};
           }
         }
       },

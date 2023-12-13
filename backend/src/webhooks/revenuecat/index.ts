@@ -42,19 +42,23 @@ router.post("/", async (req, res) => {
   const user_id = req.body.original_app_user_id;
   const event_type: revenue_cat_event_enum = req.body.type;
   const product_id = req.body.product_id;
-  const evet_id = req.body.id;
+  const event_id = req.body.id;
   try {
     const user = await User.findOne({ where: { id: user_id } });
     const creditAmount = creditConfig[event_type]?.[product_id];
 
     if (event_type == revenue_cat_event_enum.EXPIRATION) {
-      user!.is_premium = false;
+      user!.isPremium = false;
       await user?.save();
     }
 
+    if(event_type == revenue_cat_event_enum.BILLING_ISSUE) {
+      return res.status(402).json({message:"We were unable to renew your subscription, please review your payment method."})
+    }
+
     if (creditAmount !== undefined) {
-      await giveCredit(user!, creditAmount, evet_id);
-      user!.is_premium = true;
+      await giveCredit(user!, creditAmount, event_id);
+      user!.isPremium = true;
       await user?.save();
     }
 
@@ -70,20 +74,18 @@ async function giveCredit(
   amount: number,
   revenue_cat_event_id: string
 ) {
-  console.log(moment().toDate())
   const credit = new Credit();
   credit.amount = 1;
-  credit.revenue_cat_event_id = revenue_cat_event_id;
+  credit.rcEventId = revenue_cat_event_id;
   credit.date = moment().toDate();
   credit.user = user!;
   credit.type = CreditTypeEnum.TRAIN;
   await credit.save();
   for (let i = 0; i < amount; i++) {
-    console.log(moment().add(i, "days").toDate())
     const credit = new Credit();
     credit.user = user;
     credit.amount = 1;
-    credit.revenue_cat_event_id = revenue_cat_event_id;
+    credit.rcEventId = revenue_cat_event_id;
     credit.type = CreditTypeEnum.PREDICT;
     credit.date = moment().add(i, "days").toDate();
 

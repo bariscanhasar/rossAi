@@ -58,9 +58,9 @@ async function createPrediction(
         headers: { Authorization: `Token ${auth_token}` },
         data: {
           input: {
-            prompt: prompt.prompt,
+            prompt: prompt.promptText,
 
-            negative_prompt: prompt.negative_prompt,
+            negative_prompt: prompt.negativePrompt,
 
             save_infer_steps: prompt.steps,
 
@@ -72,12 +72,12 @@ async function createPrediction(
           },
           version: model?.version,
           webhook_completed:
-            "https://api.bariscanhasar.com/predictionwebhook",
+            process.env.REPLICATE_WEBHOOK_PREDICTION,
         },
       });
       replicate_prediction.set = set;
       replicate_prediction.model = model;
-      replicate_prediction.replicate_id = response.data.id;
+      replicate_prediction.replicateId = response.data.id;
       replicate_prediction.style = style;
       replicate_prediction.prompt = prompt[i];
       await replicate_prediction.save();

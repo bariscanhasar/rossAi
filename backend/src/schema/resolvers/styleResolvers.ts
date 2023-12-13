@@ -25,34 +25,34 @@ async function createStyle(
     name,
     banner,
     description,
-    is_featured,
-    is_collection,
-    style_images,
-    style_details,
+    isFeatured,
+    isCollection,
+    styleImages,
+    styleDetails,
   },
   context
 ) {
   checkPermission(context.user.role)
   const existStyle = await Style.findOne({ where: { name: name } });
   if (existStyle) throw new Error("exist style");
-  console.log(`style images: ${style_images}`);
+
   const style = new Style();
   style.name = name;
   style.banner = banner;
   style.description = description;
-  style.is_featured = is_featured;
-  style.is_collection = is_collection;
+  style.isFeatured = isFeatured;
+  style.isCollection = isCollection;
 
   const newStyle = await style.save();
 
-  for (const path of style_images) {
+  for (const path of styleImages) {
     const images = new StyleImages();
     images.path = path;
     images.style = newStyle;
     await images.save();
   }
 
-  for (const name of style_details) {
+  for (const name of styleDetails) {
     const details = new StyleDetails();
     details.name = name;
     details.style = newStyle;
@@ -61,7 +61,7 @@ async function createStyle(
 
   const lastStyleData = await Style.findOne({
     where: { name: name },
-    relations: ["style_images", "style_details", "prompt"],
+    relations: ["styleImages", "styleDetails", "prompt"],
   });
   return lastStyleData;
 }
@@ -73,10 +73,10 @@ async function updateStyle(
     name,
     banner,
     description,
-    is_featured,
-    is_collection,
-    style_images,
-    style_details,
+    isFeatured,
+    isCollection,
+    styleImages,
+    styleDetails,
   },
   context
 ) {
@@ -89,21 +89,21 @@ async function updateStyle(
   existingStyle.name = name;
   existingStyle.banner = banner;
   existingStyle.description = description;
-  existingStyle.is_featured = is_featured;
-  existingStyle.is_collection = is_collection;
-  existingStyle.style_images = [];
-  existingStyle.style_details = [];
+  existingStyle.isFeatured = isFeatured;
+  existingStyle.isCollection = isCollection;
+  existingStyle.styleImages = [];
+  existingStyle.styleDetails = [];
 
   await existingStyle.save();
 
-  for (const path of style_images) {
+  for (const path of styleImages) {
     const images = new StyleImages();
     images.path = path;
     images.style = existingStyle;
     await images.save();
   }
 
-  for (const detailName of style_details) {
+  for (const detailName of styleDetails) {
     const details = new StyleDetails();
     details.name = detailName;
     details.style = existingStyle;
@@ -112,18 +112,19 @@ async function updateStyle(
 
   const updatedStyleData = await Style.findOne({
     where: { id },
-    relations: ["style_images", "style_details"],
+    relations: ["styleImages", "styleDetails"],
   });
 
   console.log(updatedStyleData);
   return updatedStyleData;
 }
 
-async function getStyle(_, { style_id }) {
+async function getStyle(_, { styleId }) {
   const style = await Style.findOne({
-    where: { id: style_id },
-    relations: ["style_images", "style_details", "prompt"],
+    where: { id: styleId },
+    relations: ["styleImages", "styleDetails", "prompt"],
   });
+  console.log(style)
   return style;
 }
 
@@ -137,7 +138,7 @@ async function getAllStyles(_, { status }) {
       });
       const styleCounts = predictions.reduce((acc, prediction) => {
         const styleId = prediction.style?.id;
-        const createdAt = prediction.created_at;
+        const createdAt = prediction.createdAt;
 
         // @ts-ignore
         const index = acc.findIndex((style) => style.id === styleId);
@@ -174,19 +175,19 @@ async function getAllStyles(_, { status }) {
 
     case "NEWEST":
       styles = await Style.find({
-        order: { created_at: "DESC" },
+        order: { createdAt: "DESC" },
       });
       break;
 
     case "EXPLORE":
       styles = await Style.find({
-        order: { created_at: "ASC" },
+        order: { createdAt: "ASC" },
       });
       break;
 
     case "FEATURED":
       styles = await Style.find({
-        where: { is_featured: true },
+        where: { isFeatured: true },
       });
       break;
   }
@@ -199,14 +200,14 @@ async function getAllStylesAdmin(_,__,context) {
   const styles = await Style.find({relations:["prompt"]})
   return styles
 }
-async function deleteStyle(_, { style_id }) {
+async function deleteStyle(_, { styleId }) {
   const style = await Style.findOne({
-    where: { id: style_id },
+    where: { id: styleId },
     relations: ["style_images", "style_details"],
   });
   if (style) {
-    style.style_images = [];
-    style.style_details = [];
+    style.styleImages = [];
+    style.styleDetails = [];
 
     await style.save();
 
@@ -216,4 +217,15 @@ async function deleteStyle(_, { style_id }) {
 
     return style;
   }
+}
+
+async function deleteOneStyleImage(_,{imgId},context) {
+  checkPermission(context.user.role)
+  const img = await StyleImages.findOne({where:{id:imgId}})
+
+  await img?.remove()
+
+
+  return `Img successfully deleted imgId:${img?.id}`
+
 }

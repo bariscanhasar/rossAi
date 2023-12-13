@@ -9,21 +9,22 @@ export const promptResolvers = {
   },
   Mutation: {
     createPrompt,
-    deletePrompt
+    deletePrompt,
+    updatePrompt
   },
 };
 
 async function createPrompt(
   _,
-  { prompt, negative_prompt, steps, cfg, seeds, scheduler, gender, style_id },
+  { promptText, negativePrompt, steps, cfg, seeds, scheduler, gender, styleId },
   context
 ) {
   checkPermission(context.user.role)
-  const style = await Style.findOne({ where: { id: style_id } });
+  const style = await Style.findOne({ where: { id: styleId } });
 
   const newPrompt = new Prompt();
-  newPrompt.prompt = prompt;
-  newPrompt.negative_prompt = negative_prompt;
+  newPrompt.promptText = promptText;
+  newPrompt.negativePrompt = negativePrompt;
   newPrompt.steps = steps;
   newPrompt.cfg = cfg;
   newPrompt.scheduler = scheduler;
@@ -34,15 +35,41 @@ async function createPrompt(
 
   return newPrompt;
 }
+
+async function updatePrompt(_,{ promptId,promptText, negativePrompt, steps, cfg, seeds, scheduler, gender, styleId },context) {
+  checkPermission(context.user.role)
+  const prompt = await Prompt.findOne({where:{id:promptId}})
+  const style = await Style.findOne({ where: { id: styleId } });
+  prompt!.promptText = promptText;
+  prompt!.negativePrompt = negativePrompt;
+  prompt!.steps = steps;
+  prompt!.cfg = cfg;
+  prompt!.scheduler = scheduler;
+  prompt!.gender = gender;
+  prompt!.style = style!;
+
+ const savedPrompt = await prompt?.save()
+
+  return savedPrompt
+
+
+
+
+
+
+}
+
+
 async function getAllPrompts(_, __, context, {}) {
   checkPermission(context.user.role)
   const style = await Style.find({ relations: ["prompt"] });
+  console.log(style.map(style => style.prompt))
   return style;
 }
 
-async function getPrompt(_, { prompt_id },context) {
+async function getPrompt(_, { promptId },context) {
   checkPermission(context.user.role)
-  const prompt = await Prompt.findOne({ where: { id: prompt_id } });
+  const prompt = await Prompt.findOne({ where: { id: promptId } });
   return prompt;
 }
 

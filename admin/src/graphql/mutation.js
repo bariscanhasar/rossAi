@@ -1,97 +1,147 @@
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
 export const createStyle = gql`
-    mutation createStyle(
-    $name: String!,
-    $banner: String!,
-    $description: String!,
-    $is_featured: Boolean!,
-    $is_collection: Boolean!,
-    $style_images: [String!]!,
-    $style_details: [String!]!
-    ) {
+  mutation createStyle(
+    $name: String!
+    $banner: String!
+    $description: String!
+    $isFeatured: Boolean!
+    $isCollection: Boolean!
+    $styleImages: [String!]!
+    $styleDetails: [String!]!
+  ) {
     createStyle(
-    name: $name,
-    banner: $banner,
-    description: $description,
-    is_featured: $is_featured,
-    is_collection: $is_collection,
-    style_images: $style_images,
-    style_details: $style_details
+      name: $name
+      banner: $banner
+      description: $description
+      isFeatured: $isFeatured
+      isCollection: $isCollection
+      styleImages: $styleImages
+      styleDetails: $styleDetails
     ) {
-            banner
-            created_at
-            description
-            id
-            is_collection
-            is_featured
-            name
-        }
+      banner
+      createdAt
+      description
+      id
+      isCollection
+      isFeatured
+      name
     }
-`;
+  }
+`
 
 export const createPrompt = gql`
-    mutation createPrompt(
-        $prompt: String
-        $negative_prompt: String
-        $steps: String
-        $cfg: String
-        $seeds: String
-        $scheduler: String
-        $gender: String
-        $style_id: String
+  mutation createPrompt(
+    $promptText: String
+    $negativePrompt: String
+    $steps: String
+    $cfg: String
+    $seeds: String
+    $scheduler: String
+    $gender: String
+    $styleId: String
+  ) {
+    createPrompt(
+      promptText: $promptText
+      negativePrompt: $negativePrompt
+      steps: $steps
+      cfg: $cfg
+      seeds: $seeds
+      scheduler: $scheduler
+      gender: $gender
+      styleId: $styleId
     ) {
-        createPrompt(
-            prompt: $prompt
-            negative_prompt: $negative_prompt
-            steps: $steps
-            cfg: $cfg
-            seeds: $seeds
-            scheduler: $scheduler
-            gender: $gender
-            style_id: $style_id
-        ) {
-            id
-            prompt
-            negative_prompt
-            steps
-            cfg
-            seeds
-            scheduler
-            gender
-            style_id
-            createdAt
-            updatedAt
-            # Add other fields you want to retrieve after creating a prompt
-        }
+      id
+      promptText
+      negativePrompt
+      steps
+      cfg
+      seeds
+      scheduler
+      gender
+      styleId
+      createdAt
+      updatedAt
+      # Add other fields you want to retrieve after creating a prompt
     }
-`;
-
-
-export const deletePrompt =gql`
-    mutation deletePrompt($promptId: String) {
-        deletePrompt(promptId: $promptId){
-            id
-        }
-    }
-
-
-
-
+  }
 `
-export const Login = gql`
-    mutation login(
-        $email: String
-        $password:String
-   
 
+export const updatePrompt = gql`
+    mutation updatePrompt (
+      $promptId:String
+      $promptText: String
+      $negativePrompt: String
+      $steps: String
+      $cfg: String
+      $seeds: String
+      $scheduler: String
+      $gender: String
+      $styleId: String
     ) {
-        login(
-            email: $email\
-            password: $password
-
-        ) {
-            token
-        }
+      updatePrompt(
+        promptId: $promptId
+        promptText: $promptText
+        negativePrompt: $negativePrompt
+        steps: $steps
+        cfg: $cfg
+        seeds: $seeds
+        scheduler: $scheduler
+        gender: $gender
+        styleId: $styleId
+      ) {
+        id
+        promptText
+        negativePrompt
+        steps
+        cfg
+        seeds
+        scheduler
+        gender
+        styleId
+        createdAt
+        updatedAt
+      }
     }
-`;
+`
+export const createOneCredit = gql`
+  mutation createOneCredit(
+    $userId: String
+    $creditType: CreditTypeEnum
+    $amount: Int
+  ) {
+    createOneCredit(
+      userId: $userId
+      creditType: $creditType
+      amount: $amount
+    ) {
+      id
+      type
+      amount
+    }
+  }
+`
+
+export const deletePrompt = gql`
+  mutation deletePrompt($promptId: String) {
+    deletePrompt(promptId: $promptId) {
+      id
+    }
+  }
+`
+
+export const deleteStyle = gql`
+  mutation deleteStyle($styleId: String) {
+    deleteStyle(styleId: $styleId) {
+      id
+    }
+  }
+`
+
+export const Login = gql`
+  mutation login($email: String, $password: String) {
+    login(email: $email, password: $password) {
+      token
+    }
+  }
+`

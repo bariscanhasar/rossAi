@@ -1,8 +1,10 @@
 import app from './app';
 
 
+const PORT = process.env.PORT
+
 app
-    .listen(5001, () => {
-        console.log(`server running on port :5001}`);
+    .listen(PORT, () => {
+        console.log(`server running on port: ${PORT}`);
     })
     .on('error', (e) => console.log(e))

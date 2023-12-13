@@ -19,7 +19,7 @@ const columns = [
         field: 'user',
         headerName: 'User',
         width: 400,
-        valueGetter: (params) =>   params.row.user.first_name + ' ' +  params.row.user.last_name + ' ' + "<"+ params.row.user.email+ '>'  ,
+        valueGetter: (params) =>   params.row.user.firstName + ' ' +  params.row.user.lastName + ' ' + "<"+ params.row.user.email+ '>'  ,
     },
     {
         field: 'model',

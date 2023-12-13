@@ -15,15 +15,14 @@ const onButtonClick = (e, row) => {
 }
 
 const columns = [
-  { field: 'first_name', headerName: 'First Name' },
-  { field: 'last_name', headerName: 'Last Name', width: 150 },
-  { field: 'created_at', headerName: 'Created at' },
+  { field: 'firstName', headerName: 'First Name' },
+  { field: 'lastName', headerName: 'Last Name', width: 150 },
+  { field: 'createdAt', headerName: 'Created at',width: 150 },
   { field: 'email', headerName: 'Email', width: 250 },
   { field: 'role', headerName: 'Role', width: 150 },
-  { field: 'is_premium', headerName: 'Premium Status', width: 150 },
-  { field: 'device_type', headerName: 'Device Type', width: 150 },
-  { field: 'train_credits', headerName: 'Train Credits', width: 150 },
-  { field: 'predict_credits', headerName: 'Predict Credits', width: 150 },
+  { field: 'isPremium', headerName: 'Premium Status', width: 150 },
+  { field: 'deviceType', headerName: 'Device Type', width: 150 },
+
 ]
 
 export default function UserTable() {
@@ -51,7 +50,7 @@ export default function UserTable() {
   }
 
   const rowsData = data && data.getAllUsers ? data.getAllUsers : []
-
+  console.log(rowsData)
   const filteredRows = rowsData.filter((row) =>
     row.email.toLowerCase().includes(filterEmail.toLowerCase()),
   )

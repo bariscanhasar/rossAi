@@ -28,14 +28,14 @@ async function createModel(
     instance_data: string,
     gender: Gender,
     image: string,
-    user_id: number,
+    userId: number,
 ) {
 
     const image_zip = instance_data;
     const ckpt_base = process.env.REPLICATE_CKPT_BASE;
     const trainer_version = process.env.REPLICATE_TRAINER_VERSION;
     const webhook = process.env.REPLICATE_WEBHOOK_MODEL;
-    const user = await User.findOne({ where: { id: user_id } });
+    const user = await User.findOne({ where: { id: userId } });
     const random_number = Math.floor(Math.random() * 100000);
 
     const currentDate = moment().utc().startOf("day");
@@ -46,7 +46,7 @@ async function createModel(
 
     const credit = await Credit.findOne({
         where: {
-            user: { id: user_id },
+            user: { id: userId },
             date: Between(startOfDay, endOfDay),
             type: CreditTypeEnum.TRAIN,
         },
@@ -66,18 +66,18 @@ async function createModel(
                 max_train_steps: 2000,
                 ckpt_base: ckpt_base,
             },
-            model: `bariscanhasar/${user_id}${random_number}`,
+            model: `bariscanhasar/${userId}${random_number}`,
             trainer_version: trainer_version,
             webhook_completed:
-            "https://api.bariscanhasar.com/modelwebhook",
+            process.env.REPLICATE_WEBHOOK_MODEL,
         },
     });
     console.log(response.data)
     const new_model = new ReplicateModel();
-    new_model.replicate_id = response.data.id;
+    new_model.replicateId = response.data.id;
     new_model.user = user!;
-    new_model.instance_data = image_zip;
-    new_model.name = `bariscanhasar/${user_id}${random_number}`;
+    new_model.instanceData = image_zip;
+    new_model.name = `bariscanhasar/${userId}${random_number}`;
     new_model.status = response.data.status;
     new_model.gender = gender;
     new_model.image = image
@@ -85,7 +85,7 @@ async function createModel(
 
     credit!.amount = -1
     await credit.save()
-    Logger.info(`Sent request to replicate for create model for user: ${user_id}`)
+    Logger.info(`Sent request to replicate for create model for user: ${userId}`)
     return saved_model;
 
 }
