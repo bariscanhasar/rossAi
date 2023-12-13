@@ -50,7 +50,7 @@ router.post("/", async (req, res) => {
   exist_set!.status = "succeeded"
   await exist_set?.save()
 
-  if (exist_set &&  (exist_set.images!.length >= 20 || exist_set.images.length >= 50)) {
+  if (user?.fcmId && exist_set &&  (exist_set.images!.length >= 20 || exist_set.images.length >= 50)) {
    await sendPushNotification(user?.fcmId,"Your outputs waiting you.","Now u can enjoy our app.")
   }
   res.status(200).send(req.body);

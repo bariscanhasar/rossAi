@@ -11,6 +11,9 @@ import { createStyle } from '../../graphql/mutation'
 import Button from '@mui/material/Button'
 import axios from 'axios'
 import Alert from '@mui/material/Alert'
+
+
+const PF = "https://api.bariscanhasar.com/"
 export default function SingleStylePage() {
   const [file, setFile] = useState([])
   const [fileName, setFileName] = useState([])
@@ -154,7 +157,7 @@ export default function SingleStylePage() {
         //   isCollection: false,
         // })
       }
-      await axios.post('http://localhost:5001/upload', formData)
+      await axios.post(`${PF}upload`, formData)
     } catch (e) {
       console.error(e.message)
     }
