@@ -79,7 +79,7 @@ export default function PromptTable() {
     const handleGenderChange = (event) => {
         setGenderFilter(event.target.value);
     };
-    console.log(transformedRows)
+
     return (
         <div style={{ width: '100%' }}>
             <Toolbar>
@@ -122,7 +122,7 @@ export default function PromptTable() {
                         </div>
                     </div>
                     <Link to="/prompts/create">
-                        <button className="btn btn-sm btn-primary me-3">Create</button>
+                        <button className="btn btn-sm btn-dark me-3">Create</button>
                     </Link>
                 </div>
             </Toolbar>

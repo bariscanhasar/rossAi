@@ -18,7 +18,6 @@ export default function ReplicateModelsTable() {
         return  <ProgressBar/>
     }
     const modelsData = data?.getAllReplicateModelsAdmin ?? [];
-    console.log(modelsData);
 
     const handleRowClick = (params) => {
         navigate(`/replicate-models/${params.id}`);

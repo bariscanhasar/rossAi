@@ -5,7 +5,7 @@ export class StyleDetails extends BaseEntity{
     @PrimaryGeneratedColumn()
     id?: number;
 
-    @Column({nullable:true,})
+    @Column()
     name?: string;
 
     @CreateDateColumn({ default: () => "CURRENT_TIMESTAMP" })

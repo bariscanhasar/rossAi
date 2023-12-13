@@ -26,7 +26,6 @@ import HomePage from "./pages/homePage";
 export default function App() {
   const isLoggedIn = window.localStorage.getItem('token')
   const api = process.env.REACT_APP_API
-  console.log(api)
   return (
     <Router>
       {isLoggedIn ? (

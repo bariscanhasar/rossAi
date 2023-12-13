@@ -30,33 +30,31 @@ export class ReplicateModel extends BaseEntity {
   @PrimaryGeneratedColumn()
   id?: number;
 
-  @Column({ nullable: true })
+  @Column()
   name?: string;
 
-  @Column({ nullable: true })
+  @Column()
   replicateId!: string;
 
-  @Column({ nullable: true })
+  @Column()
   version?: string;
 
-  @Column({ nullable: true })
+  @Column()
   image?: string;
 
-  @Column({ nullable: true })
+  @Column()
   instanceData?: string;
 
 
 
 
   @Column({
-    nullable: true,
     type: "enum",
     enum: ReplicateStatusEnum,
   })
   status?: ReplicateStatusEnum;
 
   @Column({
-    nullable: true,
     type: "enum",
     enum: Gender,
   })

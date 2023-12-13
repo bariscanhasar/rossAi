@@ -14,7 +14,7 @@ if (!fs.existsSync(dir)) {
 }
 
 const logLevel = environment === 'development' ? 'debug' : 'warn';
-console.log(environment)
+
 const dailyRotateFile = new DailyRotateFile({
     level: logLevel,
     // @ts-ignore

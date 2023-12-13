@@ -55,7 +55,7 @@ async function getReplicateModel(_, __, context) {
     },
     relations: ["user"],
   });
-  console.log(model)
+
   return model;
 }
 
@@ -85,7 +85,7 @@ async function createReplicatePrediction(_, { styleId, modelId }, context, __) {
 
   });
   if(!credit) return Error('no credit for prediction.')
-  console.log(credit)
+
   if (credit?.amount! < 0) return Error("u already used ur credit.t");
 
 
@@ -101,7 +101,7 @@ async function createReplicatePrediction(_, { styleId, modelId }, context, __) {
     credit!.amount = -1;
     await credit!.save();
     Logger.info(`Created predictions for user: ${user_id}`);
-    console.log(`savedSet:${saved_set}`);
+
     return saved_set;
   } catch (e) {
     Logger.error(e);
@@ -134,7 +134,7 @@ async function onGoingProcess(_, __,context) {
       },
       relations: ["model"],
     });
-    console.log(sets);
+
     const models = await ReplicateModel.find({
       where: {
         status: In(["processing", "waiting", "starting"]),

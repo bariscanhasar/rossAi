@@ -10,7 +10,6 @@ import { useState } from 'react'
 import ProgressBar from '../circularProgress/circularProgress'
 
 const onButtonClick = (e, row) => {
-  console.log(row)
   e.stopPropagation()
 }
 
@@ -50,7 +49,7 @@ export default function UserTable() {
   }
 
   const rowsData = data && data.getAllUsers ? data.getAllUsers : []
-  console.log(rowsData)
+
   const filteredRows = rowsData.filter((row) =>
     row.email.toLowerCase().includes(filterEmail.toLowerCase()),
   )

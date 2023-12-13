@@ -1,4 +1,4 @@
-import * as process from "process";
+
 
 export const environment = process.env.NODE_ENV;
 export const port = process.env.PORT;

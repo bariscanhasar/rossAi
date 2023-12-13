@@ -6,8 +6,9 @@ import path from "path";
 import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServer } from "@apollo/server";
 import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
-import { resolvers } from "./schema/typeDefs/index";
-import { typeDefs } from "./schema/typeDefs/index";
+import { ApolloServerPluginLandingPageDisabled } from '@apollo/server/plugin/disabled';
+import { resolvers } from "./schema";
+import { typeDefs } from "./schema";
 import { dbCreateConnection } from "./orm/dbCreateConnection";
 import Logger from "./core/logger";
 import { User } from "./orm/model/User/User";
@@ -15,12 +16,13 @@ import { getAccessToken, validateTokenData } from "./auth/authUtils";
 import JWT, { JwtPayload } from "./core/jwt";
 import { upload } from "./middlewares/upload";
 import routes from "./webhooks/index";
-import S3Repo from "./core/aws";
 
+// HANDLING UNCAUGHT EXCEPTIONS
 process.on("uncaughtException", (e) => {
   Logger.error(e);
 });
 
+// ENVIRONMENT VARIABLES
 dotenv.config();
 
 const app = express();
@@ -28,13 +30,14 @@ app.use(express.json({ limit: "50mb" }));
 
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
+
+
 app.use(
   cors({
     origin: [
       "http://localhost:3000",
       "http://localhost:3001",
       "https://bariscanhasar.com",
-      "https://admin.bariscanhasar.com",
     ],
     credentials: true,
   })
@@ -42,30 +45,37 @@ app.use(
 app.use(morgan("tiny"));
 
 app.use(express.json());
+
+
 app.use(express.urlencoded({ extended: true }));
 
+
+
+// STYLE AND PREDICTION IMAGES STATIC.
 app.use("/upload", express.static(path.join(__dirname, "../upload")));
 app.use(
   "/static",
   express.static(path.join(__dirname, "../prediction_images"))
 );
 
+
+// POSTGRES DB CONNECTION
 (async () => {
   await dbCreateConnection();
 })();
 
 
-app.get("/s3",async(req,res) => {
-  await S3Repo.listObjects()
-})
 
+// WEBHOOKS
 app.use("/", routes);
 
+// UPLOAD STYLE IMAGES HERE.
 app.post("/upload", upload.array("file", 10), (req: Request, res: Response) => {
   try {
     res.send("File upload successful");
-  } catch (err) {
-    console.log(err);
+  } catch (e) {
+    Logger.error(e)
+    console.log(e);
   }
 });
 
@@ -73,12 +83,13 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   csrfPrevention: true,
+  introspection: true,
   plugins: [
+    // ApolloServerPluginLandingPageDisabled()
     ApolloServerPluginLandingPageLocalDefault({ includeCookies: true }),
   ],
 });
-// @ts-ignore
-// s3Repo.createBucket("rossai-predictions")
+
 
 (async () => {
   await server.start();
@@ -106,7 +117,8 @@ const server = new ApolloServer({
 
             return { user };
           } catch (e) {
-            console.log(e);
+            console.log(e)
+            Logger.error(e)
             return {};
           }
         }

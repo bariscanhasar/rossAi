@@ -16,19 +16,19 @@ export class Style extends BaseEntity {
   @PrimaryGeneratedColumn()
   id?: number;
 
-  @Column({ nullable: true })
+  @Column()
   name?: string;
 
-  @Column({ nullable: true })
+  @Column()
   banner?: string;
 
-  @Column({ nullable: true })
+  @Column()
   description?: string;
 
-  @Column({ nullable: true })
+  @Column()
   isFeatured?: boolean;
 
-  @Column({ nullable: true })
+  @Column()
   isCollection?: boolean;
 
   @CreateDateColumn({ default: () => "CURRENT_TIMESTAMP" })

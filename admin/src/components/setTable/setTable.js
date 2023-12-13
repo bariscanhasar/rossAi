@@ -5,12 +5,7 @@ import * as React from "react";
 import {Link, NavLink, useNavigate} from "react-router-dom";
 import ProgressBar from "../circularProgress/circularProgress";
 
-const onButtonClick = (e, row) => {
-    console.log(row)
-    e.stopPropagation();
 
-    //do whatever you want with the row
-};
 
 
 

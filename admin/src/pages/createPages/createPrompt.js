@@ -59,7 +59,6 @@ export default function CreatePrompt() {
           styleId: prompt.styleId,
         },
       })
-      console.log(data)
       if(data) {
         setShow('block')
         // Set "none" after 3 seconds
@@ -68,7 +67,7 @@ export default function CreatePrompt() {
         }, 3000)
 
       }
-      console.log(data)
+
     } catch (e) {
       console.log(e)
     }
@@ -85,7 +84,7 @@ export default function CreatePrompt() {
   //     gender: '',
   //   });
   // };
-  console.log(prompt)
+
   return (
       <div>
         <div style={{display: show}}>
@@ -198,9 +197,9 @@ export default function CreatePrompt() {
           </FormControl>
 
           <div className="d-flex justify-content-between p-3 bg-light">
-            <Button variant="contained" color="primary" onClick={handleCreatePrompt}>SAVE</Button>
+            <button className="btn btn-dark btn-sm" onClick={handleCreatePrompt}>SAVE</button>
             <div className="">
-              <Button variant="contained" color="warning">CLEAR</Button>
+              <button  className="btn btn-light btn-sm" >CLEAR</button>
             </div>
           </div>
         </div>

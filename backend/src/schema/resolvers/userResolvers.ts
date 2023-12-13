@@ -1,11 +1,12 @@
 import { User } from "../../orm/model/User/User";
 import Logger from "../../core/logger";
 import { createTokens } from "../../auth/authUtils";
-import { AuthFailureError } from "../../core/apiError";
 import axios from "axios";
 import { ReplicateModel } from "../../orm/model/Replicate/ReplicateModel";
 import { Set } from "../../orm/model/Set/Set";
 import crypto from "crypto-js";
+import bcrypt from 'bcrypt'
+import {checkPermission} from "../../helpers/checkPermission";
 
 export const userResolvers = {
   Query: {
@@ -21,7 +22,7 @@ export const userResolvers = {
   },
 };
 async function googleLogin(_, { google_id_token }) {
-  console.log(google_id_token);
+
   const google_token = google_id_token;
 
   try {
@@ -48,45 +49,39 @@ async function googleLogin(_, { google_id_token }) {
     user.lastName = data.family_name;
     const newUser = await user.save();
     const token = await createTokens(newUser);
-    return {
-      code: 1000,
-      success: true,
-      message: "User created.",
-      is_new_user: true,
-      user: newUser,
-      token: token.token,
-    };
+
+    return token.token
   } catch (e) {
     console.log(e);
   }
 }
 
-async function register(
-  _,
-  {
-    firstName,
-    lastName,
-    email,
-    role,
-    deviceType,
-    keychain,
-    isAgreementCheck,
-    isPremium,
-    subId,
-      fcmId,
-    password,
-  }
-) {
-  const userExist = await User.findOne({
-    where: { email: email },
-  });
 
-  if (userExist) {
-    return new AuthFailureError("User already exists.");
-  }
-  const hashedPass = crypto.AES.encrypt(password, "secret_key").toString();
-  const user = new User();
-  if (password) {
+
+async function register(_, {
+  firstName,
+  lastName,
+  email,
+  role,
+  deviceType,
+  keychain,
+  isAgreementCheck,
+  isPremium,
+  subId,
+  fcmId,
+  password,
+}) {
+  try {
+    const userExist = await User.findOne({
+      where: { email: email },
+    });
+
+    if (userExist) return  new Error("User already exists.")
+
+
+    const hashedPass = password ? await bcrypt.hash(password, 10) : undefined;
+
+    const user = new User();
     user.email = email;
     user.firstName = firstName;
     user.lastName = lastName;
@@ -98,34 +93,19 @@ async function register(
     user.subId = subId;
     user.fcmId = fcmId;
     user.password = hashedPass;
-  } else {
-    user.email = email;
-    user.firstName = firstName;
-    user.lastName = lastName;
-    user.role = role;
-    user.deviceType = deviceType;
-    user.keychain = keychain;
-    user.isAgreementCheck = isAgreementCheck;
-    user.isPremium = isPremium;
-    user.subId = subId;
-    user.fcmId = fcmId;
-  }
 
-  try {
     const newUser = await user.save();
+
     const token = await createTokens(newUser);
-    return {
-      code: 1000,
-      success: true,
-      message: "User created.",
-      is_new_user: true,
-      user: newUser,
-      token: token.token,
-    };
-  } catch (error) {
-    return error;
+
+    return token.token
+  } catch (e) {
+
+    console.error("Registration error:", e);
+    throw new Error("Registiration error.")
   }
 }
+
 
 async function anonRegister(
   _,
@@ -141,45 +121,33 @@ async function anonRegister(
 
   const token = await createTokens(last_user);
 
-  return {
-    code: 1000,
-    success: true,
-    message: "User created.",
-    is_new_user: true,
-    user: last_user,
-    token: token.token,
-  };
+  return token.token
 }
 
 async function login(_, { email, password }) {
-  console.log(`email:${email}`);
+
   const exist_user = await User.findOne({ where: { email: email } });
   if (password) {
     const hashedPass = crypto.AES.decrypt(exist_user!.password!, "secret_key");
     const orgPass = hashedPass.toString(crypto.enc.Utf8);
-    console.log(password);
+
     if (orgPass !== password) throw new Error("Wrong pass.");
   }
 
   const token = await createTokens(exist_user);
-  return {
-    code: 1000,
-    success: true,
-    message: "logged in.",
-    is_new_user: true,
-    user: exist_user,
-    token: token.token,
-  };
+
+  return token.token
 }
 
 //@ts-ignore
 async function getAllUsers(_, __, context): Promise<any[]> {
+  checkPermission(context.user.role)
   const users = await User.find();
   const formattedUsers = users.map((user) => ({
     ...user,
     created_at: user.createdAt.toLocaleDateString("en-GB"),
   }));
-  console.log(formattedUsers)
+
   return formattedUsers;
 }
 

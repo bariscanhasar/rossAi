@@ -1,4 +1,3 @@
-import {AuthFailureError, InternalError} from '../core/apiError';
 import JWT, {JwtPayload} from '../core/jwt';
 import {User} from '../orm/model/User/User'
 
@@ -8,14 +7,14 @@ import {User} from '../orm/model/User/User'
 
 // Function to retrieve access token from Authorization header
 export const getAccessToken = (authorization?: string) => {
-    if (!authorization) throw new AuthFailureError('Invalid Authorization');
-    if (!authorization.startsWith('Bearer ')) throw new AuthFailureError('Invalid Authorization')
+    if (!authorization) throw new Error('Invalid Authorization');
+    if (!authorization.startsWith('Bearer ')) throw new Error('Invalid Authorization')
     const token = authorization.split(' ')[1]
     return token
 }
 // Function to validate token data
 export const validateTokenData = (payload: JwtPayload): boolean => {
-    if (!payload.userId) throw new AuthFailureError('Invalid Access Token');
+    if (!payload.userId) throw new Error('Invalid Access Token');
 
     return true;
 };
@@ -24,7 +23,7 @@ export const validateTokenData = (payload: JwtPayload): boolean => {
 export const createTokens = async (
     user: User | null,
 ) => {
-    console.log(user)
+    
     const token = await JWT.encode(
         new JwtPayload(
             user?.id!, // We use the User's ID in the JWT payload

@@ -38,31 +38,8 @@ export class ReplicatePrediction extends BaseEntity {
   @PrimaryGeneratedColumn()
   id?: number;
 
-  @Column({ nullable: true })
+  @Column()
   replicateId!: string;
-
-  @Column({ nullable: true })
-  promptText?: string;
-
-  @Column({ nullable: true })
-  negativePrompt?: string;
-
-  @Column({ nullable: true })
-  promptSteps?: string;
-
-  @Column({ nullable: true })
-  promptCfg?: string;
-
-  @Column({ nullable: true })
-  promptOutput?: string;
-
-  @Column({
-    nullable: true,
-    type: "enum",
-    enum: Scheduler,
-  })
-  promptScheduler?: Scheduler;
-
 
   @Column({
     nullable: true,

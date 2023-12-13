@@ -31,7 +31,7 @@ router.post("/", async (req, res) => {
   if (user?.fcmId) {
     await sendPushNotification(user.fcmId,"Your model successfully created.","Now u can enjoy our app.")
   }
-  console.log(req.body);
+
   res.status(200).send(modified_model);
 });
 

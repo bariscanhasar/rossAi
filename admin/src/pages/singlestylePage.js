@@ -12,6 +12,7 @@ import { useQuery } from '@apollo/client'
 import { getStyle, GET_STYLE } from '../graphql/queries'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
+import ProgressBar from "../components/circularProgress/circularProgress";
 
 export default function SingleStylePage() {
   const [selectedImage, setSelectedImage] = useState(null)
@@ -42,19 +43,16 @@ export default function SingleStylePage() {
       setSelectedImage(styleData.banner ? PF + styleData.banner : null)
     }
   }, [loading, data])
-  if (loading) {
-    return (
-      <Box sx={{ display: 'flex' }}>
-        <CircularProgress />
-      </Box>
-    )
-  }
+    if (loading) {
+        return <ProgressBar/>
+
+    }
 
   if (error) {
     return <p>Error: {error.message}</p>
   }
 
-  console.log(style)
+
 
   const handleFileSelected = (e) => {
     const selectedFile = e.target.files[0]

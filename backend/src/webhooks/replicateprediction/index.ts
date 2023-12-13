@@ -3,7 +3,6 @@ import { Set } from "../../orm/model/Set/Set";
 import { ReplicatePrediction } from "../../orm/model/Replicate/ReplicatePrediction";
 import axios from "axios";
 import path from "path";
-import fs from "fs";
 import { SetImage } from "../../orm/model/Set/SetImage";
 import { v4 as uuidv4 } from "uuid";
 import S3Repo from "../../core/aws"

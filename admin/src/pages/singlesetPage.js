@@ -12,6 +12,7 @@ import { useQuery } from '@apollo/client'
 import { getAllUsers, getSet, getStyle } from '../graphql/queries'
 import CircularProgress from '@mui/material/CircularProgress'
 import Box from '@mui/material/Box'
+import ProgressBar from "../components/circularProgress/circularProgress";
 
 const PF = `https://rossai-predictions.s3.eu-central-1.amazonaws.com/`
 
@@ -21,15 +22,11 @@ export default function SingleSetPage() {
     variables: { setId: id },
   })
   if (loading) {
-    return (
-      <Box sx={{ display: 'flex' }}>
-        <CircularProgress />
-      </Box>
-    )
+    return <ProgressBar/>
+
   }
 
   const setData = data && data.getSet ? data.getSet : null
-  console.log(setData)
   return (
     <div className="card">
       <div className="info p-3 border-bottom">

@@ -19,19 +19,19 @@ export class Credit extends BaseEntity {
   @PrimaryGeneratedColumn()
   id?: number;
 
-  @Column({ nullable: true })
+  @Column()
   amount?: number;
 
-  @Column({ nullable: true })
+  @Column()
   date?: Date;
 
-  @Column({ nullable: true })
+  @Column({nullable: true,})
   rcEventId?: string;
 
   @Column({
     type: "enum",
     enum: CreditTypeEnum,
-    nullable: true,
+
   })
   type?: CreditTypeEnum;
   @CreateDateColumn({ default: () => "CURRENT_TIMESTAMP" })

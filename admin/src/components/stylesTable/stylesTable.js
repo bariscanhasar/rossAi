@@ -34,10 +34,7 @@ export default function StylesTable() {
   const label = { inputProps: { 'aria-label': 'Switch demo' } }
   const styleData = data && data.getAllStylesAdmin ? data.getAllStylesAdmin : []
 
-  console.log(data)
 
-
-  console.log(styleData)
   const handleRowClick = (params) => {
     navigate(`/styles/${params.id}`)
   }
@@ -46,7 +43,7 @@ export default function StylesTable() {
       <Toolbar>
         <div className="d-flex justify-content-end w-100 align-items-center">
           <Link to="/styles/create">
-            <button className="btn btn-sm btn-primary me-3">Create</button>
+            <button className="btn btn-sm btn-dark me-3">Create</button>
           </Link>
         </div>
       </Toolbar>

@@ -3,10 +3,15 @@ import Widget from '../components/widget/widget'
 import Chart from '../components/chart/chart'
 import { useQuery } from '@apollo/client'
 import { getAllSetsAdmin, homePageStats } from '../graphql/queries'
+import ProgressBar from "../components/circularProgress/circularProgress";
 export default function HomePage() {
   const { loading, error, data } = useQuery(homePageStats)
   const rowData = data && data.homePageStats ? data.homePageStats : []
 
+  if (loading) {
+    return <ProgressBar />
+  }
+  
   let diff
   if (rowData.lastSevenDayPredictionCount && rowData.lastSevenDayPredictionCount.length >= 2) {
     const lastObject =
@@ -21,7 +26,7 @@ export default function HomePage() {
     const countDifference = lastObject.count - secondLastObject.count
     diff = (countDifference / Math.abs(secondLastObject.count)) * 100
   }
-  console.log(rowData.lastSevenDayPredictionCount)
+
   return (
     <div>
       <div className="d-flex">

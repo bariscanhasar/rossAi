@@ -72,7 +72,7 @@ async function createModel(
             process.env.REPLICATE_WEBHOOK_MODEL,
         },
     });
-    console.log(response.data)
+    
     const new_model = new ReplicateModel();
     new_model.replicateId = response.data.id;
     new_model.user = user!;

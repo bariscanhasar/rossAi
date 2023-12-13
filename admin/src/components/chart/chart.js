@@ -19,7 +19,6 @@ const Chart = ({ aspect, title, predictionData }) => {
         };
     });
 
-    console.log(data);
 
     return (
         <div className="chart">

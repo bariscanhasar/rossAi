@@ -41,7 +41,7 @@ export default function SinglePromptPage() {
     }
   }, [data])
 
-  console.log(prompt)
+
 
   if (loading) {
     return <ProgressBar />

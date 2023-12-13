@@ -1,34 +1,27 @@
 import {
-    Entity,
-    PrimaryGeneratedColumn,
-    Column,
-    CreateDateColumn,
-    BaseEntity,
-    ManyToOne,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  BaseEntity,
+  ManyToOne,
 } from "typeorm";
-import {Set} from './Set'
-
-
+import { Set } from "./Set";
 
 @Entity()
 export class SetImage extends BaseEntity {
-    @PrimaryGeneratedColumn()
-    id?: number;
+  @PrimaryGeneratedColumn()
+  id?: number;
 
+  @Column()
+  path!: string;
 
-    @Column({ nullable: true })
-    path!: string;
+  @Column({ nullable: true })
+  replicateId!: string;
 
-    @Column({ nullable: true })
-    replicateId!: string;
+  @CreateDateColumn({ default: () => "CURRENT_TIMESTAMP" })
+  createdAt?: Date;
 
-
-    @CreateDateColumn({ default: () => "CURRENT_TIMESTAMP" })
-    createdAt?: Date;
-
-
-    @ManyToOne(() => Set, (set) => set.images)
-    set!: Set;
-
-
+  @ManyToOne(() => Set, (set) => set.images)
+  set!: Set;
 }

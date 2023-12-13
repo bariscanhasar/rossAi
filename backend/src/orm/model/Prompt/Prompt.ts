@@ -22,16 +22,16 @@ export class Prompt extends BaseEntity{
     @PrimaryGeneratedColumn()
     id?: number;
 
-    @Column({nullable:true,})
+    @Column()
     promptText?: string;
 
-    @Column({nullable:true,})
+    @Column()
     negativePrompt?: string;
 
-    @Column({nullable:true,})
+    @Column()
     steps?: number;
 
-    @Column({nullable:true,})
+    @Column()
     cfg?: number;
 
     @Column({nullable:true,})

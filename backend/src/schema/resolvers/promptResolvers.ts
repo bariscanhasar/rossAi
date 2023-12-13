@@ -63,7 +63,6 @@ async function updatePrompt(_,{ promptId,promptText, negativePrompt, steps, cfg,
 async function getAllPrompts(_, __, context, {}) {
   checkPermission(context.user.role)
   const style = await Style.find({ relations: ["prompt"] });
-  console.log(style.map(style => style.prompt))
   return style;
 }
 

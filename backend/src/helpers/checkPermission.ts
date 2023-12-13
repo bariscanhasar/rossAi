@@ -8,7 +8,7 @@ enum Role {
 }
 
 function checkPermission(userRole: Role) {
-  console.log(userRole);
+
   if (userRole !== Role.SUPERADMIN) {
 
     throw new Error("Access denied. User does not have access.");

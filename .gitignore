@@ -8,6 +8,15 @@ logs
 
 node_modules
 
+
+/admin/src
+
+/admin/public
+
+/admin/.prettierrc
+
+
+
 .env
 
 yarn-error.log

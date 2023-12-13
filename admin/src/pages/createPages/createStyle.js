@@ -297,13 +297,12 @@ export default function SingleStylePage() {
           </div>
         ))}
         <div className="d-flex justify-content-start">
-          <Button
-            variant="contained"
-            color="primary"
+          <button
+            className="btn btn-dark fs-6"
             onClick={handleCreateStyle}
           >
             SAVE
-          </Button>
+          </button>
         </div>
       </div>
     </div>

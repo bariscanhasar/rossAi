@@ -8,8 +8,9 @@ const MenuItem = ({ to, children }) => {
 
     const hoverAnimation = useSpring({
         scale: hovered ? 1.1 : 1,
-        config: { mass: 1, tension: 80, friction: 20 },
+        config: { mass: 1, tension: 120, friction: 14 },
     });
+
 
     return (
         <animated.div

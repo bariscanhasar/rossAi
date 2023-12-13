@@ -14,6 +14,7 @@ import {useParams} from "react-router-dom";
 import {useQuery} from "@apollo/client";
 import {getUser} from "../graphql/queries";
 import NativeSelect from '@mui/material/NativeSelect';
+import ProgressBar from "../components/circularProgress/circularProgress";
 export default function SingleUserPage() {
     const [age, setAge] = React.useState('');
     const { id } = useParams()
@@ -22,7 +23,8 @@ export default function SingleUserPage() {
         variables: { userId: id },
     });
     if (loading) {
-        return <p>Loading...</p>
+        return <ProgressBar/>
+
     }
 
     if (error) {
@@ -30,7 +32,6 @@ export default function SingleUserPage() {
     }
 
     const userData = data && data.getUser ? data.getUser : null
-    console.log(userData)
     const handleChange = (event) => {
         setAge(event.target.value);
     };

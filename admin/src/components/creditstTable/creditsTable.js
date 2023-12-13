@@ -37,14 +37,14 @@ export default function CreditsTable() {
 
     const rowsData = data && data.getAllCreditsAdmin ? data.getAllCreditsAdmin : []
 
-    console.log(data)
+
     return (
         <div style={{  width: '100%' }}>
            <Toolbar>
                <div className="d-flex flex-row-reverse w-100">
 
                <Link to="/credits/create">
-                   <button className="btn btn-sm btn-primary me-3">Create</button>
+                   <button className="btn btn-sm btn-dark me-3">Create</button>
                </Link>
                </div>
            </Toolbar>

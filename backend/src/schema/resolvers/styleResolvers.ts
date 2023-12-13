@@ -115,7 +115,7 @@ async function updateStyle(
     relations: ["styleImages", "styleDetails"],
   });
 
-  console.log(updatedStyleData);
+
   return updatedStyleData;
 }
 
@@ -124,7 +124,7 @@ async function getStyle(_, { styleId }) {
     where: { id: styleId },
     relations: ["styleImages", "styleDetails", "prompt"],
   });
-  console.log(style)
+  
   return style;
 }
 

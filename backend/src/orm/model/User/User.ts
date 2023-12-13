@@ -20,13 +20,13 @@ export class User extends BaseEntity{
     @PrimaryGeneratedColumn()
     id?: number;
 
-    @Column({nullable:true,})
+    @Column()
     firstName?: string;
 
-    @Column({nullable:true,})
+    @Column()
     lastName?: string;
 
-    @Column({nullable:true,})
+    @Column()
     email?: string;
 
     @Column({nullable:true,})
@@ -35,7 +35,8 @@ export class User extends BaseEntity{
     @Column({
         type: "enum",
         enum: Role,
-        default: Role.USER
+        default: Role.USER,
+        nullable:true
     })
     role?: Role;
 

@@ -1,22 +1,28 @@
-  import Button from '@mui/material/Button'
-  import {useNavigate} from "react-router-dom";
+import React from 'react';
+import Button from '@mui/material/Button';
+import { useNavigate,Link } from 'react-router-dom';
+
+
 export default function NavBar() {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
-    const handleLogOut = (e) => {
-        window.localStorage.removeItem("token")
-        navigate("/login")
-        window.location.reload()
-    }
+    const handleLogOut = () => {
+        window.localStorage.removeItem('token');
+        navigate('/login');
+        window.location.reload();
+    };
 
-  return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark justify-content-between align-items-center">
-
-        <a className="navbar-brand" href="/">
-          RossAi
-        </a>
-        <Button onClick={handleLogOut} variant="text">Logout</Button>
-
-    </nav>
-  )
+    return (
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark justify-content-between align-items-center">
+            <Link className="navbar-brand" to="/">
+                RossAi
+            </Link>
+            <div className="d-flex align-items-center">
+                <Button onClick={handleLogOut} variant="text" style={{ color: 'white', marginRight: '10px' }}>
+                    Logout
+                </Button>
+                {/* Add more buttons or components as needed */}
+            </div>
+        </nav>
+    );
 }

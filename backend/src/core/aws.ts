@@ -57,7 +57,7 @@ class S3Repo {
         Key: fileName,
       })
     );
-    console.log(await Body!.transformToString());
+
     return Body;
   }
 
@@ -69,64 +69,10 @@ class S3Repo {
 
     for await (const page of paginator) {
       const objects = page.Contents;
-      console.log(objects);
+
     }
   }
 }
 
 export default new S3Repo();
 
-// export async function main() {
-//     // A region and credentials can be declared explicitly. For example
-//     // `new S3Client({ region: 'us-east-1', credentials: {...} })` would
-//     //initialize the client with those settings. However, the SDK will
-//     // use your local configuration and credentials if those properties
-//     // are not defined here.
-//
-//
-//
-//     // Create an Amazon S3 bucket. The epoch timestamp is appended
-//     // to the name to make it unique.
-//     const bucketName = `test-bucket-${Date.now()}`;
-//     await s3Client.send(
-//         new CreateBucketCommand({
-//             Bucket: bucketName,
-//         })
-//     );
-//
-//     // Put an object into an Amazon S3 bucket.
-//     await s3Client.send(
-//         new PutObjectCommand({
-//             Bucket: bucketName,
-//             Key: "my-first-object.txt",
-//             Body: "Hello JavaScript SDK!",
-//         })
-//     );
-//
-//     // Read the object.
-//     // const { Body } = await s3Client.send(
-//     //     new GetObjectCommand({
-//     //         Bucket: bucketName,
-//     //         Key: "my-first-object.txt",
-//     //     })
-//     // );
-//
-//     const { Body } = await s3Client.send(
-//       new GetObjectCommand({
-//         Bucket: bucketName,
-//         Key: "my-first-object.txt",
-//       })
-//     );
-//
-//     console.log(await Body?.transformToString())
-//
-//
-//
-// }
-
-// Call a function if this file was run directly. This allows the file
-// to be runnable without running on import.
-// import { fileURLToPath } from "url";
-// if (process.argv[1] === fileURLToPath(import.meta.url)) {
-//     main();
-// }

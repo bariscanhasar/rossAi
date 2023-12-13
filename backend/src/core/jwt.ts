@@ -1,6 +1,5 @@
 import {promisify} from 'util';
 import {sign, verify} from 'jsonwebtoken';
-import {BadTokenError} from './apiError';
 import Logger from './logger';
 
 
@@ -30,7 +29,7 @@ async function validate(token: string): Promise<JwtPayload> {
     } catch (e: any) {
         Logger.debug(e);
         // throws error if the token has not been encrypted by the private key
-        throw new BadTokenError();
+        throw new Error("Bad token error.")
     }
 }
 

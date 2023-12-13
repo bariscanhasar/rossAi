@@ -15,7 +15,6 @@ async function makeQuery(query) {
     }
 
     const setData = data && data.query ? data.query : [];
-    console.log(setData);
 
     return { loading: false, data: setData, error: null };
 }
