@@ -21,7 +21,7 @@ router.post("/", async (req, res) => {
     relations: ["set"],
   });
   const set_id = exist_prediction?.set.id;
-  const exist_set = await Set.findOne({ where: { id: set_id },relations:["images"] });
+  const exist_set = await Set.findOne({ where: { id: set_id },relations:["images","user"] });
   const user = await User.findOne({where:{id:exist_set?.user.id}})
   if (!exist_set) res.status(500).json("Error on prediction webhook.")
 
