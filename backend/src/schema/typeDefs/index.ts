@@ -5,10 +5,10 @@ const indexTypeDefs = `#graphql
 
 type Query {
     getAllUsers:[User]
-    getUser(userId:String):User
+    getUser(userId:String!):User
     getReplicateModel:[ReplicateModel]
     getUserAllReplicateModels:[ReplicateModel]
-    getAllSets(status:ReplicateStatusEnum,modelId:String):[Set]
+    getAllSets(status:ReplicateStatusEnum,modelId:String!):[Set]
     getSet(setId:String):Set
     getAllSetsAdmin:[Set]
     getAllReplicateModelsAdmin:[ReplicateModel]
