@@ -5,8 +5,8 @@ import axios from "axios";
 import { ReplicateModel } from "../../orm/model/Replicate/ReplicateModel";
 import { Set } from "../../orm/model/Set/Set";
 import crypto from "crypto-js";
-import bcrypt from 'bcrypt'
-import {checkPermission} from "../../helpers/checkPermission";
+import bcrypt from "bcrypt";
+import { checkPermission } from "../../helpers/checkPermission";
 
 export const userResolvers = {
   Query: {
@@ -22,7 +22,6 @@ export const userResolvers = {
   },
 };
 async function googleLogin(_, { google_id_token }) {
-
   const google_token = google_id_token;
 
   try {
@@ -50,34 +49,34 @@ async function googleLogin(_, { google_id_token }) {
     const newUser = await user.save();
     const token = await createTokens(newUser);
 
-    return token.token
+    return token.token;
   } catch (e) {
     console.log(e);
   }
 }
 
-
-
-async function register(_, {
-  firstName,
-  lastName,
-  email,
-  role,
-  deviceType,
-  keychain,
-  isAgreementCheck,
-  isPremium,
-  subId,
-  fcmId,
-  password,
-}) {
+async function register(
+  _,
+  {
+    firstName,
+    lastName,
+    email,
+    role,
+    deviceType,
+    keychain,
+    isAgreementCheck,
+    isPremium,
+    subId,
+    fcmId,
+    password,
+  }
+) {
   try {
     const userExist = await User.findOne({
       where: { email: email },
     });
 
-    if (userExist) return  new Error("User already exists.")
-
+    if (userExist) return new Error("User already exists.");
 
     const hashedPass = password ? await bcrypt.hash(password, 10) : undefined;
 
@@ -98,19 +97,16 @@ async function register(_, {
 
     const token = await createTokens(newUser);
 
-    return token.token
+    return {
+      token: token.token,
+    };
   } catch (e) {
-
     console.error("Registration error:", e);
-    throw new Error("Registiration error.")
+    throw new Error("Registiration error.");
   }
 }
 
-
-async function anonRegister(
-  _,
-  { deviceToken, deviceType, keychain, fcmId }
-) {
+async function anonRegister(_, { deviceToken, deviceType, keychain, fcmId }) {
   const user = new User();
   user.deviceType = deviceType;
   user.keychain = keychain;
@@ -121,11 +117,12 @@ async function anonRegister(
 
   const token = await createTokens(last_user);
 
-  return token.token
+  return {
+    token: token.token,
+  };
 }
 
 async function login(_, { email, password }) {
-
   const exist_user = await User.findOne({ where: { email: email } });
   if (password) {
     const hashedPass = crypto.AES.decrypt(exist_user!.password!, "secret_key");
@@ -136,12 +133,14 @@ async function login(_, { email, password }) {
 
   const token = await createTokens(exist_user);
 
-  return token.token
+  return {
+    token: token.token,
+  };
 }
 
 //@ts-ignore
 async function getAllUsers(_, __, context): Promise<any[]> {
-  checkPermission(context.user.role)
+  checkPermission(context.user.role);
   const users = await User.find();
   const formattedUsers = users.map((user) => ({
     ...user,

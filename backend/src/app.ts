@@ -102,11 +102,9 @@ const server = new ApolloServer({
     expressMiddleware(server, {
       //@ts-ignore
       context: async ({ req }) => {
-        if (
-          req.headers.authorization &&
-          !req.path.includes("login") &&
-          !req.path.includes("register")
-        ) {
+        //@ts-ignore
+        console.log(req.body.operationName)
+        if (!(req.body.operationName == 'login' || req.body.operationName == "register")) {
           try {
             const token = getAccessToken(req.headers.authorization);
             const payload: JwtPayload = await JWT.validate(token);
