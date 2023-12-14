@@ -47,7 +47,7 @@ async function createStyle(
 
   for (const path of styleImages) {
     const images = new StyleImages();
-    images.path = path;
+    images.path = `https://api.bariscanhasar.com/upload/${path}`;
     images.style = newStyle;
     await images.save();
   }
@@ -131,6 +131,9 @@ async function getStyle(_, { styleId }) {
 async function getAllStyles(_, { status }) {
   let styles;
 
+  if (status) {
+
+
   switch (status) {
     case "POPULAR":
       const predictions = await ReplicatePrediction.find({
@@ -191,7 +194,9 @@ async function getAllStyles(_, { status }) {
       });
       break;
   }
-
+  } else {
+    styles = await Style.find()
+  }
   return styles;
 }
 

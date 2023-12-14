@@ -40,7 +40,7 @@ router.post("/", async (req, res) => {
       set_image.set = exist_set!;
       set_image.replicateId = replicateId;
       //@ts-ignore
-      set_image.path = imageName;
+      set_image.path =`https://rossai-predictions.s3.eu-central-1.amazonaws.com/${imageName}` ;
       await set_image.save();
     } catch (error) {
       console.error(error);

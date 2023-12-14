@@ -21,7 +21,7 @@ export const userResolvers = {
     anonRegister,
   },
 };
-async function googleLogin(_, { google_id_token }) {
+async function googleLogin(_, { google_id_token,fcmId }) {
   const google_token = google_id_token;
 
   try {
@@ -106,7 +106,7 @@ async function register(
   }
 }
 
-async function anonRegister(_, { deviceToken, deviceType, keychain, fcmId }) {
+async function anonRegister(_, { deviceType, keychain, fcmId }) {
   const user = new User();
   user.deviceType = deviceType;
   user.keychain = keychain;
@@ -188,4 +188,9 @@ async function mergeUser({ _, userId, newUserId }) {
   } catch (e) {
     return e;
   }
+}
+
+
+async function addFcmId(_,{fcmId}) {
+
 }

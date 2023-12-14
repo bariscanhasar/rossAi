@@ -62,9 +62,6 @@ type lastSevenDayPredictionCount {
     count:Int
 }
 
-type AuthResponse {
-    token:String
-}
 type StatResponse {
     userCount:Int
     modelCount:Int
