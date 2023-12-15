@@ -29,8 +29,8 @@ type Prompt {
     gender: GenderEnum
     styleId: String
     style:Style
-    createdAt: String
-    updatedAt: String
+    createdAt: Date
+    updatedAt: Date
 
 }
 

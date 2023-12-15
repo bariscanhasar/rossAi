@@ -1,7 +1,7 @@
 import { ApolloServer } from "@apollo/server";
 
-const indexTypeDefs = `#graphql
 
+const indexTypeDefs = `#graphql
 
 type Query {
     getAllUsers:[User]
@@ -23,6 +23,12 @@ type Query {
     homePageStats:StatResponse
 
 }
+# Example resolver for the Date scalar
+
+
+# Resolvers for custom scalar types
+
+
 
 type Mutation {
     googleLogin(googleIdToken:String!): AuthResponse

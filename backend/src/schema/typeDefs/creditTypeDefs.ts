@@ -12,11 +12,11 @@ enum CreditTypeEnum {
 
 type Credit {
     id: ID!
-    date: String!
+    date: Date!
     amount: Int!
     type: CreditTypeEnum!
     user: User
-    createdAt: String!
+    createdAt: Date!
 
 }
 

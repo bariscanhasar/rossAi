@@ -12,46 +12,49 @@ export const statsResolvers = {
 };
 
 async function homePageStats() {
-
   const users = await User.find();
   const models = await ReplicateModel.find();
   const predictions = await ReplicatePrediction.find();
   const sets = await Set.find();
-    try {
+  try {
+    const replicatePredictionRepository = getRepository(
+      ReplicatePrediction,
+      "typeorm"
+    );
 
+    const currentDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(currentDate.getDate() - 6); // 6 days ago
 
-        const replicatePredictionRepository = getRepository(ReplicatePrediction,"typeorm");
+    const endDate = new Date();
+    endDate.setHours(23, 59, 59, 999);
 
-        const currentDate = new Date();
-        const startDate = new Date();
-        startDate.setDate(currentDate.getDate() - 6); // 6 days ago
+    const results = await replicatePredictionRepository
+      .createQueryBuilder("prediction")
+      .select("DATE(prediction.createdAt) as date")
+      .addSelect("COUNT(prediction.id) as count")
+      .where("prediction.createdAt BETWEEN :startDate AND :endDate", {
+        startDate,
+        endDate,
+      })
+      .groupBy("DATE(prediction.createdAt)")
+      .getRawMany();
 
-        const endDate = new Date();
-        endDate.setHours(23, 59, 59, 999);
+    const formattedResults = results.map((e) => {
+      const utcDate = new Date(e.date);
+      const formattedDate = utcDate.toLocaleDateString("en-GB");
 
-        const results = await replicatePredictionRepository
-            .createQueryBuilder("prediction")
-            .select("DATE(prediction.createdAt) as date")
-            .addSelect("COUNT(prediction.id) as count")
-            .where("prediction.createdAt BETWEEN :startDate AND :endDate", {
-                startDate,
-                endDate,
-            })
-            .groupBy("DATE(prediction.createdAt)")
-            .getRawMany();
+      return { date: formattedDate, count: e.count };
+    });
 
-        return {
-            userCount:users.length,
-            modelCount:models.length,
-            predictionCount:predictions.length,
-            setCount:sets.length,
-            lastSevenDayPredictionCount:results
-        }
-    }catch (e) {
-        console.log(e)
-    }
-
-
-
-
+    return {
+      userCount: users.length,
+      modelCount: models.length,
+      predictionCount: predictions.length,
+      setCount: sets.length,
+      lastSevenDayPredictionCount: formattedResults,
+    };
+  } catch (e) {
+    console.log(e);
+  }
 }

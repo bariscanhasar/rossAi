@@ -1,13 +1,13 @@
-import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany, BaseEntity} from "typeorm";
-import {StyleDetails} from "../Style/StyleDetails";
-import {ReplicateModel} from "../Replicate/ReplicateModel";
-import {Set} from '../Set/Set'
-import {Credit} from "../Credit/Credit";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany, BaseEntity } from "typeorm";
+import { StyleDetails } from "../Style/StyleDetails";
+import { ReplicateModel } from "../Replicate/ReplicateModel";
+import { Set } from '../Set/Set'
+import { Credit } from "../Credit/Credit";
 
 enum Role {
     ADMIN = "ADMIN",
     USER = "USER",
-    SUPERADMN = "SUPERADMIN"
+    SUPERADMIN = "SUPERADMIN"
 }
 
 enum DeviceType {
@@ -15,8 +15,9 @@ enum DeviceType {
     ANDROID = "ANDROID",
     WEB = "WEB"
 }
+
 @Entity()
-export class User extends BaseEntity{
+export class User extends BaseEntity {
     @PrimaryGeneratedColumn()
     id?: number;
 
@@ -29,43 +30,39 @@ export class User extends BaseEntity{
     @Column()
     email?: string;
 
-    @Column({nullable:true,})
+    @Column({ nullable: true, })
     password?: string;
 
     @Column({
         type: "enum",
         enum: Role,
-        default: Role.USER,
-        nullable:true
+        nullable: true
     })
     role?: Role;
-
 
     @Column({
         type: "enum",
         enum: DeviceType,
         default: DeviceType.IOS
-
     })
     deviceType?: DeviceType;
 
     @Column({
-        nullable:true,
+        nullable: true,
         default: "123"
     })
     keychain?: string;
 
-
-    @Column({nullable:true,})
+    @Column({ nullable: true, })
     isAgreementCheck?: boolean;
 
-    @Column({nullable:true,})
+    @Column({ nullable: true, })
     isPremium?: boolean;
 
-    @Column({nullable:true,})
+    @Column({ nullable: true, })
     subId?: string;
 
-    @Column({nullable:true,})
+    @Column({ nullable: true, })
     fcmId?: string;
 
     @CreateDateColumn({ default: () => "CURRENT_TIMESTAMP" })
@@ -80,8 +77,5 @@ export class User extends BaseEntity{
     @OneToMany(() => Set, (set) => set.user)
     set?: Set;
 
+
 }
-
-
-
-

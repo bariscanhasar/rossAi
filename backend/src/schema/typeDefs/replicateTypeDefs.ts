@@ -23,8 +23,8 @@ type ReplicateModel {
     status: ReplicateStatusEnum
     gender: GenderEnum
     user: User
-    createdAt: String
-    updatedAt: String
+    createdAt: Date
+    updatedAt: Date
 }
 
 type Image {
@@ -32,19 +32,13 @@ type Image {
     path: String!
     set:Set
     replicateId: String
-    createdAt: String!
-    updatedAt: String!
+    createdAt: Date!
+    updatedAt: Date!
 }
 type ReplicatePrediction {
     id: ID!
     replicateId: String!
     status: ReplicateStatusEnum!
-    PromptText: String!
-    negativePrompt: String
-    promptSteps: String
-    promptCfg: String
-    PromptScheduler: SchedulerEnum
-    promptOutput: String!
     modelId: String!
     promptId: String!
     styleId: String
@@ -52,8 +46,8 @@ type ReplicatePrediction {
     prompt: Prompt!
     style: Style
     images: [Image!]!
-    createdAt: String!
-    updatedAt: String!
+    createdAt: Date!
+    updatedAt: Date!
 }
 type Set {
     id: ID!
@@ -62,8 +56,8 @@ type Set {
     user:User
     images:[Image]
     model: ReplicateModel
-    createdAt: String
-    updatedAt: String
+    createdAt: Date
+    updatedAt: Date
 }
 
 

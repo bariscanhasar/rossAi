@@ -2,11 +2,13 @@ import { ApolloServer } from "@apollo/server";
 
 const userTypeDefs = `#graphql
 
+scalar Date
+
 type User {
     id: ID
     email: String
-    createdAt: String
-    updatedAt: String
+    createdAt: Date
+    updatedAt: Date
     keychain: String
     firstName: String
     lastName: String

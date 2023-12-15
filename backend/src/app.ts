@@ -16,7 +16,7 @@ import { getAccessToken, validateTokenData } from "./auth/authUtils";
 import JWT, { JwtPayload } from "./core/jwt";
 import { upload } from "./middlewares/upload";
 import routes from "./webhooks/index";
-
+import { GraphQLScalarType, Kind } from 'graphql';
 // HANDLING UNCAUGHT EXCEPTIONS
 process.on("uncaughtException", (e) => {
   Logger.error(e);
@@ -103,7 +103,6 @@ const server = new ApolloServer({
       //@ts-ignore
       context: async ({ req }) => {
         //@ts-ignore
-        console.log(req.body.operationName)
         if (!(req.body.operationName == 'login' || req.body.operationName == "register")) {
           try {
             const token = getAccessToken(req.headers.authorization);

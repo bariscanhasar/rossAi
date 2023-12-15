@@ -9,6 +9,7 @@ import bcrypt from "bcrypt";
 import { checkPermission } from "../../helpers/checkPermission";
 
 export const userResolvers = {
+
   Query: {
     getAllUsers,
     getUser,
@@ -84,7 +85,7 @@ async function register(
     user.email = email;
     user.firstName = firstName;
     user.lastName = lastName;
-    user.role = role;
+    user.role = role || "USER";
     user.deviceType = deviceType;
     user.keychain = keychain;
     user.isAgreementCheck = isAgreementCheck;
@@ -98,6 +99,7 @@ async function register(
     const token = await createTokens(newUser);
 
     return {
+      user:user,
       token: token.token,
     };
   } catch (e) {
@@ -152,6 +154,7 @@ async function getAllUsers(_, __, context): Promise<any[]> {
 
 async function getUser(_, { userId }, context) {
   const user = await User.findOne({ where: { id: userId } });
+
 
   if (!user) return Error("No user.");
 

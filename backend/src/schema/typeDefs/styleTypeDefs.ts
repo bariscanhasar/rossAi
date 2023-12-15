@@ -11,21 +11,21 @@ type Style {
     styleImages: [StyleImage!]
     styleDetails: [StyleDetail!]
     prompt:[Prompt]
-    createdAt: String
-    updatedAt: String
+    createdAt: Date
+    updatedAt: Date
   
 }
 
 type StyleImage {
     id: ID
     path: String
-    createdAt: String
+    createdAt: Date
 }
 
 type StyleDetail {
     id: ID
     name: String
-    createdAt: String
+    createdAt: Date
 }
 
 
