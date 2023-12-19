@@ -8,7 +8,6 @@ import {
   ManyToOne,
 } from "typeorm";
 import { Set } from "../Set/Set";
-import { StyleDetails } from "../Style/StyleDetails";
 import { User } from "../User/User";
 import { ReplicatePrediction } from "./ReplicatePrediction";
 enum ReplicateStatusEnum {
@@ -30,13 +29,13 @@ export class ReplicateModel extends BaseEntity {
   @PrimaryGeneratedColumn()
   id?: number;
 
-  @Column()
+  @Column({nullable:true})
   name?: string;
 
-  @Column()
+  @Column({nullable:true})
   replicateId!: string;
 
-  @Column()
+  @Column({nullable:true})
   version?: string;
 
   @Column()

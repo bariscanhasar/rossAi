@@ -36,12 +36,33 @@ async function createReplicateModel(
 ) {
   try {
     const userId = context.user.id;
+
+    const currentDate = moment().utc().startOf("day");
+
+    const startOfDay = currentDate.toDate();
+    const endOfDay = moment(currentDate).endOf("day").toDate();
+
+    const credit = await Credit.findOne({
+      where: {
+        user: { id: userId },
+        date: Between(startOfDay, endOfDay),
+        type: CreditTypeEnum.TRAIN,
+      },
+      order: { createdAt: "DESC" },
+
+    });
+
+    if(!credit) return Error('no credit for prediction.')
+
+    if (credit?.amount! < 0) return Error("u already used ur credit.t");
+
     const saved_model = await createModel(instanceData, gender, image, userId);
 
     return saved_model;
   } catch (e) {
     Logger.error(e);
-    throw e;
+
+    throw e
   }
 }
 

@@ -23,16 +23,11 @@ type Query {
     homePageStats:StatResponse
 
 }
-# Example resolver for the Date scalar
-
-
-# Resolvers for custom scalar types
-
 
 
 type Mutation {
     googleLogin(googleIdToken:String!): AuthResponse
-    createStyle(name:String!,banner:String!,description:String!,styleDetails:[String]!,styleImages:[String]!,isCollection:Boolean,isFeatured:Boolean):Style
+    createStyle(name:String!,banner:String!,description:String!,styleDetails:[String]!,styleImages:[String]!,isCollection:Boolean,isFeatured:Boolean,images:[String]!,details:[String]!):Style
     updateStyle(name:String!,banner:String!,description:String!,styleDetails:[String]!,styleImages:[String]!,isCollection:Boolean,isFeatured:Boolean):Style
     register(firstName: String!, lastName:String!,email: String,password:String,keychain:String,isPremium:Boolean,deviceType:DeviceType,role:UserRoleEnum, isAgreementCheck: Boolean,subId:String): AuthResponse
     createPrompt(promptText:String, negativePrompt:String, steps:String, cfg:String, seeds:String, scheduler:String, gender:String, styleId:String ):Prompt

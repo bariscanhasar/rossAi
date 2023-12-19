@@ -9,7 +9,7 @@ import { Login } from '../graphql/mutation';
 import { useNavigate } from 'react-router-dom';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-
+import "./loginpage.css"
 export default function LoginPage() {
   const navigate = useNavigate();
   const [data, setData] = useState({
@@ -37,6 +37,10 @@ export default function LoginPage() {
 
   const handleLogin = async () => {
     try {
+      if (!data.email || !data.password) {
+        console.log("Please enter both email and password.");
+        return;
+      }
       const graphqlResponse = await login({
         variables: {
           email: data.email,
@@ -58,10 +62,10 @@ export default function LoginPage() {
   };
 
   return (
-      <div style={{ height: '100vh', background: 'peachpuff' }} className="d-flex justify-content-center align-items-center">
-        <div className="card p-3" style={{ maxWidth: '400px', width: '100%' }}>
+      <div style={{ height: '100vh'}} className="d-flex justify-content-center align-items-center slider-thumb">
+        <div className="card login-div p-3" style={{ maxWidth: '400px', width: '100%' }}>
           <div className="h3 text-center mb-4">Admin Login</div>
-          <div className="card-body d-flex flex-column">
+          <div className="card-body d-flex flex-column ">
             <TextField
                 fullWidth
                 className="mb-3"

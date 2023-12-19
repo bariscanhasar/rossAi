@@ -6,8 +6,6 @@ import {
   OneToMany,
   BaseEntity,
 } from "typeorm";
-import { StyleImages } from "./StyleImages";
-import { StyleDetails } from "./StyleDetails";
 import { Prompt } from "../Prompt/Prompt";
 import { ReplicatePrediction } from "../Replicate/ReplicatePrediction";
 
@@ -31,14 +29,14 @@ export class Style extends BaseEntity {
   @Column()
   isCollection?: boolean;
 
+  @Column("simple-array",{nullable:true})
+  images?: string[];
+
+  @Column("simple-array",{nullable:true})
+  details?: string[];
+
   @CreateDateColumn({ default: () => "CURRENT_TIMESTAMP" })
   createdAt?: Date;
-
-  @OneToMany(() => StyleImages, (styleImages) => styleImages.style)
-  styleImages?: StyleImages[];
-
-  @OneToMany(() => StyleDetails, (styleDetails) => styleDetails.style)
-  styleDetails?: StyleDetails[];
 
   @OneToMany(() => Prompt, (prompt) => prompt.style)
   prompt?: Prompt;

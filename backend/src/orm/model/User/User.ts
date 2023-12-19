@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany, BaseEntity } from "typeorm";
-import { StyleDetails } from "../Style/StyleDetails";
+
 import { ReplicateModel } from "../Replicate/ReplicateModel";
 import { Set } from '../Set/Set'
 import { Credit } from "../Credit/Credit";

@@ -8,8 +8,6 @@ import {
   ManyToOne,
 } from "typeorm";
 import { Style } from "../Style/Style";
-import { StyleDetails } from "../Style/StyleDetails";
-import { User } from "../User/User";
 import { Prompt } from "../Prompt/Prompt";
 import { ReplicateModel } from "./ReplicateModel";
 import {Set} from "../Set/Set";

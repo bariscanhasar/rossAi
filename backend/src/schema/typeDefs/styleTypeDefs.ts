@@ -10,6 +10,8 @@ type Style {
     isCollection: Boolean
     styleImages: [StyleImage!]
     styleDetails: [StyleDetail!]
+    images:[String]
+    details:[String]
     prompt:[Prompt]
     createdAt: Date
     updatedAt: Date

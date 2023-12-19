@@ -7,7 +7,7 @@ import {
   paginateListObjectsV2,
   GetObjectCommand,
 } from "@aws-sdk/client-s3";
-import { fromEnv } from "@aws-sdk/credential-providers";
+import { fromEnv } from "@aws-sdk/credential-provider-env";
 
 
 const bucketName = process.env.S3_BUCKET_NAME

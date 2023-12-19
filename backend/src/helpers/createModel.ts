@@ -38,25 +38,12 @@ async function createModel(
     const user = await User.findOne({ where: { id: userId } });
     const random_number = Math.floor(Math.random() * 100000);
 
-    const currentDate = moment().utc().startOf("day");
 
 
-    const startOfDay = currentDate.toDate();
-    const endOfDay = moment(currentDate).endOf("day").toDate();
-
-    const credit = await Credit.findOne({
-        where: {
-            user: { id: userId },
-            date: Between(startOfDay, endOfDay),
-            type: CreditTypeEnum.TRAIN,
-        },
-    });
-
-    if (!credit) return Error("no credit for train");
 
     const response = await axios({
         method: "post",
-        url: "https://dreambooth-api-experimental.replicate.com/v1/trainings",
+        url: 'https://dreambooth-api-experimental.replicate.com/v1/trainings',
         headers: { Authorization: `Token ${auth_token}` },
         data: {
             input: {
@@ -66,7 +53,7 @@ async function createModel(
                 max_train_steps: 2000,
                 ckpt_base: ckpt_base,
             },
-            model: `bariscanhasar/${userId}${random_number}`,
+            model: `kajmergroup/${userId}${random_number}`,
             trainer_version: trainer_version,
             webhook_completed:
             process.env.REPLICATE_WEBHOOK_MODEL,
@@ -83,9 +70,8 @@ async function createModel(
     new_model.image = image
     const saved_model = await new_model.save();
 
-    credit!.amount = -1
-    await credit.save()
-    Logger.info(`Sent request to replicate for create model for user: ${userId}`)
+
+
     return saved_model;
 
 }

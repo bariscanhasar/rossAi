@@ -12,7 +12,7 @@ import Alert from '@mui/material/Alert'
 import ProgressBar from "../../components/circularProgress/circularProgress";
 
 
-const PF = "https://api.bariscanhasar.com/"
+const PF = process.env.REACT_APP_API
 export default function SingleStylePage() {
   const [file, setFile] = useState([])
   const [fileName, setFileName] = useState([])
@@ -130,6 +130,8 @@ export default function SingleStylePage() {
           description: style.description,
           styleDetails: dataDetails,
           styleImages: fileName,
+          images:fileName,
+          details:dataDetails,
           isCollection: style.isCollection,
           isFeatured: style.isFeatured,
         },
@@ -148,13 +150,6 @@ export default function SingleStylePage() {
         setSelectedBanner(null)
         setImageInputs([])
         setDetailInputs([{ id: 1, value: null }])
-        // setStyle({
-        //   name: '',
-        //   description: '',
-        //   banner: '',
-        //   isFeatured: false,
-        //   isCollection: false,
-        // })
       }
       await axios.post(`${PF}upload`, formData)
     } catch (e) {

@@ -92,6 +92,8 @@ export const getStyle = gql`
       description
       isFeatured
       isCollection
+      images
+      details
       styleImages {
         id
         path

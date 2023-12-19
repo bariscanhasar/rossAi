@@ -9,6 +9,8 @@ export const createStyle = gql`
     $isCollection: Boolean!
     $styleImages: [String!]!
     $styleDetails: [String!]!
+    $details:[String]!
+    $images:[String]!
   ) {
     createStyle(
       name: $name
@@ -18,6 +20,8 @@ export const createStyle = gql`
       isCollection: $isCollection
       styleImages: $styleImages
       styleDetails: $styleDetails
+      images: $images
+      details: $details
     ) {
       banner
       createdAt
@@ -40,6 +44,7 @@ export const createPrompt = gql`
     $scheduler: String
     $gender: String
     $styleId: String
+
   ) {
     createPrompt(
       promptText: $promptText
@@ -50,6 +55,7 @@ export const createPrompt = gql`
       scheduler: $scheduler
       gender: $gender
       styleId: $styleId
+      
     ) {
       id
       promptText

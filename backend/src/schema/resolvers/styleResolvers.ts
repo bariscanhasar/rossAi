@@ -1,11 +1,10 @@
 import { Style } from "../../orm/model/Style/Style";
-import { StyleDetails } from "../../orm/model/Style/StyleDetails";
-import { StyleImages } from "../../orm/model/Style/StyleImages";
-import { where } from "sequelize";
 import { ReplicatePrediction } from "../../orm/model/Replicate/ReplicatePrediction";
 import { In } from "typeorm";
 import {checkPermission} from "../../helpers/checkPermission";
-import {Prompt} from "../../orm/model/Prompt/Prompt";
+import S3Repo from "../../core/aws"
+import path from "path";
+
 export const styleResolvers = {
   Query: {
     getStyle,
@@ -29,39 +28,40 @@ async function createStyle(
     isCollection,
     styleImages,
     styleDetails,
+      images,
+    details
   },
   context
 ) {
   checkPermission(context.user.role)
   const existStyle = await Style.findOne({ where: { name: name } });
   if (existStyle) throw new Error("exist style");
+  const uplodPath = process.env.API_UPLOAD_END_POINT
 
+
+
+
+  const lastImgPath = images.map(name => uplodPath + name)
+  console.log(lastImgPath)
   const style = new Style();
   style.name = name;
-  style.banner = banner;
+  style.banner = `${uplodPath}${banner}`;
   style.description = description;
   style.isFeatured = isFeatured;
   style.isCollection = isCollection;
-
+  style.images = lastImgPath
+  style.details = details
   const newStyle = await style.save();
 
-  for (const path of styleImages) {
-    const images = new StyleImages();
-    images.path = `https://api.bariscanhasar.com/upload/${path}`;
-    images.style = newStyle;
-    await images.save();
-  }
 
-  for (const name of styleDetails) {
-    const details = new StyleDetails();
-    details.name = name;
-    details.style = newStyle;
-    await details.save();
-  }
+
+
+
+
 
   const lastStyleData = await Style.findOne({
     where: { name: name },
-    relations: ["styleImages", "styleDetails", "prompt"],
+    relations: ["prompt"],
   });
   return lastStyleData;
 }
@@ -91,28 +91,16 @@ async function updateStyle(
   existingStyle.description = description;
   existingStyle.isFeatured = isFeatured;
   existingStyle.isCollection = isCollection;
-  existingStyle.styleImages = [];
-  existingStyle.styleDetails = [];
+
 
   await existingStyle.save();
 
-  for (const path of styleImages) {
-    const images = new StyleImages();
-    images.path = path;
-    images.style = existingStyle;
-    await images.save();
-  }
 
-  for (const detailName of styleDetails) {
-    const details = new StyleDetails();
-    details.name = detailName;
-    details.style = existingStyle;
-    await details.save();
-  }
+
 
   const updatedStyleData = await Style.findOne({
     where: { id },
-    relations: ["styleImages", "styleDetails"],
+
   });
 
 
@@ -122,9 +110,9 @@ async function updateStyle(
 async function getStyle(_, { styleId }) {
   const style = await Style.findOne({
     where: { id: styleId },
-    relations: ["styleImages", "styleDetails", "prompt"],
+
   });
-  
+  console.log(style)
   return style;
 }
 
@@ -208,29 +196,11 @@ async function getAllStylesAdmin(_,__,context) {
 async function deleteStyle(_, { styleId }) {
   const style = await Style.findOne({
     where: { id: styleId },
-    relations: ["style_images", "style_details"],
   });
-  if (style) {
-    style.styleImages = [];
-    style.styleDetails = [];
-
-    await style.save();
-
-    await Style.remove(style);
 
     await style?.remove();
 
     return style;
-  }
-}
-
-async function deleteOneStyleImage(_,{imgId},context) {
-  checkPermission(context.user.role)
-  const img = await StyleImages.findOne({where:{id:imgId}})
-
-  await img?.remove()
-
-
-  return `Img successfully deleted imgId:${img?.id}`
 
 }
+

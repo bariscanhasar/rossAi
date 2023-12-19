@@ -1,4 +1,4 @@
-import React, {  useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import FormGroup from '@mui/material/FormGroup'
@@ -7,10 +7,11 @@ import Switch from '@mui/material/Switch'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import { useParams } from 'react-router-dom'
-import { useQuery } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
 import { getStyle } from '../graphql/queries'
-
-import ProgressBar from "../components/circularProgress/circularProgress";
+import { deleteStyle } from '../graphql/mutation'
+import RemoveIcon from '@mui/icons-material/Remove'
+import ProgressBar from '../components/circularProgress/circularProgress'
 
 export default function SingleStylePage() {
   const [selectedImage, setSelectedImage] = useState(null)
@@ -25,32 +26,30 @@ export default function SingleStylePage() {
   const { loading, error, data } = useQuery(getStyle, {
     variables: { styleId: id },
   })
-  const styleData = data && data.getStyle ? data.getStyle : null
-  useEffect(() => {
-    if (!loading && data && data.getStyle) {
-      const styleData = data.getStyle
-      setStyle({
-        name: styleData.name,
-        description: styleData.description,
-        banner: styleData.banner,
-        isFeatured: styleData.isFeatured,
-        isCollection: styleData.isCollection,
-        styleImages: styleData.styleImages,
-        styleDetails: styleData.styleDetails,
-      })
-      setSelectedImage(styleData.banner ?   styleData.banner : null)
-    }
-  }, [loading, data])
-    if (loading) {
-        return <ProgressBar/>
+  const [deleteStyleMutation] = useMutation(deleteStyle)
 
-    }
+  const handleDelete = async () => {
+    const gpqResponse = await deleteStyleMutation({
+      variables: {
+        styleId: styleData.id,
+      },
+    })
+    console.log(gpqResponse)
+  }
+  const styleData = data && data.getStyle ? data.getStyle : null
+
+
+
+
+
+
+  if (loading) {
+    return <ProgressBar />
+  }
 
   if (error) {
     return <p>Error: {error.message}</p>
   }
-
-
 
   const handleFileSelected = (e) => {
     const selectedFile = e.target.files[0]
@@ -59,7 +58,6 @@ export default function SingleStylePage() {
     }
   }
 
-  const PF = `${process.env.REACT_APP_API}upload/`
   return (
     <div className="d-flex flex-column">
       <div className="w-25 mb-3">
@@ -90,19 +88,26 @@ export default function SingleStylePage() {
       </div>
       <div className="mb-3">
         {styleData && styleData.banner ? (
-          <img
-            key={style.id}
-            src={PF + styleData.banner}
-            alt=""
-            style={{ width: '100px', height: 'auto' }}
-          />
-        ) : (
-          selectedImage && (
+          <div>
             <img
-              src={selectedImage}
+              key={style.id}
+              src={styleData.banner}
               alt=""
               style={{ width: '100px', height: 'auto' }}
             />
+            <RemoveIcon />
+          </div>
+        ) : (
+          selectedImage && (
+            <div>
+              <img
+                key={style.id}
+                src={styleData.banner}
+                alt=""
+                style={{ width: '100px', height: 'auto' }}
+              />
+              <RemoveIcon />
+            </div>
           )
         )}
       </div>
@@ -112,7 +117,7 @@ export default function SingleStylePage() {
           id="filled-basic"
           label="Image Link"
           variant="filled"
-          defaultValue={PF + styleData.banner}
+          defaultValue={styleData.banner}
         />
       </div>
       <div className="mb-3">
@@ -127,10 +132,13 @@ export default function SingleStylePage() {
       <div>
         <FormGroup>
           <FormControlLabel
-            control={<Switch defaultChecked />}
+            control={<Switch checked={styleData.isFeatured} />}
             label="Is featured"
           />
-          <FormControlLabel control={<Switch />} label="Is collection" />
+          <FormControlLabel
+            control={<Switch checked={styleData.isCollection} />}
+            label="Is collection"
+          />
         </FormGroup>
       </div>
       <span>Examples</span>
@@ -152,35 +160,39 @@ export default function SingleStylePage() {
         />
       </div>
       <div className="mb-3">
-        {styleData &&
-          styleData.styleImages.map((style) => (
+        {styleData.images &&
+          styleData.images.map((style) => (
             <div className="mb-3">
-              <img
-                key={style.id}
-                src={style.path}
-                alt=""
-                style={{ width: '100px', height: 'auto' }}
-              />
+              <div>
+                <img
+                  src={style}
+                  alt=""
+                  style={{ width: '100px', height: 'auto' }}
+                />
+
+              </div>
               <TextField
                 fullWidth
                 id="filled-basic"
                 label="Image Link"
                 variant="filled"
-                defaultValue={style.path}
+                defaultValue={style}
               />
             </div>
           ))}
       </div>
+
       <span>Details</span>
       <List dense={false}>
         {styleData &&
-          styleData.styleDetails.map((detail) => (
+          styleData.details &&
+          styleData.details.map((detail) => (
             <ListItem>
               <div className="w-25 mb-3">
                 <TextField
                   id="filled-basic"
                   variant="filled"
-                  defaultValue={detail.name}
+                  defaultValue={detail}
                 />
               </div>
             </ListItem>
@@ -190,7 +202,9 @@ export default function SingleStylePage() {
         <Button disabled variant="contained">
           Save
         </Button>
-        <Button variant="contained">Delete</Button>
+        <button onClick={handleDelete} className="btn btn-sm btn-danger">
+          Delete
+        </button>
       </div>
     </div>
   )

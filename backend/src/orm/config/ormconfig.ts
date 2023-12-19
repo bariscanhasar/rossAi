@@ -2,8 +2,7 @@ import { ConnectionOptions } from "typeorm";
 import * as config from "../../config"
 import {User} from '../model/User/User'
 import {Style} from "../model/Style/Style";
-import {StyleImages} from "../model/Style/StyleImages";
-import {StyleDetails} from "../model/Style/StyleDetails";
+
 import {Prompt} from "../model/Prompt/Prompt"
 import {ReplicateModel} from "../model/Replicate/ReplicateModel";
 import {ReplicatePrediction} from "../model/Replicate/ReplicatePrediction";
@@ -24,8 +23,6 @@ const ormConfig: ConnectionOptions = {
   entities: [
     User,
     Style,
-    StyleImages,
-    StyleDetails,
     Prompt,
     ReplicateModel,
     ReplicatePrediction,
